@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LaunchPad — Startup Credit Programs</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">🚀</span>
+      <div class="brand-text">
+        <h1 class="brand-name">LaunchPad</h1>
+        <p class="brand-tagline">One profile. Every startup credit program.</p>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <span class="pill" id="programCountPill">Loading programs…</span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PROFILE ============ -->
+  <section class="section" id="profileSection" aria-labelledby="profileHeading">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="profileHeading">Your startup profile</h2>
+        <p class="section-sub">Fill it once. We match you to every credit program you qualify for and pre-write your applications.</p>
+      </div>
+    </div>
+
+    <div class="card profile-card">
+      <div class="completeness">
+        <div class="completeness-top">
+          <span class="completeness-label">Profile completeness</span>
+          <span class="completeness-pct" id="completenessPct">0%</span>
+        </div>
+        <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter">
+          <div class="meter-fill" id="meterFill"></div>
+        </div>
+        <p class="completeness-hint" id="completenessHint">The more you complete, the more programs unlock.</p>
+      </div>
+
+      <form id="profileForm" novalidate autocomplete="on">
+
+        <fieldset class="field-group">
+          <legend class="group-legend">Basics</legend>
+          <div class="grid">
+            <label class="field">
+              <span class="field-label">Startup name</span>
+              <input type="text" name="basic.startupName" placeholder="Acme Inc." />
+            </label>
+            <label class="field">
+              <span class="field-label">Website</span>
+              <input type="url" name="basic.website" placeholder="https://acme.com" inputmode="url" />
+            </label>
+            <label class="field">
+              <span class="field-label">Contact email</span>
+              <input type="email" name="basic.email" placeholder="founder@acme.com" inputmode="email" />
+            </label>
+            <label class="field">
+              <span class="field-label">Country</span>
+              <input type="text" name="basic.country" placeholder="United States" />
+            </label>
+            <label class="field">
+              <span class="field-label">Founded year</span>
+              <input type="number" name="basic.foundedYear" placeholder="2024" min="1900" max="2100" inputmode="numeric" />
+            </label>
+            <label class="field field-wide">
+              <span class="field-label">What does your startup do?</span>
+              <textarea name="basic.description" rows="3" placeholder="One or two sentences a reviewer could quote."></textarea>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend class="group-legend">Details that unlock more programs</legend>
+          <div class="grid">
+            <label class="field">
+              <span class="field-label">Stage</span>
+              <select name="extended.stage">
+                <option value="">Select…</option>
+                <option value="idea">Idea</option>
+                <option value="pre-seed">Pre-seed</option>
+                <option value="seed">Seed</option>
+                <option value="series-a+">Series A+</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Funding raised</span>
+              <input type="text" name="extended.fundingRaised" placeholder="none / $50k angel" />
+            </label>
+            <label class="field">
+              <span class="field-label">Team size</span>
+              <input type="number" name="extended.teamSize" placeholder="3" min="1" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span class="field-label">Industry</span>
+              <input type="text" name="extended.industry" placeholder="Fintech, DevTools…" />
+            </label>
+            <label class="field">
+              <span class="field-label">Incorporated?</span>
+              <select name="extended.incorporated">
+                <option value="">Select…</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Monthly cloud spend</span>
+              <input type="text" name="extended.monthlyCloudSpend" placeholder="$500 / mo" />
+            </label>
+            <label class="field">
+              <span class="field-label">Tech stack</span>
+              <input type="text" name="extended.techStack" placeholder="Node, Postgres, React…" />
+            </label>
+            <label class="field">
+              <span class="field-label">LinkedIn</span>
+              <input type="url" name="extended.linkedin" placeholder="https://linkedin.com/company/…" inputmode="url" />
+            </label>
+            <label class="field">
+              <span class="field-label">Founder name</span>
+              <input type="text" name="extended.founderName" placeholder="Jane Doe" />
+            </label>
+            <label class="field">
+              <span class="field-label">Founder role</span>
+              <input type="text" name="extended.founderRole" placeholder="CEO & Co-founder" />
+            </label>
+            <label class="field field-wide">
+              <span class="field-label">Elevator pitch</span>
+              <textarea name="extended.pitch" rows="3" placeholder="One paragraph a reviewer would remember."></textarea>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save profile</button>
+          <span class="save-status" id="saveStatus" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ PROGRAMS ============ -->
+  <section class="section" id="programsSection" aria-labelledby="programsHeading">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title" id="programsHeading">Credit programs</h2>
+        <p class="section-sub">Unlocked programs are ready to apply to. Locked ones open up as your profile fills in.</p>
+      </div>
+    </div>
+
+    <div id="unlockBanner" class="unlock-banner" hidden></div>
+
+    <div id="programsState" class="state-note" hidden></div>
+
+    <div id="unlockedGrid" class="programs-grid" aria-live="polite"></div>
+
+    <div id="lockedWrap" hidden>
+      <h3 class="locked-heading">🔒 Locked — complete your profile to unlock</h3>
+      <div id="lockedGrid" class="programs-grid locked-programs-grid"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>LaunchPad presents your real profile persuasively. It never fabricates facts, and never clicks final submit for you.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js" defer></script>
+</body>
+</html>

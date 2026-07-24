@@ -1,0 +1,19 @@
+{
+  "name": "launchpad",
+  "description": "Startup-benefits auto-apply platform — dashboard + AI form-filling agent",
+  "env": {
+    "KIRO_API_KEY": {
+      "description": "Kiro ksk_ API key for the AI answer proxy (optional)",
+      "required": false
+    },
+    "ANTHROPIC_API_KEY": {
+      "description": "Anthropic API key for the server-side answer engine (optional)",
+      "required": false
+    },
+    "AGENT_TOKEN": {
+      "description": "Set to protect /api/agent-generate in production",
+      "required": false,
+      "generator": "secret"
+    }
+  }
+}

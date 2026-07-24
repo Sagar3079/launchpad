@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LaunchPad Agent</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🚀</span>
+        <h1 class="brand-title">LaunchPad Agent</h1>
+      </div>
+      <div class="status" role="status" aria-live="polite">
+        <span id="statusDot" class="status-dot is-idle" aria-hidden="true"></span>
+        <span id="statusText" class="status-text">Idle</span>
+      </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <span id="modelBadge" class="model-badge" title="Active model">—</span>
+      <div class="toolbar-actions">
+        <button id="syncBtn" class="icon-btn" type="button" title="Sync profile from LaunchPad">
+          <span aria-hidden="true">↻</span><span class="icon-btn-label">Sync</span>
+        </button>
+        <button id="settingsBtn" class="icon-btn" type="button" title="Open settings">
+          <span aria-hidden="true">⚙</span><span class="icon-btn-label">Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Error banner region -->
+    <div id="bannerRegion" class="banner-region" aria-live="assertive"></div>
+
+    <!-- Scrollable body -->
+    <main class="body">
+      <button id="scanBtn" class="btn btn-primary" type="button">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Scan &amp; Generate</span>
+      </button>
+
+      <p id="scanMeta" class="scan-meta" hidden></p>
+
+      <section id="answers" class="answers" aria-label="Generated answers"></section>
+
+      <div id="emptyState" class="empty-state">
+        <div class="empty-illustration" aria-hidden="true">✎</div>
+        <p class="empty-title">No answers yet</p>
+        <p class="empty-sub">Open a startup-benefit application, then run
+          <em>Scan &amp; Generate</em> to draft truthful answers from your profile.</p>
+      </div>
+    </main>
+
+    <!-- Sticky footer -->
+    <footer class="footer">
+      <div id="fillResult" class="fill-result" aria-live="polite" hidden></div>
+      <button id="fillBtn" class="btn btn-fill" type="button" disabled>
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Fill page</span>
+      </button>
+      <p class="footer-note">Submit is always left to you.</p>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

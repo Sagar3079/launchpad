@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment files (API keys live here) — keep the example template tracked
+.env
+.env.*
+!.env.example
+
+# data/profile.json is runtime data: it holds the user's personal startup
+# profile (name, email, LinkedIn, pitch) and must never be published.
+# data/programs.json (the program catalog) stays tracked.
+data/profile.json
+
+# Local Claude Code settings — contains machine-local permission entries
+# (one of which embeds a literal API key). Never commit.
+.claude/settings.local.json
+
+# Build artifacts
+*.zip
+
+# Logs
+npm-debug.log*
+
+# OS cruft
+.DS_Store
+Thumbs.db

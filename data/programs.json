@@ -1,0 +1,483 @@
+[
+  {
+    "id": "aws-activate",
+    "name": "AWS Activate",
+    "provider": "Amazon Web Services",
+    "logoEmoji": "🟠",
+    "benefitSummary": "Up to $100,000 in AWS credits",
+    "benefits": [
+      "Activate Founders package: $1,000 in AWS credits for self-funded / bootstrapped startups",
+      "Activate Portfolio package: up to $100,000 in AWS credits for startups backed by an approved Activate Provider (accelerator, VC, or incubator)",
+      "12 months of AWS Business or Developer Support (credit-funded)",
+      "$350 in self-paced AWS Skill Builder training and technical/architecture guidance",
+      "Credits typically valid for up to 2 years from issue"
+    ],
+    "applyUrl": "https://aws.amazon.com/startups/credits",
+    "requiresLogin": true,
+    "loginNote": "Create or sign in to your AWS account first — you apply with the AWS account ID that will receive the credits.",
+    "eligibility": [
+      "Company founded within the last 10 years",
+      "Have a live, fully functioning company website",
+      "New to AWS Activate credits (not previously received equal or greater credits)",
+      "Founders package: self-funded / bootstrapped, not raised institutional funding",
+      "Portfolio package: associated with an approved Activate Provider (have their Organizational ID) and pre-Series B",
+      "Portfolio applicants should apply within 12 months of their most recent funding round"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Company website URL", "profileKey": "basic.website", "type": "text", "hint": "Use a live domain that matches your email domain — mismatches are a top rejection reason."},
+      {"label": "Work email address", "profileKey": "basic.email", "type": "text", "hint": "Use a company-domain email, not Gmail/Outlook."},
+      {"label": "Country / region", "profileKey": "basic.country", "type": "text"},
+      {"label": "Company founded date / year", "profileKey": "basic.foundedYear", "type": "text", "hint": "Must be within the last 10 years to qualify."},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Founders package = self-funded; Portfolio = pre-Series B and provider-backed."},
+      {"label": "AWS account ID (the account that receives the credits)", "profileKey": null, "type": "text", "hint": "Reviewers cross-check that the account is new to Activate credits; use the account you actually intend to build on."},
+      {"label": "Activate Provider Organizational ID (Portfolio only)", "profileKey": null, "type": "text", "hint": "Only for Portfolio — the ID given by your accelerator/VC. Leave blank for Founders package."},
+      {"label": "What are you building? Describe your product and the problem it solves.", "profileKey": "generated", "type": "textarea", "hint": "Reviewers look for a clear, specific product with a real use case for AWS. Name the concrete AWS services you plan to use (EC2, S3, RDS, Bedrock, etc.) and tie them to real workloads — vague or generic answers get rejected."},
+      {"label": "How do you plan to use AWS?", "profileKey": "generated", "type": "textarea", "hint": "Show genuine intent to run production workloads on AWS. Mention expected monthly spend and specific services so the credit request looks proportionate and legitimate."}
+    ],
+    "approvalTips": [
+      "Make sure your website domain matches your work email domain — a mismatch is one of the most common rejection reasons.",
+      "Have a real, live landing page that clearly describes your product before applying — placeholder or parked pages get denied.",
+      "State your funding stage accurately: apply for Founders if self-funded, Portfolio only if you genuinely have an Activate Provider ID.",
+      "Name concrete AWS services you will use (e.g. EC2, S3, RDS, Bedrock) rather than saying 'cloud hosting' generically.",
+      "Use the AWS account ID you actually intend to build on and that has not previously received Activate credits.",
+      "For Portfolio, apply within 12 months of your most recent funding round and include the correct Organizational ID from your accelerator or VC."
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "google-startups-cloud",
+    "name": "Google for Startups Cloud Program",
+    "provider": "Google Cloud",
+    "logoEmoji": "🔵",
+    "benefitSummary": "Up to $200,000 in Google Cloud credits ($350k for AI startups)",
+    "benefits": [
+      "Start tier: up to $2,000 in Google Cloud credits for early / bootstrapped startups, valid 1 year",
+      "Scale tier: Year 1 covers 100% of usage up to $100,000, Year 2 covers 20% up to a further $100,000 (equity-funded, pre-seed to Series A)",
+      "AI-first startups can qualify for up to $250,000 in Year 1 (up to $350k across two years)",
+      "Google Cloud and Firebase usage both covered by credits",
+      "Technical training, Startup Success Manager access, and Google Workspace / partner offers"
+    ],
+    "applyUrl": "https://cloud.google.com/startup/apply",
+    "requiresLogin": true,
+    "loginNote": "Sign in with your Google account and have a Google Cloud Billing Account ID ready — credits are applied to that billing account.",
+    "eligibility": [
+      "Company founded within the last 10 years",
+      "Have a company website whose domain matches your email and billing account email",
+      "Start tier: not yet received Google Cloud credits beyond the free trial, not funded by an institutional investor",
+      "Scale tier: raised recent equity funding (pre-seed to Series A) from an institutional investor",
+      "Scale AI tier: qualifying VC funding (seed to Series A), founded within 10 years, not yet received more than $5,000 in Google Cloud credits",
+      "Not a prohibited business type; company in good standing"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Company website", "profileKey": "basic.website", "type": "text", "hint": "Domain must match your email domain AND your Cloud Billing account email domain."},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text", "hint": "Company-domain email required."},
+      {"label": "Country / headquarters", "profileKey": "basic.country", "type": "text"},
+      {"label": "Year founded", "profileKey": "basic.foundedYear", "type": "text", "hint": "Must be within the last 10 years."},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Determines Start vs Scale vs Scale-AI tier. Be accurate — funding is verified."},
+      {"label": "Total funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Scale tier requires institutional equity funding; Start tier is for pre-institutional startups."},
+      {"label": "Google Cloud Billing Account ID", "profileKey": null, "type": "text", "hint": "Reviewers apply credits to this account and check its email domain matches your website. Create the billing account before applying."},
+      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
+      {"label": "Describe your startup and product", "profileKey": "generated", "type": "textarea", "hint": "Reviewers want a clear product and market. AI-first startups should say so explicitly to be routed to the higher AI credit tier."},
+      {"label": "How will you use Google Cloud / Firebase?", "profileKey": "generated", "type": "textarea", "hint": "Name specific services (Compute Engine, GKE, BigQuery, Vertex AI, Firebase) and expected workloads; a credible usage plan speeds approval."}
+    ],
+    "approvalTips": [
+      "Ensure your website domain, work email domain, and Cloud Billing account email domain all match — this is explicitly checked.",
+      "Create your Google Cloud Billing Account before applying and enter its ID accurately.",
+      "State funding stage truthfully; Scale tier requires verifiable institutional equity funding.",
+      "If you are AI-first, say so clearly in the description to be considered for the $250k AI credit tier.",
+      "Have a live, substantive website that matches the product you describe.",
+      "List concrete Google Cloud services you intend to use so the credit amount looks proportionate."
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "microsoft-founders-hub",
+    "name": "Microsoft for Startups Founders Hub",
+    "provider": "Microsoft",
+    "logoEmoji": "🟦",
+    "benefitSummary": "Up to $150,000 in Azure credits + AI and dev tools",
+    "benefits": [
+      "Azure credits that scale from ~$1,000 up to $150,000, unlocked progressively as you grow",
+      "Access to Azure OpenAI Service (GPT-class models), funded by your Azure credits",
+      "GitHub Enterprise, Microsoft 365, and LinkedIn Premium benefits",
+      "Technical guidance and, for Investor Network startups, enterprise sales support",
+      "No funding required to start — self-serve enrollment"
+    ],
+    "applyUrl": "https://www.microsoft.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Sign in with a Microsoft account to enroll in Founders Hub.",
+    "eligibility": [
+      "You build and own a software product (not a consulting, agency, or resale business)",
+      "New Azure customer in an eligible country/region",
+      "Higher credit tiers unlock with product progress; up to $150k requires Microsoft for Startups Investor Network affiliation",
+      "OpenAI-branded credits are no longer offered — AI access is via Azure OpenAI Service"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.incorporated"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Stage", "profileKey": "extended.stage", "type": "select"},
+      {"label": "Is the company incorporated?", "profileKey": "extended.incorporated", "type": "select"},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "Emphasize that you own a scalable software product, not services."}
+    ],
+    "approvalTips": [
+      "Clearly present a software product you own — services/agency businesses are rejected.",
+      "Use a company-domain email and matching website.",
+      "Enroll with a new Azure customer account to access the credit benefit.",
+      "Link an investor/accelerator affiliation if you have one to reach the higher $150k tier."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "notion-startups",
+    "name": "Notion for Startups",
+    "provider": "Notion",
+    "logoEmoji": "⬛",
+    "benefitSummary": "Up to 6 months free of Notion Business + Notion AI (over $6,000 value)",
+    "benefits": [
+      "Up to 6 months free of the Notion Business plan with unlimited Notion AI when applying through a partner",
+      "~3 months free when applying directly without a partner code",
+      "Value up to $6,000+ depending on team size",
+      "Full access to Notion AI, wikis, docs, and project management during the free period"
+    ],
+    "applyUrl": "https://www.notion.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Create or sign in to a Notion workspace with your company email before applying.",
+    "eligibility": [
+      "New, non-paying Notion customer (never on a paid plan or prior promo)",
+      "Fewer than 100 employees",
+      "Building a scalable tech product",
+      "Working website and a company-domain email (not Gmail/Outlook)"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Company email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Team size / number of employees", "profileKey": "extended.teamSize", "type": "text", "hint": "Must be under 100."},
+      {"label": "What does your startup do?", "profileKey": "generated", "type": "textarea"},
+      {"label": "Partner / accelerator code (optional)", "profileKey": "generated", "type": "text", "hint": "A valid partner code unlocks the full 6-month offer instead of ~3 months."}
+    ],
+    "approvalTips": [
+      "Apply from a brand-new workspace that has never been on a paid plan or trial promo.",
+      "Use a company-domain email — personal Gmail/Outlook addresses are rejected.",
+      "Add a partner or accelerator code if you have one to get the maximum free period.",
+      "Keep team size under 100 employees."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "stripe-startups",
+    "name": "Stripe Startups",
+    "provider": "Stripe",
+    "logoEmoji": "🟣",
+    "benefitSummary": "Waived processing fees / fee credits (varies by partner, often $20k–$50k)",
+    "benefits": [
+      "Waived Stripe processing fees or product fee credits, depending on your country",
+      "Common partner offers waive fees on the next $20,000 in processing (up to ~$500 saved)",
+      "Some accelerators provide up to $50,000 in waived Stripe processing fees",
+      "Community access and expert resources for scaling payments",
+      "Non-dilutive — no equity given up"
+    ],
+    "applyUrl": "https://stripe.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Sign in to your Stripe account; the benefit applies to that account.",
+    "eligibility": [
+      "Early-stage, venture-backed company able to show proof of institutional funding",
+      "Fee credits are increasingly replacing waived-fee offers over time",
+      "Exact benefit depends on country and partner (VC/accelerator) affiliation"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
+      {"label": "Funding raised / investor", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Institutional funding proof strengthens the application."},
+      {"label": "What does your business do?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "Apply through your VC or accelerator's Stripe partner link for the largest fee waivers.",
+      "Have proof of institutional funding ready.",
+      "Use the Stripe account you actually process payments on.",
+      "Describe a legitimate product with real transaction volume plans."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "mongodb-startups",
+    "name": "MongoDB for Startups",
+    "provider": "MongoDB",
+    "logoEmoji": "🍃",
+    "benefitSummary": "$500 in Atlas credits (up to $5,000 for qualifying startups)",
+    "benefits": [
+      "$500 in MongoDB Atlas credits for eligible early-stage companies (delivered as a promo code)",
+      "Up to $5,000 in Atlas credits depending on stage and funding status",
+      "One-on-one architectural / technical guidance",
+      "Voyage AI tokens and co-marketing opportunities",
+      "Credits valid 12 months once activated"
+    ],
+    "applyUrl": "https://www.mongodb.com/solutions/startups",
+    "requiresLogin": true,
+    "loginNote": "Create or sign in to a MongoDB Atlas account to redeem the promo code.",
+    "eligibility": [
+      "Company less than 7 years old",
+      "Series A funding stage or earlier",
+      "Building a single scalable software product (not an agency)",
+      "New or existing MongoDB users, if not previously in the startup program"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.techStack"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Series A or earlier."},
+      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text", "hint": "Mention how MongoDB/Atlas fits your architecture."},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "Keep company age under 7 years and stage at Series A or earlier.",
+      "Show a single scalable software product, not consulting/agency work.",
+      "Explain where MongoDB Atlas fits in your data architecture.",
+      "Redeem the promo code within 12 months of receiving it."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "cloudflare-startups",
+    "name": "Cloudflare for Startups",
+    "provider": "Cloudflare",
+    "logoEmoji": "🟧",
+    "benefitSummary": "Up to $250,000 in credits across 4 tiers",
+    "benefits": [
+      "Tiered credits: $5,000 (bootstrapped), $25,000 (up-and-coming), $100,000 (seed-funded), $250,000 (high growth)",
+      "Flex Usage credits on Workers, Pages, Queues, D1, and R2 (R2 capped at $10,000)",
+      "Early access to beta products and priority email support",
+      "Access to the Workers Launchpad funding program and VC partner network",
+      "Credits valid for one year or until fully used"
+    ],
+    "applyUrl": "https://www.cloudflare.com/forstartups/",
+    "requiresLogin": true,
+    "loginNote": "Sign in to your Cloudflare account to apply and receive credits.",
+    "eligibility": [
+      "Building a software product/service with an active website",
+      "Funded up to Series B",
+      "Founded within the last 5 years",
+      "Valid website and email address; bonus tiers for approved accelerator/partner affiliation"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.techStack"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Up to Series B; determines your credit tier."},
+      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text", "hint": "Mention Workers, Pages, R2, or D1 usage plans."},
+      {"label": "What are you building on the Developer Platform?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "Have an active website and matching company email.",
+      "State your funding stage accurately — it maps directly to the credit tier.",
+      "Highlight plans to build on Workers, Pages, D1, or R2 to fit the Developer Platform focus.",
+      "Reference any approved accelerator/partner affiliation to reach higher tiers."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "hubspot-startups",
+    "name": "HubSpot for Startups",
+    "provider": "HubSpot",
+    "logoEmoji": "🟠",
+    "benefitSummary": "Up to 90% off Year 1 (50% Year 2, 25% Year 3)",
+    "benefits": [
+      "90% off Year 1, 50% off Year 2, 25% off Year 3 for venture-funded startups (pre-seed to Series A)",
+      "30% off Year 1, 15% off Year 2 for startups affiliated with approved entrepreneurial organizations",
+      "Discounts apply across HubSpot's CRM, Marketing, Sales, and Service hubs",
+      "Onboarding support and startup education resources"
+    ],
+    "applyUrl": "https://www.hubspot.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Sign in or create a HubSpot account; discount is tied to your portal.",
+    "eligibility": [
+      "90% tier: raised pre-seed, seed, or Series A funding under $20M (not Series B+) and affiliated with an approved HubSpot for Startups partner",
+      "30% tier: associated with one of HubSpot's approved entrepreneurial organizations",
+      "Not available to agencies or service companies",
+      "Association with a recognized VC, accelerator, or incubator is required"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised", "extended.industry"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Pre-seed to Series A for the 90% tier."},
+      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Under $20M for the top discount tier."},
+      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
+      {"label": "VC / accelerator / incubator affiliation", "profileKey": "generated", "type": "text", "hint": "Name the approved partner that qualifies you — required for the discount."}
+    ],
+    "approvalTips": [
+      "Enter the exact approved VC, accelerator, or incubator you're affiliated with.",
+      "Keep funding under $20M and stage at Series A or earlier for the 90% tier.",
+      "Present a product company, not an agency or service business.",
+      "Use a matching company website and email domain."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "vercel-startups",
+    "name": "Vercel for Startups",
+    "provider": "Vercel",
+    "logoEmoji": "▲",
+    "benefitSummary": "Up to $30,000 in Vercel platform credits",
+    "benefits": [
+      "Up to $30,000 in credits toward the Vercel platform",
+      "Credits apply to Pro/Enterprise usage, compute, and add-ons",
+      "Access to Vercel's startup partner ecosystem",
+      "Non-dilutive — no equity or cost to apply"
+    ],
+    "applyUrl": "https://vercel.com/startups/credits",
+    "requiresLogin": true,
+    "loginNote": "Sign in to your Vercel account; credits are applied to that team.",
+    "eligibility": [
+      "Raised Series A or less",
+      "Apply within 12 months of your most recent funding round",
+      "Company website with an email that matches the website domain",
+      "Not previously received Vercel for Startups credits; affiliation with an approved Vercel partner"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text", "hint": "Email domain must match the website domain."},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Series A or less."},
+      {"label": "Funding raised / most recent round", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Apply within 12 months of this round."},
+      {"label": "Approved partner proof", "profileKey": "generated", "type": "text", "hint": "Screenshot/reference of your partner dashboard, hub, or accelerator affiliation."}
+    ],
+    "approvalTips": [
+      "Ensure your email domain matches your website domain.",
+      "Apply within 12 months of your most recent funding round.",
+      "Provide proof of affiliation with an approved Vercel partner (dashboard screenshot).",
+      "Use a Vercel team that has not previously received startup credits."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "airtable-startups",
+    "name": "Airtable for Startups",
+    "provider": "Airtable",
+    "logoEmoji": "🟨",
+    "benefitSummary": "~$500 in Airtable credits + program access",
+    "benefits": [
+      "Around $500 in Airtable license credits for one year",
+      "Larger allocations (e.g. $2,000) available through partner offers such as HubSpot for Startups",
+      "Program access for bootstrapped, pre-seed, and seed startups — no VC referral required",
+      "Existing Airtable customers also eligible"
+    ],
+    "applyUrl": "https://www.airtable.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Create a free Airtable account with your company email, then activate credits from the offer page.",
+    "eligibility": [
+      "Early-stage startup (bootstrapped, pre-seed, or seed)",
+      "Company-domain email required (personal Gmail/Outlook is a top rejection reason)",
+      "Substantive company website that matches your public profile",
+      "New or existing Airtable customers"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize", "extended.industry"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Company email", "profileKey": "basic.email", "type": "text", "hint": "Must be a company domain, not Gmail/Outlook."},
+      {"label": "Team size", "profileKey": "extended.teamSize", "type": "text"},
+      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
+      {"label": "How will you use Airtable?", "profileKey": "generated", "type": "textarea", "hint": "Describe operations, CRM, or internal tools you'll build."}
+    ],
+    "approvalTips": [
+      "Use a company-domain email — the #1 rejection reason is a personal Gmail/Outlook address.",
+      "Have a substantive website, not a thin or placeholder page.",
+      "Keep application details consistent with your Crunchbase/LinkedIn profile.",
+      "Sign up with your company email before activating the offer."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "anthropic-startups",
+    "name": "Claude for Startups (Anthropic)",
+    "provider": "Anthropic",
+    "logoEmoji": "🟤",
+    "benefitSummary": "Claude API credits — commonly $1,000–$5,000, up to $100,000 for funded startups",
+    "benefits": [
+      "Claude API credits, commonly $1,000–$5,000 at the standard tier",
+      "Up to $100,000 in credits for equity-funded startups referred by partner VCs/accelerators",
+      "Credits usable across the Claude model family (Opus, Sonnet, Haiku)",
+      "Credits valid roughly 12 months; non-dilutive (no equity taken)",
+      "Technical resources for building on Claude"
+    ],
+    "applyUrl": "https://claude.com/programs/startups",
+    "requiresLogin": true,
+    "loginNote": "Create or sign in to a Claude Console account before applying — credits land in that org.",
+    "eligibility": [
+      "Open to early-stage founders and startups (with or without VC backing)",
+      "Top tier: received equity funding from an institutional investor",
+      "Founded within the last 4 years",
+      "Not previously received Anthropic startup credits"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.pitch"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Company email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
+      {"label": "Elevator pitch", "profileKey": "extended.pitch", "type": "textarea"},
+      {"label": "What are you building with Claude?", "profileKey": "generated", "type": "textarea", "hint": "Describe concrete AI use cases and which Claude models you'll use."}
+    ],
+    "approvalTips": [
+      "Have a Claude Console account created before applying so credits can be issued.",
+      "Describe specific, real product use cases for Claude — vague AI ideas are weaker.",
+      "If equity-funded, note your investor to qualify for the higher credit tier.",
+      "Keep company age under 4 years and confirm you haven't received Anthropic credits before."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "digitalocean-startups",
+    "name": "DigitalOcean Startups (Hatch)",
+    "provider": "DigitalOcean",
+    "logoEmoji": "🌊",
+    "benefitSummary": "Up to $100,000 in cloud credits + free GPU access",
+    "benefits": [
+      "Up to $100,000 in DigitalOcean compute credits for 12 months",
+      "Up to 3 months of free GPU Droplet access",
+      "Premium support and marketplace access",
+      "Prioritized for AI-native startups"
+    ],
+    "applyUrl": "https://www.digitalocean.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Create a registered DigitalOcean team account with a business email before applying.",
+    "eligibility": [
+      "Raised $10 million or less",
+      "Company website with a matching corporate email",
+      "Registered DigitalOcean team account with a business email",
+      "Service-based businesses (consulting, agencies) are ineligible; AI-native startups prioritized"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.fundingRaised", "extended.techStack", "extended.monthlyCloudSpend"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text", "hint": "Must match your corporate email domain."},
+      {"label": "Business email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Must be $10M or less."},
+      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text"},
+      {"label": "Current / expected monthly cloud spend", "profileKey": "extended.monthlyCloudSpend", "type": "text", "hint": "Helps size the credit allocation."},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "AI-native workloads are prioritized — mention GPU/AI needs if relevant."}
+    ],
+    "approvalTips": [
+      "Create a DigitalOcean team account with a business email before applying.",
+      "Ensure your website domain matches your corporate email.",
+      "Keep total funding at $10M or less.",
+      "Highlight AI-native or GPU workloads to be prioritized, and present a product (not services) business."
+    ],
+    "tier": "locked-extra"
+  }
+]
