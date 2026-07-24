@@ -37,6 +37,25 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — login popup fix, more programs, honest install modal
+- Fixed login/modal overlay not dismissing: `.agent-modal-overlay{display:flex}`
+  outranked UA `[hidden]{display:none}`; added
+  `.agent-modal-overlay[hidden]{display:none!important}`.
+- Added 5 researched programs to the catalog with ACCURATE requiresLogin +
+  blocker notes (Mixpanel, Amplitude, Notion-direct, NVIDIA Inception,
+  Retool). Honest finding: for an unincorporated bootstrapped India startup,
+  "no-login AND eligible now" is essentially empty — incorporation is the
+  common gate; Amplitude/Notion are the closest but need a product account
+  (Scalemax DOES have a company-domain email, so that specific gate is fine).
+- IMPORTANT architecture reality surfaced: the "Add to Chrome"/"Quick try"
+  buttons launch Chrome via the local server, which is IMPOSSIBLE on the
+  deployed Scalingo instance (a cloud server can't touch the user's machine —
+  error was "Chrome not found ... /app/extension"). Made the modal
+  origin-aware: on non-localhost it shows the honest manual path (download
+  from GitHub → load unpacked) instead of the broken server-launch buttons.
+  The extension autofill is a LOCAL workflow (extension talks to
+  localhost:3000); the deployed site is profile management only.
+
 ### 2026-07-25 — multi-startup application run (prep)
 - Researched all 10 remaining programs (3 web-research subagents) for
   login-gating and eligibility. Public no-login forms: Cloudflare

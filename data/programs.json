@@ -479,5 +479,188 @@
       "Highlight AI-native or GPU workloads to be prioritized, and present a product (not services) business."
     ],
     "tier": "locked-extra"
+  },
+  {
+    "id": "mixpanel-startups",
+    "name": "Mixpanel for Startups",
+    "provider": "Mixpanel",
+    "logoEmoji": "📊",
+    "benefitSummary": "First year of the Startup Plan free (up to 1B events)",
+    "benefits": [
+      "One year free on the Mixpanel Startup Plan",
+      "Up to 1 billion events per year",
+      "Session Replay, Group Analytics, Warehouse Connectors",
+      "Account is auto-provisioned after the form is approved"
+    ],
+    "applyUrl": "https://mixpanel.com/startups-apply/",
+    "requiresLogin": false,
+    "loginNote": "Public application form — no product account needed to apply; it is created after approval.",
+    "eligibility": [
+      "Raised $8 million or less",
+      "BLOCKER for Scalemax: must be incorporated less than 5 years ago (Scalemax is not yet incorporated)",
+      "Must start sending data within 90 days of acceptance",
+      "Not a current or past paid Mixpanel customer"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "formFields": [
+      {"label": "Company website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
+      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Must be $8M or less."},
+      {"label": "Referral partner", "profileKey": "generated", "type": "select", "hint": "Choose 'I do not have a referral partner' if unaffiliated."},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "The only real gate for a bootstrapped India startup here is incorporation — incorporate first.",
+      "Apply from your company-domain email (contact@scalemax.pro).",
+      "Be honest that you are pre-revenue and bootstrapped; funding fit is fine.",
+      "Plan to instrument your product within 90 days of approval."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "amplitude-startups",
+    "name": "Amplitude for Startups (Scholarship)",
+    "provider": "Amplitude",
+    "logoEmoji": "📈",
+    "benefitSummary": "One year of the Growth plan free (200,000 MTUs)",
+    "benefits": [
+      "One year free on the Amplitude Growth plan",
+      "200,000 monthly tracked users",
+      "Behavioral Cohorts, Pathfinder, and advanced analytics",
+      "~96% acceptance, decision in about 2 business days"
+    ],
+    "applyUrl": "https://amplitude.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Applying goes through Amplitude account signup — create an account, then complete the scholarship application.",
+    "eligibility": [
+      "Fewer than 20 employees and under $10M funding",
+      "No incorporation requirement — bootstrapped and pre-revenue are fine",
+      "India is eligible; new (non-paying) customers only",
+      "Best eligibility fit for Scalemax of the analytics programs"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.teamSize"],
+    "formFields": [
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Team size", "profileKey": "extended.teamSize", "type": "text"},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "No incorporation needed — this is one you can actually apply to now (just create an Amplitude account).",
+      "Use your company-domain email.",
+      "Keep team size and funding within the caps (under 20 / under $10M).",
+      "Describe concrete product-analytics use to speed approval."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "notion-startups-v2",
+    "name": "Notion for Startups (direct)",
+    "provider": "Notion",
+    "logoEmoji": "⬛",
+    "benefitSummary": "3 months free of the Business plan incl. Notion AI",
+    "benefits": [
+      "3 months free on the Notion Business plan (non-partner applicants)",
+      "Includes Notion AI",
+      "Up to 6 months if applying through an approved partner",
+      "Standard collaboration, unlimited blocks"
+    ],
+    "applyUrl": "https://www.notion.so/startups-apply",
+    "requiresLogin": true,
+    "loginNote": "Requires signing into a Notion account; the application form appears after login.",
+    "eligibility": [
+      "Fewer than 50 employees and under $10M funding",
+      "New or non-paying Notion workspace",
+      "Requires a company-domain work email — Scalemax has one (contact@scalemax.pro), so this is fine",
+      "No incorporation requirement"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize"],
+    "formFields": [
+      {"label": "Work email", "profileKey": "basic.email", "type": "text", "hint": "Must be a company-domain email (not Gmail)."},
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Team size", "profileKey": "extended.teamSize", "type": "select"},
+      {"label": "Referral partner", "profileKey": "generated", "type": "select", "hint": "Choose 'I do not work with a listed partner' if unaffiliated."}
+    ],
+    "approvalTips": [
+      "Log into (or create) a Notion account first, then the form appears.",
+      "Apply with contact@scalemax.pro — the company-domain email requirement is satisfied.",
+      "No incorporation or funding proof needed for the 3-month tier."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "nvidia-inception",
+    "name": "NVIDIA Inception",
+    "provider": "NVIDIA",
+    "logoEmoji": "🟩",
+    "benefitSummary": "Free AI program — partner cloud credits, GPUs, VC exposure",
+    "benefits": [
+      "Free to join; no equity taken",
+      "Cloud credits via partners (e.g. AWS tiers $25k–$100k)",
+      "Technical enablement, DGX/GPU resources, deep-learning training",
+      "VC / Capital Connect exposure and go-to-market support"
+    ],
+    "applyUrl": "https://www.nvidia.com/en-us/startups/",
+    "requiresLogin": true,
+    "loginNote": "Application runs through the NVIDIA programs portal, which requires creating portal login credentials.",
+    "eligibility": [
+      "BLOCKER for Scalemax: startup must be officially incorporated (Scalemax is not yet)",
+      "At least one developer and a working website",
+      "Bootstrapped is allowed; revenue not required; under 10 years old",
+      "Consulting/outsourcing firms excluded — a product company like Scalemax is fine; India eligible"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.techStack", "extended.industry"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "AI / ML focus", "profileKey": "extended.industry", "type": "text"},
+      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text"},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "Emphasize the AI/ML core — frontier model orchestration."}
+    ],
+    "approvalTips": [
+      "Incorporate first — it is the hard gate; everything else about Scalemax fits well.",
+      "Lead with the AI/ML core (OpenAI + Anthropic orchestration) — this is an AI-focused program.",
+      "Have a working website and at least one named developer.",
+      "Once incorporated, this pairs with AWS/GCP partner credit tiers."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "retool-startups",
+    "name": "Retool for Startups",
+    "provider": "Retool",
+    "logoEmoji": "🔧",
+    "benefitSummary": "100% off for 1 year (up to ~$60k) + ~$200k partner deals",
+    "benefits": [
+      "100% off Retool Team/Business for the first year (credited after cycle 1)",
+      "Around $200,000 in partner deals",
+      "25% off in year two",
+      "Bootstrapped and pre-seed explicitly welcome"
+    ],
+    "applyUrl": "https://retool.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Requires creating a Retool account and starting a paid Team/Business plan before applying; the credit is refunded after the first billing cycle.",
+    "eligibility": [
+      "Bootstrapped, angel, pre-seed, seed, or Series A — under $10M raised",
+      "No incorporation requirement stated",
+      "Founded within the last 10 years; must be a new customer",
+      "Practical gate: you must front a paid plan first, then get credited"
+    ],
+    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "formFields": [
+      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
+      {"label": "Website", "profileKey": "basic.website", "type": "text"},
+      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
+      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
+      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+    ],
+    "approvalTips": [
+      "Eligibility fits (bootstrapped/pre-seed OK, no incorporation needed) — the catch is fronting a paid plan first.",
+      "Apply as a brand-new Retool customer.",
+      "Use your company-domain email."
+    ],
+    "tier": "locked-extra"
   }
 ]

@@ -460,12 +460,13 @@
   }
 
   function showInstallHelp() {
-    // Modal "Add to Chrome" experience. A web page cannot install an
-    // extension directly (Chrome removed inline installs in 2018), but the
-    // local server can launch Chrome for us — that plus a clipboard copy of
-    // the extension path gets within one click of the store experience.
     let overlay = $('#agentInstallOverlay');
     if (overlay) { overlay.hidden = false; return; }
+
+    // The server-launch install (open chrome://extensions / --load-extension)
+    // only works when the server IS this machine. On a cloud deploy the server
+    // cannot touch your computer, so we show the honest manual path instead.
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
     overlay = el('div', 'agent-modal-overlay');
     overlay.id = 'agentInstallOverlay';
@@ -473,81 +474,91 @@
     const modal = el('div', 'agent-modal');
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
-
     modal.appendChild(el('h3', 'agent-modal-title', 'Add LaunchPad Agent to Chrome'));
-    modal.appendChild(el('p', 'agent-modal-sub',
-      'The autofill agent is a Chrome extension. Chrome only allows one-click installs from its Web Store, so this is the next best thing — a one-time, ~20 second setup:'));
-
-    const steps = el('ol', 'agent-modal-steps');
-    [
-      'Click "Add to Chrome" below — Chrome opens the extensions page and the folder path is copied to your clipboard.',
-      'Switch on "Developer mode" (top-right toggle).',
-      'Click "Load unpacked" and paste the copied path into the folder picker.'
-    ].forEach((s) => steps.appendChild(el('li', null, s)));
-    modal.appendChild(steps);
 
     const btnRow = el('div', 'agent-modal-actions');
 
-    const addBtn = el('button', 'btn btn-primary', 'Add to Chrome');
-    addBtn.type = 'button';
-    addBtn.addEventListener('click', async () => {
-      addBtn.disabled = true;
-      try {
-        const res = await fetch('/api/install-agent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mode: 'open' })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (data.extensionPath && navigator.clipboard) {
-          try { await navigator.clipboard.writeText(data.extensionPath); } catch (_e) { /* ignore */ }
-        }
-        if (data.ok) {
-          toast('Chrome extensions page opened — path copied. Developer mode → Load unpacked → paste.', { sticky: true });
-        } else {
-          toast((data.error || 'Could not launch Chrome') + '. Path: ' + (data.extensionPath || 'extension folder'), { error: true, sticky: true });
-        }
-      } catch (_e) {
-        toast('Server not reachable — is LaunchPad running?', { error: true });
-      } finally {
-        addBtn.disabled = false;
-      }
-    });
-    btnRow.appendChild(addBtn);
+    if (isLocal) {
+      modal.appendChild(el('p', 'agent-modal-sub',
+        'The autofill agent is a Chrome extension. Chrome only allows one-click installs from its Web Store, so this is the next best thing — a one-time, ~20 second setup:'));
+      const steps = el('ol', 'agent-modal-steps');
+      [
+        'Click "Add to Chrome" below — Chrome opens the extensions page and the folder path is copied to your clipboard.',
+        'Switch on "Developer mode" (top-right toggle).',
+        'Click "Load unpacked" and paste the copied path into the folder picker.'
+      ].forEach((s) => steps.appendChild(el('li', null, s)));
+      modal.appendChild(steps);
 
-    const quickBtn = el('button', 'btn btn-fill', 'Quick try (this session)');
-    quickBtn.type = 'button';
-    quickBtn.title = 'Launches a Chrome window with the agent pre-loaded — no setup, lasts until Chrome fully closes';
-    quickBtn.addEventListener('click', async () => {
-      quickBtn.disabled = true;
-      try {
-        const res = await fetch('/api/install-agent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mode: 'load' })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (data.ok) {
-          toast('New Chrome window launching with the agent loaded — use the dashboard there.', { sticky: true });
-        } else {
-          toast(data.error || 'Could not launch Chrome', { error: true });
-        }
-      } catch (_e) {
-        toast('Server not reachable — is LaunchPad running?', { error: true });
-      } finally {
-        quickBtn.disabled = false;
-      }
-    });
-    btnRow.appendChild(quickBtn);
+      const addBtn = el('button', 'btn btn-primary', 'Add to Chrome');
+      addBtn.type = 'button';
+      addBtn.addEventListener('click', async () => {
+        addBtn.disabled = true;
+        try {
+          const res = await fetch('/api/install-agent', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'open' })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (data.extensionPath && navigator.clipboard) {
+            try { await navigator.clipboard.writeText(data.extensionPath); } catch (_e) { /* ignore */ }
+          }
+          if (data.ok) {
+            toast('Chrome extensions page opened — path copied. Developer mode → Load unpacked → paste.', { sticky: true });
+          } else {
+            toast((data.error || 'Could not launch Chrome') + '. Path: ' + (data.extensionPath || 'extension folder'), { error: true, sticky: true });
+          }
+        } catch (_e) {
+          toast('Server not reachable — is LaunchPad running?', { error: true });
+        } finally { addBtn.disabled = false; }
+      });
+      btnRow.appendChild(addBtn);
+
+      const quickBtn = el('button', 'btn btn-fill', 'Quick try (this session)');
+      quickBtn.type = 'button';
+      quickBtn.addEventListener('click', async () => {
+        quickBtn.disabled = true;
+        try {
+          const res = await fetch('/api/install-agent', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'load' })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (data.ok) toast('New Chrome window launching with the agent loaded.', { sticky: true });
+          else toast(data.error || 'Could not launch Chrome', { error: true });
+        } catch (_e) {
+          toast('Server not reachable — is LaunchPad running?', { error: true });
+        } finally { quickBtn.disabled = false; }
+      });
+      btnRow.appendChild(quickBtn);
+    } else {
+      // Deployed: cannot install anything on the visitor's machine.
+      modal.appendChild(el('p', 'agent-modal-sub',
+        'The autofill agent is a Chrome extension that runs on your own computer. This site is hosted in the cloud, so it cannot install anything on your machine — you load the extension locally, one time:'));
+      const steps = el('ol', 'agent-modal-steps');
+      [
+        'Open the GitHub repo (button below) → green "Code" button → "Download ZIP" → unzip it.',
+        'In Chrome, open chrome://extensions and turn on "Developer mode" (top-right).',
+        'Click "Load unpacked" and select the "extension" folder inside the unzipped project.',
+        'The ⚡ Fill this autofill runs against the app on YOUR computer — run it locally with "npm start" and use http://localhost:3000. This cloud site is for managing your profile from anywhere.'
+      ].forEach((s) => steps.appendChild(el('li', null, s)));
+      modal.appendChild(steps);
+
+      const ghBtn = el('a', 'btn btn-primary', 'Open GitHub repo');
+      ghBtn.href = 'https://github.com/Sagar3079/launchpad';
+      ghBtn.target = '_blank';
+      ghBtn.rel = 'noopener';
+      btnRow.appendChild(ghBtn);
+    }
 
     const closeBtn = el('button', 'btn btn-ghost', 'Close');
     closeBtn.type = 'button';
     closeBtn.addEventListener('click', () => { overlay.hidden = true; });
     btnRow.appendChild(closeBtn);
-
     modal.appendChild(btnRow);
-    modal.appendChild(el('p', 'agent-modal-note',
-      'Once added, this dialog never appears again — "⚡ Fill this" goes straight to work. Note: if Chrome ignores the quick-try window (newer versions block it), use the 3-step install.'));
+
+    modal.appendChild(el('p', 'agent-modal-note', isLocal
+      ? 'Once added, this dialog never appears again — "⚡ Fill this" goes straight to work. If Chrome ignores the quick-try window (newer versions block it), use the 3-step install.'
+      : 'Why not one-click? Chrome only allows one-click installs from its Web Store, and no website — especially a cloud-hosted one — can install extensions or reach your computer. The autofill also talks to a server on your own machine, so it is a local workflow.'));
 
     overlay.appendChild(modal);
     overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.hidden = true; });
