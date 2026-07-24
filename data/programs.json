@@ -261,9 +261,9 @@
       "Access to the Workers Launchpad funding program and VC partner network",
       "Credits valid for one year or until fully used"
     ],
-    "applyUrl": "https://www.cloudflare.com/forstartups/",
-    "requiresLogin": true,
-    "loginNote": "Sign in to your Cloudflare account to apply and receive credits.",
+    "applyUrl": "https://www.cloudflare.com/lp/startups",
+    "requiresLogin": false,
+    "loginNote": "Public application form; a free Cloudflare account is needed later to receive credits.",
     "eligibility": [
       "Building a software product/service with an active website",
       "Funded up to Series B",
@@ -299,9 +299,9 @@
       "Discounts apply across HubSpot's CRM, Marketing, Sales, and Service hubs",
       "Onboarding support and startup education resources"
     ],
-    "applyUrl": "https://www.hubspot.com/startups",
-    "requiresLogin": true,
-    "loginNote": "Sign in or create a HubSpot account; discount is tied to your portal.",
+    "applyUrl": "https://www.hubspot.com/startups/bootstrap-program",
+    "requiresLogin": false,
+    "loginNote": "Public Bootstrap Program form (no login). 30% off year one; for bootstrapped Asia/LatAm/Africa startups.",
     "eligibility": [
       "90% tier: raised pre-seed, seed, or Series A funding under $20M (not Series B+) and affiliated with an approved HubSpot for Startups partner",
       "30% tier: associated with one of HubSpot's approved entrepreneurial organizations",

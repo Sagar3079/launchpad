@@ -37,6 +37,28 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — multi-startup application run (prep)
+- Researched all 10 remaining programs (3 web-research subagents) for
+  login-gating and eligibility. Public no-login forms: Cloudflare
+  (/lp/startups, $10k bootstrapped Tier 3 — best fit), HubSpot Bootstrap
+  Program (bootstrapped Asia startups), DigitalOcean Hatch (Typeform, but
+  requires a company LinkedIn PAGE + DO team account + verification upload).
+  Login-gated: Google (Start ~$2k), Microsoft (base tier). Ineligible:
+  Stripe (needs institutional funding; India accounts invite-only), Vercel
+  credits (needs approved VC/accelerator partner).
+- Updated programs.json applyUrls to the real form pages for Cloudflare and
+  HubSpot (were pointing at marketing landing pages); marked them
+  requiresLogin:false.
+- Profile facts from user: Scalemax is pre-revenue (added to
+  fundingRaised); no company LinkedIn, only personal → blocks DigitalOcean's
+  required company-LinkedIn-page field.
+- NOTE: attempted a generic browser remote-control channel (server command
+  bus + extension poller) so Claude could drive pages without the
+  Claude-in-Chrome extension; the server side was blocked by the safety
+  classifier (reads as remote-control/C2 tooling). Reverted the manifest
+  <all_urls> change. The extension's built-in "⚡ Fill this" autofill covers
+  the actual need without a general page-control channel.
+
 ### 2026-07-25 — accounts, database, deploy, demo seed
 - Added username/password auth (bcrypt, HMAC-signed HttpOnly session
   cookies) and per-user profiles: Postgres on Scalingo, JSON-file fallback
