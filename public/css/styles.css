@@ -536,3 +536,8 @@ body:not(.agent-on) .btn-fill { opacity: .85; }
 .auth-modal input:focus { outline: 2px solid #D97757; outline-offset: 1px; border-color: #D97757; }
 .auth-error { color: #C0392B; font-size: 13.5px; margin: 4px 0 10px; }
 .agent-modal-note a { color: #D97757; font-weight: 600; }
+
+/* Fix: a class selector on the overlay was overriding the [hidden]
+   attribute (UA `[hidden]{display:none}` loses to `.agent-modal-overlay`),
+   so the login/modal box never disappeared. Make [hidden] win. */
+.agent-modal-overlay[hidden] { display: none !important; }
