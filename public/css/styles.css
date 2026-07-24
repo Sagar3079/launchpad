@@ -521,3 +521,18 @@ body:not(.agent-on) .btn-fill { opacity: .85; }
   padding: 10px 16px; cursor: pointer;
 }
 .btn-ghost:hover { border-color: #141413; color: #141413; }
+
+/* =============== Auth =============== */
+.auth-area { display: inline-flex; align-items: center; gap: 10px; margin-left: 12px; }
+.auth-user { font-weight: 600; color: #141413; }
+.auth-btn { padding: 8px 14px; font-size: 14px; }
+.auth-modal .field { display: block; margin-bottom: 14px; }
+.auth-modal .field-label { display: block; margin-bottom: 6px; font-size: 13.5px; color: #55524a; }
+.auth-modal input {
+  width: 100%; padding: 10px 12px; font-size: 15px;
+  border: 1px solid #E5E1D8; border-radius: 10px;
+  background: #fff; color: #141413; box-sizing: border-box;
+}
+.auth-modal input:focus { outline: 2px solid #D97757; outline-offset: 1px; border-color: #D97757; }
+.auth-error { color: #C0392B; font-size: 13.5px; margin: 4px 0 10px; }
+.agent-modal-note a { color: #D97757; font-weight: 600; }

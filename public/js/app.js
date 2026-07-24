@@ -124,6 +124,113 @@
     }
   }
 
+  /* ======================= AUTH ======================= */
+
+  let currentUser = null;
+  let authMode = 'login'; // 'login' | 'register'
+
+  function renderAuthArea() {
+    const area = $('#authArea');
+    if (!area) return;
+    area.textContent = '';
+    if (currentUser) {
+      const name = el('span', 'auth-user', '@' + currentUser.username);
+      const out = el('button', 'btn btn-ghost auth-btn', 'Log out');
+      out.type = 'button';
+      out.addEventListener('click', async () => {
+        try { await fetch('/api/logout', { method: 'POST' }); } catch (_e) { /* ignore */ }
+        currentUser = null;
+        renderAuthArea();
+        await loadProfile();
+        await loadPrograms();
+      });
+      area.appendChild(name);
+      area.appendChild(out);
+    } else {
+      const btn = el('button', 'btn btn-primary auth-btn', 'Log in / Sign up');
+      btn.type = 'button';
+      btn.addEventListener('click', () => openAuth('login'));
+      area.appendChild(btn);
+    }
+  }
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    const isLogin = mode === 'login';
+    $('#authTitle').textContent = isLogin ? 'Log in' : 'Create your account';
+    $('#authSubmit').textContent = isLogin ? 'Log in' : 'Sign up';
+    $('#authSwitchText').textContent = isLogin ? 'No account yet?' : 'Already have an account?';
+    $('#authSwitch').textContent = isLogin ? 'Create one' : 'Log in';
+    $('#authPassword').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+    const errEl = $('#authError');
+    errEl.hidden = true;
+  }
+
+  function openAuth(mode) {
+    setAuthMode(mode);
+    $('#authOverlay').hidden = false;
+    $('#authUsername').focus();
+  }
+
+  async function submitAuth(evt) {
+    evt.preventDefault();
+    const errEl = $('#authError');
+    errEl.hidden = true;
+    const username = $('#authUsername').value.trim();
+    const password = $('#authPassword').value;
+    const btn = $('#authSubmit');
+    btn.disabled = true;
+    try {
+      const res = await fetch(authMode === 'login' ? '/api/login' : '/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        errEl.textContent = data.error || 'Something went wrong — try again.';
+        errEl.hidden = false;
+        return;
+      }
+      currentUser = data.user;
+      $('#authOverlay').hidden = true;
+      $('#authPassword').value = '';
+      renderAuthArea();
+      await loadProfile();
+      await loadPrograms({ animate: true });
+    } catch (_e) {
+      errEl.textContent = 'Server not reachable.';
+      errEl.hidden = false;
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function initAuth() {
+    try {
+      const res = await fetch('/api/me');
+      const data = await res.json();
+      currentUser = data && data.user ? data.user : null;
+    } catch (_e) {
+      currentUser = null;
+    }
+    renderAuthArea();
+    // On a deployed (non-localhost) instance, an account is the only way to
+    // keep a profile — prompt right away when anonymous.
+    const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if (!currentUser && !isLocal) openAuth('login');
+  }
+
+  $('#authForm').addEventListener('submit', submitAuth);
+  $('#authSwitch').addEventListener('click', (e) => {
+    e.preventDefault();
+    setAuthMode(authMode === 'login' ? 'register' : 'login');
+  });
+  $('#authClose').addEventListener('click', () => { $('#authOverlay').hidden = true; });
+  $('#authOverlay').addEventListener('click', (ev) => {
+    if (ev.target === $('#authOverlay')) $('#authOverlay').hidden = true;
+  });
+
   async function saveProfile(evt) {
     evt.preventDefault();
     const btn = $('#saveBtn');
@@ -493,6 +600,8 @@
   form.addEventListener('input', updateCompleteness);
   form.addEventListener('change', updateCompleteness);
 
-  loadProfile();
-  loadPrograms();
+  initAuth().then(() => {
+    loadProfile();
+    loadPrograms();
+  });
 })();

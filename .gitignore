@@ -11,6 +11,9 @@ node_modules/
 # data/programs.json (the program catalog) stays tracked.
 data/profile.json
 
+# Local user store (file-mode fallback) — usernames + bcrypt password hashes.
+data/users.json
+
 # Local Claude Code settings — contains machine-local permission entries
 # (one of which embeds a literal API key). Never commit.
 .claude/settings.local.json

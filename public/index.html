@@ -18,6 +18,7 @@
     </div>
     <nav class="header-nav">
       <span class="pill" id="programCountPill">Loading programs…</span>
+      <span id="authArea" class="auth-area"></span>
     </nav>
   </div>
 </header>
@@ -173,6 +174,30 @@
     <p>LaunchPad presents your real profile persuasively. It never fabricates facts, and never clicks final submit for you.</p>
   </div>
 </footer>
+
+<div class="agent-modal-overlay" id="authOverlay" hidden>
+  <div class="agent-modal auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <h3 class="agent-modal-title" id="authTitle">Log in</h3>
+    <p class="agent-modal-sub" id="authSub">Your profile is saved to your account, on any device.</p>
+    <form id="authForm" novalidate>
+      <label class="field">
+        <span class="field-label">Username</span>
+        <input type="text" id="authUsername" autocomplete="username" placeholder="yourname" />
+      </label>
+      <label class="field">
+        <span class="field-label">Password</span>
+        <input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••" />
+      </label>
+      <p class="auth-error" id="authError" role="alert" hidden></p>
+      <div class="agent-modal-actions">
+        <button type="submit" class="btn btn-primary" id="authSubmit">Log in</button>
+        <button type="button" class="btn btn-ghost" id="authClose">Close</button>
+      </div>
+    </form>
+    <p class="agent-modal-note"><span id="authSwitchText">No account yet?</span>
+      <a href="#" id="authSwitch">Create one</a></p>
+  </div>
+</div>
 
 <script src="/js/app.js" defer></script>
 </body>
