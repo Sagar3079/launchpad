@@ -37,6 +37,20 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — Live Co-browse verified working (free tier)
+- Fixed with the user's Steel key + local verification: (1) embed debugUrl
+  (the /player interactive viewer), NOT sessionViewerUrl (Steel dashboard
+  login); (2) region 'fra' deprecated -> 'iad'; (3) Steel free tier forbids
+  proxy + captcha (needs >=$10), so those are now OPT-IN via STEEL_USE_PROXY;
+  stealthConfig (free) is what makes Google/MS serve pages (the earlier 403
+  was the default fingerprint, not the IP).
+- Verified end to end locally (6/6 infra checks + the real cobrowse module):
+  session -> viewer -> Playwright -> field scan -> Kiro answers -> fill, and
+  it filled only profile-matching fields, marking the rest missing (no
+  fabrication, failed:0). The human account login is the only unverifiable
+  step (by design). For best login odds add $10 Steel credit + set
+  STEEL_USE_PROXY=true (India residential proxy).
+
 ### 2026-07-25 — Live Co-browse (Steel.dev) built
 - Researched the "human logs in, agent fills" problem with 3 subagents.
   Findings: fresh automated logins to Google/MS are usually blocked, but a

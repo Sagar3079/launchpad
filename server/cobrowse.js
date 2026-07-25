@@ -58,18 +58,21 @@ async function startSession(userId) {
   const existing = sessions.get(userId);
   if (existing) return { sessionId: existing.id, liveViewUrl: existing.liveViewUrl };
 
-  const s = await steelFetch('/sessions', {
-    method: 'POST',
-    body: JSON.stringify({
-      // Route through a residential proxy pinned to India + stealth, so
-      // Google/Microsoft see a login from the user's real country (far fewer
-      // "verify it's you" challenges) instead of 403-ing a datacenter IP.
-      useProxy: { geolocation: { country: 'IN' } },
-      solveCaptcha: true,
-      stealthConfig: { humanizeInteractions: true },
-      region: 'iad',
-    }),
-  });
+  // Stealth (free) is what makes Google/Microsoft serve pages instead of 403.
+  // The residential proxy + captcha solving need >= $10 Steel balance, so they
+  // are OPT-IN via STEEL_USE_PROXY=true — they give the best odds on the actual
+  // login (a request from the user's real country), but stealth alone already
+  // loads the pages. Free tier works without them.
+  const body = {
+    stealthConfig: { humanizeInteractions: true },
+    region: 'iad',
+  };
+  if (/^(1|true|yes)$/i.test((process.env.STEEL_USE_PROXY || '').trim())) {
+    const country = (process.env.STEEL_PROXY_COUNTRY || 'IN').trim().toUpperCase();
+    body.useProxy = { geolocation: { country } };
+    body.solveCaptcha = true;
+  }
+  const s = await steelFetch('/sessions', { method: 'POST', body: JSON.stringify(body) });
 
   const id = s.id || s.sessionId;
   // debugUrl = the INTERACTIVE, embeddable live viewer (no Steel login needed).
