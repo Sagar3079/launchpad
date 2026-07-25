@@ -61,12 +61,13 @@ async function startSession(userId) {
   const s = await steelFetch('/sessions', {
     method: 'POST',
     body: JSON.stringify({
-      // Route through Steel's proxy + stealth so Google/Microsoft don't 403
-      // the raw datacenter IP before the human can even log in.
-      useProxy: true,
+      // Route through a residential proxy pinned to India + stealth, so
+      // Google/Microsoft see a login from the user's real country (far fewer
+      // "verify it's you" challenges) instead of 403-ing a datacenter IP.
+      useProxy: { geolocation: { country: 'IN' } },
       solveCaptcha: true,
       stealthConfig: { humanizeInteractions: true },
-      region: 'fra',
+      region: 'iad',
     }),
   });
 
