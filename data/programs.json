@@ -23,18 +23,71 @@
       "Portfolio package: associated with an approved Activate Provider (have their Organizational ID) and pre-Series B",
       "Portfolio applicants should apply within 12 months of their most recent funding round"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Company website URL", "profileKey": "basic.website", "type": "text", "hint": "Use a live domain that matches your email domain — mismatches are a top rejection reason."},
-      {"label": "Work email address", "profileKey": "basic.email", "type": "text", "hint": "Use a company-domain email, not Gmail/Outlook."},
-      {"label": "Country / region", "profileKey": "basic.country", "type": "text"},
-      {"label": "Company founded date / year", "profileKey": "basic.foundedYear", "type": "text", "hint": "Must be within the last 10 years to qualify."},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Founders package = self-funded; Portfolio = pre-Series B and provider-backed."},
-      {"label": "AWS account ID (the account that receives the credits)", "profileKey": null, "type": "text", "hint": "Reviewers cross-check that the account is new to Activate credits; use the account you actually intend to build on."},
-      {"label": "Activate Provider Organizational ID (Portfolio only)", "profileKey": null, "type": "text", "hint": "Only for Portfolio — the ID given by your accelerator/VC. Leave blank for Founders package."},
-      {"label": "What are you building? Describe your product and the problem it solves.", "profileKey": "generated", "type": "textarea", "hint": "Reviewers look for a clear, specific product with a real use case for AWS. Name the concrete AWS services you plan to use (EC2, S3, RDS, Bedrock, etc.) and tie them to real workloads — vague or generic answers get rejected."},
-      {"label": "How do you plan to use AWS?", "profileKey": "generated", "type": "textarea", "hint": "Show genuine intent to run production workloads on AWS. Mention expected monthly spend and specific services so the credit request looks proportionate and legitimate."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website URL",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "Use a live domain that matches your email domain — mismatches are a top rejection reason."
+      },
+      {
+        "label": "Work email address",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Use a company-domain email, not Gmail/Outlook."
+      },
+      {
+        "label": "Country / region",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "Company founded date / year",
+        "profileKey": "basic.foundedYear",
+        "type": "text",
+        "hint": "Must be within the last 10 years to qualify."
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Founders package = self-funded; Portfolio = pre-Series B and provider-backed."
+      },
+      {
+        "label": "AWS account ID (the account that receives the credits)",
+        "profileKey": null,
+        "type": "text",
+        "hint": "Reviewers cross-check that the account is new to Activate credits; use the account you actually intend to build on."
+      },
+      {
+        "label": "Activate Provider Organizational ID (Portfolio only)",
+        "profileKey": null,
+        "type": "text",
+        "hint": "Only for Portfolio — the ID given by your accelerator/VC. Leave blank for Founders package."
+      },
+      {
+        "label": "What are you building? Describe your product and the problem it solves.",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Reviewers look for a clear, specific product with a real use case for AWS. Name the concrete AWS services you plan to use (EC2, S3, RDS, Bedrock, etc.) and tie them to real workloads — vague or generic answers get rejected."
+      },
+      {
+        "label": "How do you plan to use AWS?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Show genuine intent to run production workloads on AWS. Mention expected monthly spend and specific services so the credit request looks proportionate and legitimate."
+      }
     ],
     "approvalTips": [
       "Make sure your website domain matches your work email domain — a mismatch is one of the most common rejection reasons.",
@@ -70,19 +123,76 @@
       "Scale AI tier: qualifying VC funding (seed to Series A), founded within 10 years, not yet received more than $5,000 in Google Cloud credits",
       "Not a prohibited business type; company in good standing"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Company website", "profileKey": "basic.website", "type": "text", "hint": "Domain must match your email domain AND your Cloud Billing account email domain."},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text", "hint": "Company-domain email required."},
-      {"label": "Country / headquarters", "profileKey": "basic.country", "type": "text"},
-      {"label": "Year founded", "profileKey": "basic.foundedYear", "type": "text", "hint": "Must be within the last 10 years."},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Determines Start vs Scale vs Scale-AI tier. Be accurate — funding is verified."},
-      {"label": "Total funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Scale tier requires institutional equity funding; Start tier is for pre-institutional startups."},
-      {"label": "Google Cloud Billing Account ID", "profileKey": null, "type": "text", "hint": "Reviewers apply credits to this account and check its email domain matches your website. Create the billing account before applying."},
-      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
-      {"label": "Describe your startup and product", "profileKey": "generated", "type": "textarea", "hint": "Reviewers want a clear product and market. AI-first startups should say so explicitly to be routed to the higher AI credit tier."},
-      {"label": "How will you use Google Cloud / Firebase?", "profileKey": "generated", "type": "textarea", "hint": "Name specific services (Compute Engine, GKE, BigQuery, Vertex AI, Firebase) and expected workloads; a credible usage plan speeds approval."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "Domain must match your email domain AND your Cloud Billing account email domain."
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Company-domain email required."
+      },
+      {
+        "label": "Country / headquarters",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "Year founded",
+        "profileKey": "basic.foundedYear",
+        "type": "text",
+        "hint": "Must be within the last 10 years."
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Determines Start vs Scale vs Scale-AI tier. Be accurate — funding is verified."
+      },
+      {
+        "label": "Total funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Scale tier requires institutional equity funding; Start tier is for pre-institutional startups."
+      },
+      {
+        "label": "Google Cloud Billing Account ID",
+        "profileKey": null,
+        "type": "text",
+        "hint": "Reviewers apply credits to this account and check its email domain matches your website. Create the billing account before applying."
+      },
+      {
+        "label": "Industry",
+        "profileKey": "extended.industry",
+        "type": "text"
+      },
+      {
+        "label": "Describe your startup and product",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Reviewers want a clear product and market. AI-first startups should say so explicitly to be routed to the higher AI credit tier."
+      },
+      {
+        "label": "How will you use Google Cloud / Firebase?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Name specific services (Compute Engine, GKE, BigQuery, Vertex AI, Firebase) and expected workloads; a credible usage plan speeds approval."
+      }
     ],
     "approvalTips": [
       "Ensure your website domain, work email domain, and Cloud Billing account email domain all match — this is explicitly checked.",
@@ -116,14 +226,46 @@
       "Higher credit tiers unlock with product progress; up to $150k requires Microsoft for Startups Investor Network affiliation",
       "OpenAI-branded credits are no longer offered — AI access is via Azure OpenAI Service"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.incorporated"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.incorporated"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Stage", "profileKey": "extended.stage", "type": "select"},
-      {"label": "Is the company incorporated?", "profileKey": "extended.incorporated", "type": "select"},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "Emphasize that you own a scalable software product, not services."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Is the company incorporated?",
+        "profileKey": "extended.incorporated",
+        "type": "select"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Emphasize that you own a scalable software product, not services."
+      }
     ],
     "approvalTips": [
       "Clearly present a software product you own — services/agency businesses are rejected.",
@@ -154,14 +296,46 @@
       "Building a scalable tech product",
       "Working website and a company-domain email (not Gmail/Outlook)"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.teamSize"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Company email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Team size / number of employees", "profileKey": "extended.teamSize", "type": "text", "hint": "Must be under 100."},
-      {"label": "What does your startup do?", "profileKey": "generated", "type": "textarea"},
-      {"label": "Partner / accelerator code (optional)", "profileKey": "generated", "type": "text", "hint": "A valid partner code unlocks the full 6-month offer instead of ~3 months."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Company email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Team size / number of employees",
+        "profileKey": "extended.teamSize",
+        "type": "text",
+        "hint": "Must be under 100."
+      },
+      {
+        "label": "What does your startup do?",
+        "profileKey": "generated",
+        "type": "textarea"
+      },
+      {
+        "label": "Partner / accelerator code (optional)",
+        "profileKey": "generated",
+        "type": "text",
+        "hint": "A valid partner code unlocks the full 6-month offer instead of ~3 months."
+      }
     ],
     "approvalTips": [
       "Apply from a brand-new workspace that has never been on a paid plan or trial promo.",
@@ -192,14 +366,46 @@
       "Fee credits are increasingly replacing waived-fee offers over time",
       "Exact benefit depends on country and partner (VC/accelerator) affiliation"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.fundingRaised"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
-      {"label": "Funding raised / investor", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Institutional funding proof strengthens the application."},
-      {"label": "What does your business do?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Funding raised / investor",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Institutional funding proof strengthens the application."
+      },
+      {
+        "label": "What does your business do?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "Apply through your VC or accelerator's Stripe partner link for the largest fee waivers.",
@@ -231,14 +437,47 @@
       "Building a single scalable software product (not an agency)",
       "New or existing MongoDB users, if not previously in the startup program"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.techStack"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.techStack"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Series A or earlier."},
-      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text", "hint": "Mention how MongoDB/Atlas fits your architecture."},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Series A or earlier."
+      },
+      {
+        "label": "Tech stack",
+        "profileKey": "extended.techStack",
+        "type": "text",
+        "hint": "Mention how MongoDB/Atlas fits your architecture."
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "Keep company age under 7 years and stage at Series A or earlier.",
@@ -270,14 +509,47 @@
       "Founded within the last 5 years",
       "Valid website and email address; bonus tiers for approved accelerator/partner affiliation"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.techStack"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.techStack"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Up to Series B; determines your credit tier."},
-      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text", "hint": "Mention Workers, Pages, R2, or D1 usage plans."},
-      {"label": "What are you building on the Developer Platform?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Up to Series B; determines your credit tier."
+      },
+      {
+        "label": "Tech stack",
+        "profileKey": "extended.techStack",
+        "type": "text",
+        "hint": "Mention Workers, Pages, R2, or D1 usage plans."
+      },
+      {
+        "label": "What are you building on the Developer Platform?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "Have an active website and matching company email.",
@@ -308,15 +580,54 @@
       "Not available to agencies or service companies",
       "Association with a recognized VC, accelerator, or incubator is required"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised", "extended.industry"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.fundingRaised",
+      "extended.industry"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Pre-seed to Series A for the 90% tier."},
-      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Under $20M for the top discount tier."},
-      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
-      {"label": "VC / accelerator / incubator affiliation", "profileKey": "generated", "type": "text", "hint": "Name the approved partner that qualifies you — required for the discount."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Pre-seed to Series A for the 90% tier."
+      },
+      {
+        "label": "Funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Under $20M for the top discount tier."
+      },
+      {
+        "label": "Industry",
+        "profileKey": "extended.industry",
+        "type": "text"
+      },
+      {
+        "label": "VC / accelerator / incubator affiliation",
+        "profileKey": "generated",
+        "type": "text",
+        "hint": "Name the approved partner that qualifies you — required for the discount."
+      }
     ],
     "approvalTips": [
       "Enter the exact approved VC, accelerator, or incubator you're affiliated with.",
@@ -347,14 +658,49 @@
       "Company website with an email that matches the website domain",
       "Not previously received Vercel for Startups credits; affiliation with an approved Vercel partner"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.fundingRaised"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text", "hint": "Email domain must match the website domain."},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select", "hint": "Series A or less."},
-      {"label": "Funding raised / most recent round", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Apply within 12 months of this round."},
-      {"label": "Approved partner proof", "profileKey": "generated", "type": "text", "hint": "Screenshot/reference of your partner dashboard, hub, or accelerator affiliation."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "Email domain must match the website domain."
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Series A or less."
+      },
+      {
+        "label": "Funding raised / most recent round",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Apply within 12 months of this round."
+      },
+      {
+        "label": "Approved partner proof",
+        "profileKey": "generated",
+        "type": "text",
+        "hint": "Screenshot/reference of your partner dashboard, hub, or accelerator affiliation."
+      }
     ],
     "approvalTips": [
       "Ensure your email domain matches your website domain.",
@@ -385,14 +731,47 @@
       "Substantive company website that matches your public profile",
       "New or existing Airtable customers"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize", "extended.industry"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.teamSize",
+      "extended.industry"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Company email", "profileKey": "basic.email", "type": "text", "hint": "Must be a company domain, not Gmail/Outlook."},
-      {"label": "Team size", "profileKey": "extended.teamSize", "type": "text"},
-      {"label": "Industry", "profileKey": "extended.industry", "type": "text"},
-      {"label": "How will you use Airtable?", "profileKey": "generated", "type": "textarea", "hint": "Describe operations, CRM, or internal tools you'll build."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Company email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Must be a company domain, not Gmail/Outlook."
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "Industry",
+        "profileKey": "extended.industry",
+        "type": "text"
+      },
+      {
+        "label": "How will you use Airtable?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Describe operations, CRM, or internal tools you'll build."
+      }
     ],
     "approvalTips": [
       "Use a company-domain email — the #1 rejection reason is a personal Gmail/Outlook address.",
@@ -424,14 +803,46 @@
       "Founded within the last 4 years",
       "Not previously received Anthropic startup credits"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.pitch"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.pitch"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Company email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
-      {"label": "Elevator pitch", "profileKey": "extended.pitch", "type": "textarea"},
-      {"label": "What are you building with Claude?", "profileKey": "generated", "type": "textarea", "hint": "Describe concrete AI use cases and which Claude models you'll use."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Company email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Elevator pitch",
+        "profileKey": "extended.pitch",
+        "type": "textarea"
+      },
+      {
+        "label": "What are you building with Claude?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Describe concrete AI use cases and which Claude models you'll use."
+      }
     ],
     "approvalTips": [
       "Have a Claude Console account created before applying so credits can be issued.",
@@ -462,15 +873,55 @@
       "Registered DigitalOcean team account with a business email",
       "Service-based businesses (consulting, agencies) are ineligible; AI-native startups prioritized"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.fundingRaised", "extended.techStack", "extended.monthlyCloudSpend"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.fundingRaised",
+      "extended.techStack",
+      "extended.monthlyCloudSpend"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text", "hint": "Must match your corporate email domain."},
-      {"label": "Business email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Must be $10M or less."},
-      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text"},
-      {"label": "Current / expected monthly cloud spend", "profileKey": "extended.monthlyCloudSpend", "type": "text", "hint": "Helps size the credit allocation."},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "AI-native workloads are prioritized — mention GPU/AI needs if relevant."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "Must match your corporate email domain."
+      },
+      {
+        "label": "Business email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Must be $10M or less."
+      },
+      {
+        "label": "Tech stack",
+        "profileKey": "extended.techStack",
+        "type": "text"
+      },
+      {
+        "label": "Current / expected monthly cloud spend",
+        "profileKey": "extended.monthlyCloudSpend",
+        "type": "text",
+        "hint": "Helps size the credit allocation."
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "AI-native workloads are prioritized — mention GPU/AI needs if relevant."
+      }
     ],
     "approvalTips": [
       "Create a DigitalOcean team account with a business email before applying.",
@@ -501,13 +952,42 @@
       "Must start sending data within 90 days of acceptance",
       "Not a current or past paid Mixpanel customer"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.fundingRaised"
+    ],
     "formFields": [
-      {"label": "Company website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
-      {"label": "Funding raised", "profileKey": "extended.fundingRaised", "type": "text", "hint": "Must be $8M or less."},
-      {"label": "Referral partner", "profileKey": "generated", "type": "select", "hint": "Choose 'I do not have a referral partner' if unaffiliated."},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text",
+        "hint": "Must be $8M or less."
+      },
+      {
+        "label": "Referral partner",
+        "profileKey": "generated",
+        "type": "select",
+        "hint": "Choose 'I do not have a referral partner' if unaffiliated."
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "The only real gate for a bootstrapped India startup here is incorporation — incorporate first.",
@@ -538,13 +1018,40 @@
       "India is eligible; new (non-paying) customers only",
       "Best eligibility fit for Scalemax of the analytics programs"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.teamSize"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.teamSize"
+    ],
     "formFields": [
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Team size", "profileKey": "extended.teamSize", "type": "text"},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "No incorporation needed — this is one you can actually apply to now (just create an Amplitude account).",
@@ -575,13 +1082,41 @@
       "Requires a company-domain work email — Scalemax has one (contact@scalemax.pro), so this is fine",
       "No incorporation requirement"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.teamSize"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.teamSize"
+    ],
     "formFields": [
-      {"label": "Work email", "profileKey": "basic.email", "type": "text", "hint": "Must be a company-domain email (not Gmail)."},
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Team size", "profileKey": "extended.teamSize", "type": "select"},
-      {"label": "Referral partner", "profileKey": "generated", "type": "select", "hint": "Choose 'I do not work with a listed partner' if unaffiliated."}
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Must be a company-domain email (not Gmail)."
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "select"
+      },
+      {
+        "label": "Referral partner",
+        "profileKey": "generated",
+        "type": "select",
+        "hint": "Choose 'I do not work with a listed partner' if unaffiliated."
+      }
     ],
     "approvalTips": [
       "Log into (or create) a Notion account first, then the form appears.",
@@ -611,13 +1146,41 @@
       "Bootstrapped is allowed; revenue not required; under 10 years old",
       "Consulting/outsourcing firms excluded — a product company like Scalemax is fine; India eligible"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.techStack", "extended.industry"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.techStack",
+      "extended.industry"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "AI / ML focus", "profileKey": "extended.industry", "type": "text"},
-      {"label": "Tech stack", "profileKey": "extended.techStack", "type": "text"},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea", "hint": "Emphasize the AI/ML core — frontier model orchestration."}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "AI / ML focus",
+        "profileKey": "extended.industry",
+        "type": "text"
+      },
+      {
+        "label": "Tech stack",
+        "profileKey": "extended.techStack",
+        "type": "text"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Emphasize the AI/ML core — frontier model orchestration."
+      }
     ],
     "approvalTips": [
       "Incorporate first — it is the hard gate; everything else about Scalemax fits well.",
@@ -648,18 +1211,532 @@
       "Founded within the last 10 years; must be a new customer",
       "Practical gate: you must front a paid plan first, then get credited"
     ],
-    "requiredProfileFields": ["basic.startupName", "basic.website", "basic.email", "basic.description", "extended.stage", "extended.fundingRaised"],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.fundingRaised"
+    ],
     "formFields": [
-      {"label": "Company name", "profileKey": "basic.startupName", "type": "text"},
-      {"label": "Website", "profileKey": "basic.website", "type": "text"},
-      {"label": "Work email", "profileKey": "basic.email", "type": "text"},
-      {"label": "Funding stage", "profileKey": "extended.stage", "type": "select"},
-      {"label": "What are you building?", "profileKey": "generated", "type": "textarea"}
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
     ],
     "approvalTips": [
       "Eligibility fits (bootstrapped/pre-seed OK, no incorporation needed) — the catch is fronting a paid plan first.",
       "Apply as a brand-new Retool customer.",
       "Use your company-domain email."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "sentry-for-startups",
+    "name": "Sentry for Startups",
+    "provider": "Sentry",
+    "logoEmoji": "🐞",
+    "benefitSummary": "Up to $5,000 in Sentry credits (12 months) plus priority support.",
+    "benefits": [
+      "Up to $5,000 in platform credits, valid for 12 months",
+      "Priority support from the Sentry team",
+      "Full access to error monitoring, tracing, and performance tooling",
+      "No equity taken; free to apply"
+    ],
+    "applyUrl": "https://sentry.io/for/startups/apply/",
+    "requiresLogin": true,
+    "loginNote": "Requires a free Sentry account first — the form asks for your Sentry Org Slug, which exists only after you sign up.",
+    "eligibility": [
+      "Founded within the last 2 years",
+      "Raised less than $5M (bootstrapped is explicitly fine)",
+      "New to paying for Sentry (no prior paid plan)",
+      "No incorporation or VC-partner referral required"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Startup Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Startup Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Sentry Org Slug",
+        "profileKey": "generated",
+        "type": "text",
+        "hint": "From your Sentry account."
+      },
+      {
+        "label": "Founder Name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Contact Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding Details",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      }
+    ],
+    "approvalTips": [
+      "Create the free Sentry account and grab your Org Slug before starting the form.",
+      "State clearly you are bootstrapped / raised under $5M.",
+      "Founding must be within 24 months.",
+      "Reply usually in 2-3 business days."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "together-ai-startups",
+    "name": "Together AI Startup Accelerator",
+    "provider": "Together AI",
+    "logoEmoji": "🤝",
+    "benefitSummary": "Up to $15K compute credits (Build tier), scaling to $50K, plus engineering hours.",
+    "benefits": [
+      "Up to $15K compute credits (Build tier, <=$5M raised); $30K/$50K higher tiers",
+      "Credits across serverless inference, fine-tuning, dedicated endpoints",
+      "3+ hours of hands-on engineering support",
+      "GTM support, community, and VC-network access"
+    ],
+    "applyUrl": "https://www.together.ai/startup-accelerator",
+    "requiresLogin": true,
+    "loginNote": "Credits redeem against a Together AI account; create/sign in to apply them.",
+    "eligibility": [
+      "AI-native product built on Together AI",
+      "Build tier covers up to $5M raised — a bootstrapped startup qualifies",
+      "No VC referral required to apply",
+      "No stated India or incorporation restriction"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Total Funding Raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      },
+      {
+        "label": "What you're building",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Lead with a concrete inference / fine-tuning use case on Together's models.",
+      "Select the Build tier and state <=$5M (or $0) raised.",
+      "Use your company-domain email.",
+      "Review takes roughly 5-14 business days."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "neon-startups",
+    "name": "Neon Startup Program",
+    "provider": "Neon (Databricks)",
+    "logoEmoji": "🐘",
+    "benefitSummary": "Self-funded track: up to $1,000 in Neon credits (VC track goes far higher).",
+    "benefits": [
+      "Up to $1,000 in Neon credits on the self-funded (bootstrapped) track",
+      "Serverless Postgres with autoscaling and branching",
+      "Onboarding support and early feature access",
+      "Credits valid 12 months"
+    ],
+    "applyUrl": "https://neon.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Credits apply to your Neon account; sign up during the flow.",
+    "eligibility": [
+      "Self-funded track: under $1M funding, early-stage MVP — bootstrapped India startups qualify",
+      "The advertised $100K+ is VC-only (needs >=$1M raised or an accelerator) — NOT this profile",
+      "No incorporation or geography restriction",
+      "Reality check: bootstrapped gets ~$1,000, not the headline figure"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Founder Name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Company Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Investor / Accelerator (if any)",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      }
+    ],
+    "approvalTips": [
+      "Choose the self-funded track; note 'under $1M / bootstrapped, building MVP'.",
+      "Leave investor blank or write 'bootstrapped' — do not invent one.",
+      "Have your Neon account created so credits apply on approval.",
+      "Replies in a few business days."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "elevenlabs-startup-grants",
+    "name": "ElevenLabs Startup Grants",
+    "provider": "ElevenLabs",
+    "logoEmoji": "🎙️",
+    "benefitSummary": "33M characters of audio (~680 hrs, ~$4,000+ value) free for 12 months.",
+    "benefits": [
+      "33,000,000 characters of audio generation, free 12 months",
+      "Full-platform access including Conversational AI / Agents",
+      "~680 hours of agents usage, ~$4,000+ list value",
+      "Access to founder events"
+    ],
+    "applyUrl": "https://elevenlabs.io/startup-grants",
+    "requiresLogin": true,
+    "loginNote": "Grant ties to the ElevenLabs account you apply with; sign up/sign in first.",
+    "eligibility": [
+      "Fewer than 25 employees",
+      "Company-domain email required (personal emails rejected) — Scalemax has one",
+      "Real business/monetization strategy; agencies and one-off projects excluded",
+      "Open worldwide (India eligible); no funding or incorporation requirement"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Startup Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Business Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "How you'll use ElevenLabs",
+        "profileKey": "generated",
+        "type": "textarea"
+      },
+      {
+        "label": "Team details",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      }
+    ],
+    "approvalTips": [
+      "Use the company-domain email — personal emails are auto-disqualified.",
+      "Describe a concrete voice/agent use case with a monetization plan.",
+      "Emphasize team size under 25.",
+      "Turnaround ~5-10 business days."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "fireworks-ai-startups",
+    "name": "Fireworks for Startups",
+    "provider": "Fireworks AI",
+    "logoEmoji": "🎆",
+    "benefitSummary": "Build credits (third parties cite ~$10K) plus higher rate limits and AI engineering access.",
+    "benefits": [
+      "Build credits to prototype and scale inference",
+      "Higher rate limits for growing workloads",
+      "Direct access to Fireworks' applied AI engineers",
+      "Startup community: meetups, workshops, hackathons"
+    ],
+    "applyUrl": "https://fireworks.ai/startup-program",
+    "requiresLogin": true,
+    "loginNote": "You register with a Fireworks account; credits and rate limits apply to it.",
+    "eligibility": [
+      "AI-native startup building generative-AI products needing fast inference",
+      "No mandatory VC referral",
+      "No incorporation or India restriction stated",
+      "Exact credit amount not published officially (third parties cite ~$10K)"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Inference use case",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Register a Fireworks account first (form loads inside the logged-in page).",
+      "Be specific about which models and inference volume you need.",
+      "Frame the product as AI-native with a scaling story.",
+      "Credits apply to your account after review."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "pinecone-startups",
+    "name": "Pinecone for Startups",
+    "provider": "Pinecone",
+    "logoEmoji": "🌲",
+    "benefitSummary": "Free Standard Tier + Pro Support plus ~$5K in usage credits.",
+    "benefits": [
+      "Free access to Pinecone Standard Tier",
+      "Pro Support: dedicated Slack, RBAC, backups, metrics",
+      "~$5K in usage credits and discounts",
+      "Deploy to any cloud/region"
+    ],
+    "applyUrl": "https://www.pinecone.io/startup-program/",
+    "requiresLogin": true,
+    "loginNote": "Benefit ties to your Pinecone account; sign up/sign in to redeem.",
+    "eligibility": [
+      "Fewer than 100 employees",
+      "Series A or earlier (bootstrapped / pre-seed qualifies)",
+      "No geography or incorporation requirement — India eligible",
+      "For product startups, not agencies"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Use case (RAG / vector search)",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Sign into Pinecone before clicking 'Join the program'.",
+      "State Series A or earlier, under 100 employees.",
+      "Describe a genuine RAG / vector-search use case.",
+      "If the button stalls, email startups@pinecone.io."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "intercom-early-stage",
+    "name": "Intercom Early Stage",
+    "provider": "Intercom",
+    "logoEmoji": "💬",
+    "benefitSummary": "93% off Intercom year 1 (50% yr 2, 25% yr 3) plus 1 year of Fin AI free.",
+    "benefits": [
+      "93% off the Intercom helpdesk year 1, 50% year 2, 25% year 3",
+      "1 year of Fin free (300 outcomes + 15 qualifications/month yr 1)",
+      "Helpdesk from $33/month after discount",
+      "Bundled partner perks"
+    ],
+    "applyUrl": "https://www.intercom.com/early-stage",
+    "requiresLogin": true,
+    "loginNote": "Applying creates/uses an Intercom account.",
+    "eligibility": [
+      "Up to $10M funding — a bootstrapped startup qualifies",
+      "Fewer than 15 employees",
+      "Not a current Intercom customer / not on an annual plan",
+      "No incorporation or India restriction stated"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Work Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      }
+    ],
+    "approvalTips": [
+      "Apply through the Early Stage page to attach the discount.",
+      "Confirm under 15 employees and under $10M raised.",
+      "Use the company-domain email tied to your website.",
+      "Do not already hold an active Intercom subscription."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "zendesk-for-startups",
+    "name": "Zendesk for Startups",
+    "provider": "Zendesk",
+    "logoEmoji": "🎧",
+    "benefitSummary": "Zendesk Suite free for 6 months (up to 50 agents), incl. AI Agents and Copilot.",
+    "benefits": [
+      "Free Zendesk Suite for 6 months, up to 50 agents",
+      "Includes AI Agents and Copilot",
+      "Extended access for partner-referred startups",
+      "No equity taken"
+    ],
+    "applyUrl": "https://www.zendesk.com/startups/apply/",
+    "requiresLogin": true,
+    "loginNote": "Form starts with your work email and links a Zendesk account.",
+    "eligibility": [
+      "New Zendesk subscriber (current/former paid customers excluded)",
+      "Fewer than 250 employees (50+ must be partner-referred)",
+      "Raised no more than Series B — bootstrapped is allowed",
+      "Global (India selectable); excludes Talk minutes and add-ons"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Work Email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Founder Name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Company Name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Employee Count",
+        "profileKey": "extended.teamSize",
+        "type": "select"
+      },
+      {
+        "label": "Funding Stage",
+        "profileKey": "extended.fundingRaised",
+        "type": "select"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "select"
+      }
+    ],
+    "approvalTips": [
+      "Select 'No funding' / bootstrapped and the smallest employee bracket.",
+      "Use the company-domain work email.",
+      "Pick India in the country dropdown; leave referral partner blank.",
+      "Must be a brand-new Zendesk account."
     ],
     "tier": "locked-extra"
   }
