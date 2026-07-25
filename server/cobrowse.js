@@ -60,11 +60,21 @@ async function startSession(userId) {
 
   const s = await steelFetch('/sessions', {
     method: 'POST',
-    body: JSON.stringify({ solveCaptcha: false }),
+    body: JSON.stringify({
+      // Route through Steel's proxy + stealth so Google/Microsoft don't 403
+      // the raw datacenter IP before the human can even log in.
+      useProxy: true,
+      solveCaptcha: true,
+      stealthConfig: { humanizeInteractions: true },
+      region: 'fra',
+    }),
   });
 
   const id = s.id || s.sessionId;
-  const liveViewUrl = s.sessionViewerUrl || s.debugUrl || s.liveViewUrl;
+  // debugUrl = the INTERACTIVE, embeddable live viewer (no Steel login needed).
+  // sessionViewerUrl = the Steel DASHBOARD page (requires a Steel account) — do
+  // NOT embed that; it renders as a "Sign in to Steel" wall.
+  const liveViewUrl = s.debugUrl || s.sessionViewerUrl || s.liveViewUrl;
   const wsBase = s.websocketUrl || s.connectUrl || s.wsUrl;
   if (!id || !liveViewUrl || !wsBase) {
     throw new Error('Steel session response missing id / viewer / websocket URL');
