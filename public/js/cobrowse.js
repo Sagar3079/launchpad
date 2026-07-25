@@ -84,6 +84,8 @@
       fillBtn.disabled = !session;
       fillBtn.title = 'Fill the page open in the cloud browser';
     }
+    const mf = $('#maxFillBtn');
+    if (mf) mf.disabled = fillBtn.disabled;
   }
 
   async function open() {
@@ -121,6 +123,7 @@
     if (!session) return;
     // Fill whatever page is currently open in the live browser.
     $('#fillBtn').disabled = true;
+    $('#maxFillBtn').disabled = true;
     status('Reading the form and filling it — watch the browser below…');
     $('#cbResult').hidden = true;
     const programId = $('#programSelect').value || '';
@@ -130,12 +133,12 @@
         body: JSON.stringify({ programId })
       });
       const d = await res.json();
-      if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); $('#fillBtn').disabled = false; return; }
+      if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); updateMode(); return; }
       // Fill runs in the background; poll for the result (no 30s timeout).
       await pollFillResult();
     } catch (_e) {
       status('Server not reachable during fill.', true);
-      $('#fillBtn').disabled = false;
+      updateMode();
     }
   }
 
@@ -163,7 +166,7 @@
       }
       break;
     }
-    $('#fillBtn').disabled = false;
+    updateMode();
   }
 
   function toggleMax() {
@@ -187,6 +190,7 @@
   $('#startBtn').addEventListener('click', start);
   $('#openBtn').addEventListener('click', open);
   $('#fillBtn').addEventListener('click', fill);
+  $('#maxFillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
   $('#programSelect').addEventListener('change', updateMode);
   $('#maxBtn').addEventListener('click', toggleMax);

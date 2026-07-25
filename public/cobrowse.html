@@ -50,7 +50,10 @@
     <div class="card" id="frameCard" hidden style="padding:0; overflow:hidden;">
       <div class="cb-frame-bar">
         <span class="cb-frame-label">Live cloud browser</span>
-        <button type="button" class="btn btn-ghost" id="maxBtn">⛶ Expand</button>
+        <span style="display:flex; gap:8px;">
+          <button type="button" class="btn btn-fill" id="maxFillBtn" disabled>⚡ Fill now</button>
+          <button type="button" class="btn btn-ghost" id="maxBtn">⛶ Expand</button>
+        </span>
       </div>
       <iframe id="cbFrame" title="Live browser"
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
