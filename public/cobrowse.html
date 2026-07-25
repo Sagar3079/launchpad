@@ -46,9 +46,13 @@
       <div id="cbResult" class="unlock-banner" hidden></div>
     </div>
 
+    <div id="maxBackdrop" class="cb-backdrop" hidden></div>
     <div class="card" id="frameCard" hidden style="padding:0; overflow:hidden;">
+      <div class="cb-frame-bar">
+        <span class="cb-frame-label">Live cloud browser</span>
+        <button type="button" class="btn btn-ghost" id="maxBtn">⛶ Expand</button>
+      </div>
       <iframe id="cbFrame" title="Live browser"
-              style="width:100%; height:640px; border:0; display:block; background:#141413;"
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
               allow="clipboard-read; clipboard-write"></iframe>
     </div>

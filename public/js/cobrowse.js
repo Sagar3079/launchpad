@@ -131,20 +131,46 @@
       });
       const d = await res.json();
       if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); $('#fillBtn').disabled = false; return; }
-      const r = d.data;
-      let msg = `Filled ${r.filled} field${r.filled === 1 ? '' : 's'}.`;
-      if (r.missing && r.missing.length) msg += ` ${r.missing.length} need your input: ` + r.missing.map((m) => m.label).join(', ') + '.';
-      if (r.failed) msg += ` ${r.failed} could not be filled.`;
-      msg += ' Review everything, then submit yourself.';
-      const box = $('#cbResult');
-      box.textContent = msg;
-      box.hidden = false;
-      status('');
+      // Fill runs in the background; poll for the result (no 30s timeout).
+      await pollFillResult();
     } catch (_e) {
       status('Server not reachable during fill.', true);
-    } finally {
       $('#fillBtn').disabled = false;
     }
+  }
+
+  async function pollFillResult() {
+    const deadline = Date.now() + 120000;
+    for (;;) {
+      await new Promise((r) => setTimeout(r, 2000));
+      let d;
+      try {
+        d = await (await fetch('/api/cobrowse/fill-result')).json();
+      } catch (_e) { continue; } // transient — keep polling
+      if (d.status === 'running') {
+        if (Date.now() > deadline) { status('Fill is taking unusually long — check the browser below.', true); break; }
+        continue;
+      }
+      if (d.status === 'error') { status('Fill error: ' + (d.error || 'unknown'), true); break; }
+      if (d.status === 'done' && d.result) {
+        const r = d.result;
+        let msg = `Filled ${r.filled} field${r.filled === 1 ? '' : 's'}.`;
+        if (r.missing && r.missing.length) msg += ` ${r.missing.length} need your input: ` + r.missing.map((m) => m.label).join(', ') + '.';
+        if (r.failed) msg += ` ${r.failed} could not be filled.`;
+        msg += ' Review everything, then submit yourself.';
+        const box = $('#cbResult'); box.textContent = msg; box.hidden = false;
+        status('');
+      }
+      break;
+    }
+    $('#fillBtn').disabled = false;
+  }
+
+  function toggleMax() {
+    const card = $('#frameCard');
+    const on = card.classList.toggle('cb-max');
+    $('#maxBackdrop').hidden = !on;
+    $('#maxBtn').textContent = on ? '× Close' : '⛶ Expand';
   }
 
   async function stop() {
@@ -163,6 +189,11 @@
   $('#fillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
   $('#programSelect').addEventListener('change', updateMode);
+  $('#maxBtn').addEventListener('click', toggleMax);
+  $('#maxBackdrop').addEventListener('click', toggleMax);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && $('#frameCard').classList.contains('cb-max')) toggleMax();
+  });
   window.addEventListener('beforeunload', () => { if (session) navigator.sendBeacon('/api/cobrowse/stop'); });
 
   loadPrograms();

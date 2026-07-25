@@ -449,21 +449,39 @@ app.post('/api/cobrowse/open', async (req, res) => {
   }
 });
 
+// Fill runs in the BACKGROUND and the client polls /fill-result — otherwise a
+// slow fill (proxy latency + heavy page) exceeds Scalingo's ~30s request
+// timeout and the browser reports "server not reachable".
+const cobrowseFills = new Map(); // userId -> {status, result, error, ts}
+
 app.post('/api/cobrowse/fill', async (req, res) => {
   if (!requireLogin(req, res)) return;
-  try {
-    const profile = await profileForRequest(req);
-    const applyUrl = req.body && typeof req.body.applyUrl === 'string' ? req.body.applyUrl : '';
-    const programId = req.body && typeof req.body.programId === 'string' ? req.body.programId : '';
-    const result = await cobrowse.fillCurrentPage(req.userId, { applyUrl, profile });
-    // Auto-mark the program filled once we've actually filled fields for it.
-    if (programId && result && result.filled > 0) {
-      try { await db.setFilled(req.userId, programId, true); } catch { /* non-fatal */ }
-    }
-    res.json({ ok: true, data: result });
-  } catch (err) {
-    res.status(502).json({ ok: false, error: err.message });
-  }
+  const userId = req.userId;
+  const applyUrl = req.body && typeof req.body.applyUrl === 'string' ? req.body.applyUrl : '';
+  const programId = req.body && typeof req.body.programId === 'string' ? req.body.programId : '';
+  let profile;
+  try { profile = await profileForRequest(req); } catch { profile = defaultProfile(); }
+
+  cobrowseFills.set(userId, { status: 'running', ts: Date.now() });
+  res.json({ ok: true, data: { started: true } }); // respond immediately
+
+  cobrowse.fillCurrentPage(userId, { applyUrl, profile })
+    .then(async (result) => {
+      if (programId && result && result.filled > 0) {
+        try { await db.setFilled(userId, programId, true); } catch { /* non-fatal */ }
+      }
+      cobrowseFills.set(userId, { status: 'done', result, ts: Date.now() });
+    })
+    .catch((err) => {
+      cobrowseFills.set(userId, { status: 'error', error: err.message, ts: Date.now() });
+    });
+});
+
+app.get('/api/cobrowse/fill-result', (req, res) => {
+  if (!req.userId) return res.status(401).json({ ok: false, error: 'Log in' });
+  const j = cobrowseFills.get(req.userId);
+  if (!j) return res.json({ ok: true, status: 'idle' });
+  res.json({ ok: true, status: j.status, result: j.result || null, error: j.error || null });
 });
 
 app.post('/api/cobrowse/stop', async (req, res) => {
