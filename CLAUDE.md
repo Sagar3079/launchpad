@@ -37,6 +37,23 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — Live Co-browse (Steel.dev) built
+- Researched the "human logs in, agent fills" problem with 3 subagents.
+  Findings: fresh automated logins to Google/MS are usually blocked, but a
+  HUMAN logging in via a live-view cloud browser + agent driving the SAME
+  session is the viable pattern; our use case (apply once per program) needs
+  no durable session persistence. Steel.dev chosen (free 100 browser-hrs/mo,
+  open-source, Playwright/CDP). Google/MS may still challenge even human
+  logins; Stripe skipped (use API).
+- Built: server/cobrowse.js (Steel session create + Playwright connectOverCDP
+  fill routine — scans fields, generates truthful answers via Kiro, fills,
+  NEVER submits, skips consent, [MISSING] for unknowns); login-guarded routes
+  /api/cobrowse/start|fill|stop|status; public/cobrowse.html + cobrowse.js
+  workspace (embeds the live-view iframe); dashboard link. Dep: playwright-core
+  (no browser binary — connects to Steel's remote Chrome). STEEL_API_KEY in
+  .env.example. NOT yet verified end-to-end — needs the user's Steel key + a
+  live login; will verify jointly before claiming success.
+
 ### 2026-07-25 — login popup fix, more programs, honest install modal
 - Fixed login/modal overlay not dismissing: `.agent-modal-overlay{display:flex}`
   outranked UA `[hidden]{display:none}`; added

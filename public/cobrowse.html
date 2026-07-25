@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LaunchPad — Live Co-browse</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">🚀</span>
+      <div class="brand-text">
+        <h1 class="brand-name">LaunchPad — Live Co-browse</h1>
+        <p class="brand-tagline">Log into your account yourself, then the agent fills the form. It never submits.</p>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a class="btn btn-ghost" href="/">← Dashboard</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="card">
+      <ol class="agent-modal-steps">
+        <li>Click <strong>Start session</strong> — a real cloud browser appears below.</li>
+        <li>In it, <strong>log into your account</strong> (Google, Microsoft, etc.) and open the program's application page.</li>
+        <li>Pick the program and click <strong>Fill this form</strong> — the agent fills every field it can from your profile, in this same browser.</li>
+        <li>Review everything (amber fields need your input), tick any terms, and <strong>submit yourself</strong>.</li>
+      </ol>
+
+      <div class="form-actions" style="flex-wrap:wrap; gap:10px;">
+        <button type="button" class="btn btn-primary" id="startBtn">Start session</button>
+        <label class="field" style="margin:0; min-width:260px;">
+          <span class="field-label">Program to fill</span>
+          <select id="programSelect"></select>
+        </label>
+        <button type="button" class="btn btn-fill" id="fillBtn" disabled>Fill this form</button>
+        <button type="button" class="btn btn-ghost" id="stopBtn" disabled>End session</button>
+      </div>
+      <p class="save-status" id="cbStatus" role="status" aria-live="polite"></p>
+      <div id="cbResult" class="unlock-banner" hidden></div>
+    </div>
+
+    <div class="card" id="frameCard" hidden style="padding:0; overflow:hidden;">
+      <iframe id="cbFrame" title="Live browser"
+              style="width:100%; height:640px; border:0; display:block; background:#141413;"
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+              allow="clipboard-read; clipboard-write"></iframe>
+    </div>
+  </section>
+</main>
+
+<div id="agentToasts"></div>
+<script src="/js/cobrowse.js" defer></script>
+</body>
+</html>

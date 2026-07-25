@@ -386,6 +386,53 @@ app.post('/api/agent-generate', async (req, res) => {
   }
 });
 
+// ---- Live co-browse (Steel.dev) ----
+// The logged-in user starts a live cloud-browser session, logs into their own
+// account by hand in the embedded view, then the server fills the form in the
+// same browser (never submits). Requires login + STEEL_API_KEY.
+const cobrowse = (() => { try { return require('./server/cobrowse.js'); } catch { return null; } })();
+
+function requireLogin(req, res) {
+  if (!req.userId) { res.status(401).json({ ok: false, error: 'Log in to use co-browse' }); return false; }
+  if (!cobrowse || !cobrowse.configured()) {
+    res.status(503).json({ ok: false, error: 'Co-browse not configured — set STEEL_API_KEY' });
+    return false;
+  }
+  return true;
+}
+
+app.get('/api/cobrowse/status', (req, res) => {
+  res.json({ ok: true, configured: !!(cobrowse && cobrowse.configured()), loggedIn: !!req.userId });
+});
+
+app.post('/api/cobrowse/start', async (req, res) => {
+  if (!requireLogin(req, res)) return;
+  try {
+    const data = await cobrowse.startSession(req.userId);
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/cobrowse/fill', async (req, res) => {
+  if (!requireLogin(req, res)) return;
+  try {
+    const profile = await profileForRequest(req);
+    const applyUrl = req.body && typeof req.body.applyUrl === 'string' ? req.body.applyUrl : '';
+    const result = await cobrowse.fillCurrentPage(req.userId, { applyUrl, profile });
+    res.json({ ok: true, data: result });
+  } catch (err) {
+    res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/cobrowse/stop', async (req, res) => {
+  if (!req.userId) return res.json({ ok: true });
+  try { await cobrowse.stopSession(req.userId); } catch { /* ignore */ }
+  res.json({ ok: true });
+});
+
 db.init()
   .then(() => {
     console.log(`[db] storage driver: ${db.mode}`);
