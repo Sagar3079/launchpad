@@ -66,12 +66,15 @@ async function startSession(userId) {
   const body = {
     stealthConfig: { humanizeInteractions: true },
     region: 'iad',
-    // Default session timeout is only 5 min (300000) — that's why sessions
-    // kept ending mid-flow. Give 30 minutes.
-    timeout: 1800000,
-    // Full-HD viewport so the live view is sharp when expanded to fullscreen.
+    // Default session timeout is only 5 min (300000) — that's why sessions kept
+    // ending mid-flow. 900000 = 15 min = the free-tier maximum. (We do NOT set
+    // inactivityTimeout, so idle time can't release the session early.)
+    timeout: 900000,
+    // Full-HD viewport so the live view is sharp when expanded to fullscreen
+    // (blur was upscaling a ~720p stream). blockAds trims load.
     dimensions: { width: 1920, height: 1080 },
     blockAds: true,
+    debugConfig: { interactive: true, systemCursor: true },
   };
   const byoProxy = (process.env.STEEL_PROXY_URL || '').trim();
   if (byoProxy) {
@@ -89,8 +92,11 @@ async function startSession(userId) {
   const id = s.id || s.sessionId;
   // debugUrl = the INTERACTIVE, embeddable live viewer (no Steel login needed).
   // sessionViewerUrl = the Steel DASHBOARD page (requires a Steel account) — do
-  // NOT embed that; it renders as a "Sign in to Steel" wall.
-  const liveViewUrl = s.debugUrl || s.sessionViewerUrl || s.liveViewUrl;
+  // NOT embed that. Append ?interactive=true so the human can click/type.
+  const rawViewer = s.debugUrl || s.sessionViewerUrl || s.liveViewUrl;
+  const liveViewUrl = rawViewer
+    ? rawViewer + (rawViewer.includes('?') ? '&' : '?') + 'interactive=true'
+    : rawViewer;
   const wsBase = s.websocketUrl || s.connectUrl || s.wsUrl;
   if (!id || !liveViewUrl || !wsBase) {
     throw new Error('Steel session response missing id / viewer / websocket URL');

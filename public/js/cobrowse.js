@@ -119,6 +119,21 @@
     }
   }
 
+  // A dead/expired Steel session surfaces as a connect/target/websocket error.
+  function looksDead(msg) {
+    return /no live|session|connect|closed|target|websocket|ECONN|ended|timed out/i.test(String(msg || ''));
+  }
+  function markSessionEnded() {
+    session = null;
+    $('#cbFrame').src = 'about:blank';
+    $('#frameCard').hidden = true;
+    $('#stopBtn').disabled = true;
+    $('#startBtn').disabled = false;
+    $('#nextFormBtn').hidden = true;
+    $('#fillAllBtn').disabled = false;
+    updateMode();
+  }
+
   // Poll the background fill until it finishes; return the result envelope.
   async function waitFill() {
     const deadline = Date.now() + 120000;
@@ -163,6 +178,7 @@
       const r = await cloudOpenAndFillCurrent(programId);
       if (r) { const box = $('#cbResult'); box.textContent = fillMsg(r) + ' Review, then submit yourself.'; box.hidden = false; status(''); }
     } catch (e) {
+      if (looksDead(e.message)) { status('Session ended (15-min free-tier limit) — click "Start session" to continue.', true); markSessionEnded(); return; }
       status('Fill error: ' + e.message, true);
     }
     updateMode();
@@ -215,6 +231,11 @@
       $('#nextFormBtn').hidden = false;
       $('#nextFormBtn').textContent = (qIndex + 1 < queue.length) ? 'Next form →' : 'Finish';
     } catch (e) {
+      if (looksDead(e.message)) {
+        status(`Session ended at form ${qIndex + 1}/${queue.length} (15-min free-tier limit). Click "Start session", then "Fill all" to resume.`, true);
+        markSessionEnded();
+        return;
+      }
       status(`(${qIndex + 1}/${queue.length}) ${p.name} failed: ${e.message}. Click "Next form →" to skip.`, true);
       $('#nextFormBtn').hidden = false;
       $('#nextFormBtn').textContent = (qIndex + 1 < queue.length) ? 'Next form →' : 'Finish';
