@@ -28,7 +28,7 @@
       <p class="section-sub" style="margin:0 0 10px;">The right mode is picked automatically per program:</p>
       <ol class="agent-modal-steps">
         <li><strong>⚡ No-login forms</strong> (Qdrant, Algolia, AssemblyAI…): <strong>Start session</strong>, pick the program, <strong>Open application</strong> — it loads in the cloud browser through a residential proxy so captchas don't loop. Tick any "I'm not a robot" box yourself, then <strong>Fill this form</strong>.</li>
-        <li><strong>🔑 Login forms</strong> (Google, Microsoft…): pick the program and click <strong>Open in my browser</strong> — it opens in your own tab on <strong>your own IP</strong> so login is clean (no cloud-IP challenges). Log in and fill there (use the ⚡ Fill this extension if installed).</li>
+        <li><strong>🔑 Login forms</strong>: click <strong>Open &amp; log in below</strong> — the form loads in the cloud browser; log in right there (GitHub / email SSO is easiest; Google sometimes challenges a cloud login). Then click <strong>Fill this form</strong>. If Google blocks it, use <strong>Own browser ↗</strong> to log in on your own IP instead.</li>
         <li>Always <strong>review and submit yourself</strong> — the agent never submits.</li>
       </ol>
 
@@ -39,6 +39,7 @@
           <select id="programSelect"></select>
         </label>
         <button type="button" class="btn btn-primary" id="openBtn" disabled>Open application ↗</button>
+        <button type="button" class="btn btn-ghost" id="ownBtn" hidden title="Fallback: open on your own IP if Google blocks the cloud login">Own browser ↗</button>
         <button type="button" class="btn btn-fill" id="fillBtn" disabled>Fill this form</button>
         <button type="button" class="btn btn-ghost" id="stopBtn" disabled>End session</button>
       </div>

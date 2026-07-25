@@ -37,6 +37,24 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — co-browse reliability + unified login flow (3 subagents)
+- Session stability: Steel default timeout is 5 min (why sessions kept
+  ending); free tier caps at 15 min, so set timeout 900000 + no
+  inactivityTimeout. Graceful "session ended" detection -> prompt restart.
+- Clarity: blur was upscaling a ~720p stream; set dimensions 1920x1080 +
+  blockAds + debugConfig{interactive,systemCursor} + embed
+  debugUrl?interactive=true.
+- Nav reliability: robustGoto() retries with looser waitUntil (fixes transient
+  net::ERR_FAILED via proxy). Reclassified Mixpanel -> login (account-tied),
+  Cloudflare -> no-login (account only post-approval; /startups/).
+- Unified login flow: login forms now use the SAME one-window cloud flow (open
+  in cloud -> user logs in in the live view -> Fill), with an "Own browser"
+  fallback. Research verdict: fresh in-cloud SSO works for GitHub/email,
+  fragile for Google (CDP-based block, not behavioral); OAuth popups handled
+  by forcing same-tab (window.open override) since Steel's viewer shows one
+  tab. Most robust future step = persist login via Steel Profiles (not yet
+  built). Still declining auto cookie-transfer for Google (DBSC).
+
 ### 2026-07-25 — co-browse polish: proxy, modes, autopilot
 - BYO residential proxy support (STEEL_PROXY_URL) so cheap Decodo/IPRoyal
   proxies fix reCAPTCHA loops without Steel's $10 (verified: proxySource

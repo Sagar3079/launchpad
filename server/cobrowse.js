@@ -198,6 +198,13 @@ async function openUrl(userId, url) {
   try {
     const context = browser.contexts()[0];
     const page = (context.pages() && context.pages()[0]) || (await context.newPage());
+    // Keep OAuth "Continue with Google/GitHub" popups in the SAME tab — Steel's
+    // live viewer shows only one tab, so a popup would strand the human.
+    await context.addInitScript(() => {
+      try {
+        window.open = function (u) { if (u) { window.location.href = u; } return window; };
+      } catch (_e) { /* ignore */ }
+    }).catch(() => {});
     await robustGoto(page, url);
     return { url: page.url(), title: await page.title().catch(() => '') };
   } finally {

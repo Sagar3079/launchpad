@@ -71,18 +71,24 @@
     const p = selectedProgram();
     const openBtn = $('#openBtn');
     const fillBtn = $('#fillBtn');
+    const ownBtn = $('#ownBtn');
     if (p && p.requiresLogin) {
-      openBtn.textContent = 'Open in my browser (I log in) ↗';
-      openBtn.title = 'Opens on YOUR IP so login is clean — a cloud IP triggers Google/MS challenges';
-      openBtn.disabled = false;
-      fillBtn.disabled = true;
-      fillBtn.title = 'For login forms, fill in your own browser with the ⚡ Fill this extension';
+      // Login forms now use the same one-window cloud flow: open in the cloud
+      // browser, log in there (GitHub/email easiest; Google may challenge),
+      // then Fill. "Own browser" stays as a fallback.
+      openBtn.textContent = 'Open & log in below ↗';
+      openBtn.title = 'Loads in the cloud browser — log in there (prefer GitHub/email SSO), then Fill. Same one-window flow as no-login.';
+      openBtn.disabled = !(p && p.applyUrl);
+      fillBtn.disabled = !session;
+      fillBtn.title = 'After you log in in the browser below, fill the form';
+      ownBtn.hidden = false;
     } else {
       openBtn.textContent = 'Open application ↗';
       openBtn.title = 'Loads the form in the cloud browser below (residential proxy handles captchas)';
       openBtn.disabled = !(p && p.applyUrl);
       fillBtn.disabled = !session;
       fillBtn.title = 'Fill the page open in the cloud browser';
+      ownBtn.hidden = true;
     }
     const mf = $('#maxFillBtn');
     if (mf) mf.disabled = fillBtn.disabled;
@@ -92,16 +98,8 @@
     const program = selectedProgram();
     if (!program || !program.applyUrl) { status('Pick a program first (the blank option has no URL).', true); return; }
 
-    // Login-required -> open on the user's own IP in a new tab.
-    if (program.requiresLogin) {
-      window.open(program.applyUrl, '_blank', 'noopener');
-      status(`Opened ${program.name} in your own browser tab — you're on your own IP, so log in there. `
-        + `If the LaunchPad extension is installed, use "⚡ Fill this" on the dashboard to fill it.`);
-      return;
-    }
-
-    // No-login/captcha -> cloud browser (proxy). Needs a live session.
-    if (!session) { status('Click "Start session" first for no-login forms.', true); return; }
+    // Both login and no-login use the cloud browser now (one-window flow).
+    if (!session) { status('Click "Start session" first.', true); return; }
     $('#openBtn').disabled = true;
     status('Opening the application form in the cloud browser below…');
     try {
@@ -110,13 +108,26 @@
         body: JSON.stringify({ url: program.applyUrl })
       });
       const d = await res.json();
-      if (!res.ok || !d.ok) { status(d.error || 'Could not open the form', true); }
-      else status(`Opened ${program.name}. Tick any "I'm not a robot" box yourself, then click "Fill this form".`);
+      if (!res.ok || !d.ok) {
+        if (looksDead(d.error)) { status('Session ended — click "Start session".', true); markSessionEnded(); return; }
+        status(d.error || 'Could not open the form', true);
+      } else if (program.requiresLogin) {
+        status(`Opened ${program.name}. Log in in the browser below (GitHub/email SSO is easiest; Google may challenge — if it blocks you, use "Own browser ↗"). Then click "Fill this form".`);
+      } else {
+        status(`Opened ${program.name}. Tick any "I'm not a robot" box yourself, then click "Fill this form".`);
+      }
     } catch (_e) {
       status('Server not reachable.', true);
     } finally {
       updateMode();
     }
+  }
+
+  function openOwnBrowser() {
+    const p = selectedProgram();
+    if (!p || !p.applyUrl) return;
+    window.open(p.applyUrl, '_blank', 'noopener');
+    status(`Opened ${p.name} in your own browser tab (your own IP). Log in there; fill with the ⚡ Fill this extension if installed.`);
   }
 
   // A dead/expired Steel session surfaces as a connect/target/websocket error.
@@ -268,6 +279,7 @@
 
   $('#startBtn').addEventListener('click', start);
   $('#openBtn').addEventListener('click', open);
+  $('#ownBtn').addEventListener('click', openOwnBrowser);
   $('#fillBtn').addEventListener('click', fill);
   $('#maxFillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
