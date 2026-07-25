@@ -67,7 +67,13 @@ async function startSession(userId) {
     stealthConfig: { humanizeInteractions: true },
     region: 'iad',
   };
-  if (/^(1|true|yes)$/i.test((process.env.STEEL_USE_PROXY || '').trim())) {
+  const byoProxy = (process.env.STEEL_PROXY_URL || '').trim();
+  if (byoProxy) {
+    // Bring-your-own residential proxy (e.g. IPRoyal). No Steel balance needed;
+    // a clean residential IP is what stops reCAPTCHA from looping.
+    body.proxyUrl = byoProxy;
+  } else if (/^(1|true|yes)$/i.test((process.env.STEEL_USE_PROXY || '').trim())) {
+    // Steel's own residential proxy (requires >= $10 Steel balance).
     const country = (process.env.STEEL_PROXY_COUNTRY || 'IN').trim().toUpperCase();
     body.useProxy = { geolocation: { country } };
     body.solveCaptcha = true;
