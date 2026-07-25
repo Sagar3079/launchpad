@@ -1266,8 +1266,8 @@
       "No equity taken; free to apply"
     ],
     "applyUrl": "https://sentry.io/for/startups/apply/",
-    "requiresLogin": true,
-    "loginNote": "Requires a free Sentry account first — the form asks for your Sentry Org Slug, which exists only after you sign up.",
+    "requiresLogin": false,
+    "loginNote": "Public application form — no product login needed to apply. ",
     "eligibility": [
       "Founded within the last 2 years",
       "Raised less than $5M (bootstrapped is explicitly fine)",
@@ -1333,9 +1333,9 @@
       "3+ hours of hands-on engineering support",
       "GTM support, community, and VC-network access"
     ],
-    "applyUrl": "https://www.together.ai/startup-accelerator",
-    "requiresLogin": true,
-    "loginNote": "Credits redeem against a Together AI account; create/sign in to apply them.",
+    "applyUrl": "https://www.together.ai/forms/startups-program",
+    "requiresLogin": false,
+    "loginNote": "Public application form — no product login needed to apply. ",
     "eligibility": [
       "AI-native product built on Together AI",
       "Build tier covers up to $5M raised — a bootstrapped startup qualifies",
@@ -1396,8 +1396,8 @@
       "Credits valid 12 months"
     ],
     "applyUrl": "https://neon.com/startups",
-    "requiresLogin": true,
-    "loginNote": "Credits apply to your Neon account; sign up during the flow.",
+    "requiresLogin": false,
+    "loginNote": "Public application form — no product login needed to apply. ",
     "eligibility": [
       "Self-funded track: under $1M funding, early-stage MVP — bootstrapped India startups qualify",
       "The advertised $100K+ is VC-only (needs >=$1M raised or an accelerator) — NOT this profile",
@@ -1453,8 +1453,8 @@
       "Access to founder events"
     ],
     "applyUrl": "https://elevenlabs.io/startup-grants",
-    "requiresLogin": true,
-    "loginNote": "Grant ties to the ElevenLabs account you apply with; sign up/sign in first.",
+    "requiresLogin": false,
+    "loginNote": "Public application form — no product login needed to apply. ",
     "eligibility": [
       "Fewer than 25 employees",
       "Company-domain email required (personal emails rejected) — Scalemax has one",
@@ -1737,6 +1737,267 @@
       "Use the company-domain work email.",
       "Pick India in the country dropdown; leave referral partner blank.",
       "Must be a brand-new Zendesk account."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "algolia-startups",
+    "name": "Algolia for Startups",
+    "provider": "Algolia",
+    "logoEmoji": "🔍",
+    "benefitSummary": "$10,000 in Algolia search/AI credits, valid 12 months",
+    "benefits": [
+      "$10,000 in Algolia usage credits, valid for 12 months",
+      "AI search & discovery (NeuralSearch, Recommend)",
+      "World-class technical support",
+      "Partner perks and founder community",
+      "Full access to Algolia Academy"
+    ],
+    "applyUrl": "https://www.algolia.com/industries/startups",
+    "requiresLogin": false,
+    "loginNote": "Public application form (no product login). You supply your email in the form.",
+    "eligibility": [
+      "Less than 7 years old",
+      "Less than $15M total funding — bootstrapped / $0 qualifies",
+      "New Algolia customer only (no prior coupon or paid plan)",
+      "No incorporation requirement; company-domain email and live website expected"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Your name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Total funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      },
+      {
+        "label": "What are you building / how you'll use Algolia",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Apply before starting any paid Algolia plan — new customers only.",
+      "Use your company-domain email, not Gmail.",
+      "Reach the form via algolia.com/industries/startups if the link changes."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "assemblyai-startups",
+    "name": "AssemblyAI Startup Program",
+    "provider": "AssemblyAI",
+    "logoEmoji": "🗣️",
+    "benefitSummary": "12 months of recurring free Speech-to-Text credits + discounted pricing",
+    "benefits": [
+      "12 months of recurring free credits for Speech-to-Text / Voice AI",
+      "Discounted pricing (excludes LLM Gateway)",
+      "All features incl. Universal and Streaming models",
+      "Co-marketing and a Voice AI builder community"
+    ],
+    "applyUrl": "https://www.assemblyai.com/contact/startup-program",
+    "requiresLogin": false,
+    "loginNote": "Standalone public application form — no AssemblyAI account or login required.",
+    "eligibility": [
+      "Open from bootstrapped through Series B ('Bootstrapped' is an explicit option)",
+      "Building products that use voice/speech data",
+      "Work (company-domain) email required",
+      "Asks 'Year incorporated' and 'Company LinkedIn' — enter founding year; LinkedIn can be left blank",
+      "No hard funding cap"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Full name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Year incorporated",
+        "profileKey": "basic.foundedYear",
+        "type": "text"
+      },
+      {
+        "label": "Fundraising series",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Speech-to-text use case",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Select 'Bootstrapped' for the fundraising-series field.",
+      "Be concrete about your speech-to-text use case and expected usage.",
+      "For 'year incorporated', enter your founding year; the LinkedIn field can be left blank."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "baseten-startups",
+    "name": "Baseten Startup Program",
+    "provider": "Baseten",
+    "logoEmoji": "🚀",
+    "benefitSummary": "Up to $25,000 in inference/training credits + up to $2,500 for Model APIs",
+    "benefits": [
+      "Up to $25,000 in credits for Dedicated Deployments or Training",
+      "Up to $2,500 in credits for Model APIs",
+      "Fast support, shared Slack, GTM boost",
+      "Deploy open-source, fine-tuned or custom models to production"
+    ],
+    "applyUrl": "https://www.baseten.co/talk-to-us/startup-program/",
+    "requiresLogin": false,
+    "loginNote": "Standalone public application/lead form — no Baseten account or login required.",
+    "eligibility": [
+      "AI must be core to your primary product",
+      "Positioned Seed to Series A, founded < 5 years ago — very early pre-seed may be borderline on stage",
+      "Net-new customers only (no prior Baseten credits)",
+      "No incorporation requirement; India startups can apply"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Model / workload to deploy",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Make clear AI is core to your product, not a peripheral feature.",
+      "Describe the specific model/workload you'll deploy on Baseten.",
+      "Apply before any billed Baseten usage — net-new-customers only."
+    ],
+    "tier": "locked-extra"
+  },
+  {
+    "id": "qdrant-startups",
+    "name": "Qdrant for Startups",
+    "provider": "Qdrant",
+    "logoEmoji": "🧬",
+    "benefitSummary": "20% discount on Qdrant Cloud (vector DB) for the first 12 months",
+    "benefits": [
+      "20% discount on Qdrant Cloud for the first year",
+      "Technical guidance from the Qdrant team",
+      "Access to partner AI tools (LlamaIndex, Hugging Face, Airbyte)",
+      "Managed vector database for RAG / AI search"
+    ],
+    "applyUrl": "https://qdrant.tech/qdrant-for-startups/",
+    "requiresLogin": false,
+    "loginNote": "Application form embedded on the page — no Qdrant account or login required to apply.",
+    "eligibility": [
+      "Pre-seed, Seed or Series A (pre-seed explicitly eligible)",
+      "Under 5 years old with less than $5M funding — bootstrapped / $0 qualifies",
+      "New Qdrant Cloud user",
+      "Must be building an AI product — agencies/dev shops excluded; live website required"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "How you'll use Qdrant / your AI product",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Clearly describe your AI-driven product (agencies/dev shops are rejected).",
+      "Ensure your website is live and functional — an explicit requirement.",
+      "Benefit is a 20% discount (not credits)."
     ],
     "tier": "locked-extra"
   }

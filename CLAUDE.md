@@ -37,6 +37,19 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — program catalog expansion + tabs + filled tracking
+- 3 subagents: verified all 17 URLs (only Cloudflare broken: /lp/startups 404
+  -> /startups/); found 8 login + 8 no-login new programs. After dedup/merge,
+  catalog is 29 programs (18 login / 11 no-login). Skipped VC/partner-gated
+  ones (GitHub, Datadog, Atlassian). No-login agent corrected 4 (Sentry, Neon,
+  Together AI, ElevenLabs) from login -> public no-login form.
+- New: Sentry, Together AI, Neon, ElevenLabs, Fireworks, Pinecone, Intercom,
+  Zendesk, Algolia, AssemblyAI, Baseten, Qdrant.
+- Dashboard: login/no-login TABS (split unlocked programs by requiresLogin);
+  "Already filled" tracking (filled_programs table / file field, GET+POST
+  /api/filled, badge + Mark-filled toggle, co-browse auto-marks on fill).
+- Reusable merge script normalizes formField profileKeys to valid paths.
+
 ### 2026-07-25 — Live Co-browse verified working (free tier)
 - Fixed with the user's Steel key + local verification: (1) embed debugUrl
   (the /player interactive viewer), NOT sessionViewerUrl (Steel dashboard
