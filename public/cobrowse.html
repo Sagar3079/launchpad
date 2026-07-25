@@ -42,6 +42,10 @@
         <button type="button" class="btn btn-fill" id="fillBtn" disabled>Fill this form</button>
         <button type="button" class="btn btn-ghost" id="stopBtn" disabled>End session</button>
       </div>
+      <div class="form-actions" style="gap:10px; margin-top:10px;">
+        <button type="button" class="btn btn-primary" id="fillAllBtn" title="Opens and fills every no-login form one after another — you tick captchas and submit each">⚡ Fill all no-login forms (autopilot)</button>
+        <button type="button" class="btn btn-fill" id="nextFormBtn" hidden>Next form →</button>
+      </div>
       <p class="save-status" id="cbStatus" role="status" aria-live="polite"></p>
       <div id="cbResult" class="unlock-banner" hidden></div>
     </div>

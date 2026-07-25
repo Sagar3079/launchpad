@@ -119,54 +119,112 @@
     }
   }
 
+  // Poll the background fill until it finishes; return the result envelope.
+  async function waitFill() {
+    const deadline = Date.now() + 120000;
+    for (;;) {
+      await new Promise((r) => setTimeout(r, 2000));
+      let d;
+      try { d = await (await fetch('/api/cobrowse/fill-result')).json(); } catch (_e) { continue; }
+      if (d.status === 'running') { if (Date.now() > deadline) return { status: 'timeout' }; continue; }
+      return d;
+    }
+  }
+
+  function fillMsg(r) {
+    let msg = `Filled ${r.filled} field${r.filled === 1 ? '' : 's'}.`;
+    if (r.missing && r.missing.length) msg += ` ${r.missing.length} need your input: ` + r.missing.map((m) => m.label).join(', ') + '.';
+    if (r.failed) msg += ` ${r.failed} couldn't be filled.`;
+    return msg;
+  }
+
+  // Open a URL in the cloud browser + fill it; returns the fill result or null.
+  async function cloudOpenAndFill(url, programId) {
+    const o = await (await fetch('/api/cobrowse/open', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url })
+    })).json();
+    if (!o.ok) throw new Error(o.error || 'open failed');
+    await fetch('/api/cobrowse/fill', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ programId })
+    });
+    const d = await waitFill();
+    if (d.status === 'error') throw new Error(d.error || 'fill error');
+    return d.result || null;
+  }
+
   async function fill() {
     if (!session) return;
-    // Fill whatever page is currently open in the live browser.
     $('#fillBtn').disabled = true;
     $('#maxFillBtn').disabled = true;
     status('Reading the form and filling it — watch the browser below…');
     $('#cbResult').hidden = true;
     const programId = $('#programSelect').value || '';
     try {
-      const res = await fetch('/api/cobrowse/fill', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ programId })
-      });
-      const d = await res.json();
-      if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); updateMode(); return; }
-      // Fill runs in the background; poll for the result (no 30s timeout).
-      await pollFillResult();
-    } catch (_e) {
-      status('Server not reachable during fill.', true);
-      updateMode();
+      const r = await cloudOpenAndFillCurrent(programId);
+      if (r) { const box = $('#cbResult'); box.textContent = fillMsg(r) + ' Review, then submit yourself.'; box.hidden = false; status(''); }
+    } catch (e) {
+      status('Fill error: ' + e.message, true);
+    }
+    updateMode();
+  }
+
+  // Fill the page currently open (no navigation) — used by the single Fill button.
+  async function cloudOpenAndFillCurrent(programId) {
+    await fetch('/api/cobrowse/fill', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ programId })
+    });
+    const d = await waitFill();
+    if (d.status === 'error') throw new Error(d.error || 'fill error');
+    if (d.status === 'timeout') throw new Error('taking too long — check the browser below');
+    return d.result || null;
+  }
+
+  /* ---- Autopilot: fill every no-login form, one after another ---- */
+  let queue = [];
+  let qIndex = -1;
+
+  async function fillAllNoLogin() {
+    const list = programs.filter((p) => !p.requiresLogin && p.applyUrl && p.unlocked !== false);
+    if (!list.length) { status('No unlocked no-login programs to fill.', true); return; }
+    $('#fillAllBtn').disabled = true;
+    if (!session) { status('Starting the cloud browser…'); await start(); }
+    if (!session) { $('#fillAllBtn').disabled = false; return; }
+    queue = list; qIndex = 0;
+    await runQueueStep();
+  }
+
+  async function runQueueStep() {
+    if (qIndex >= queue.length) {
+      status(`Autopilot done — filled ${queue.length} no-login form${queue.length === 1 ? '' : 's'}. Submit any you haven't yet.`);
+      $('#nextFormBtn').hidden = true;
+      $('#fillAllBtn').disabled = false;
+      return;
+    }
+    const p = queue[qIndex];
+    $('#programSelect').value = p.id; updateMode();
+    $('#nextFormBtn').hidden = true;
+    status(`(${qIndex + 1}/${queue.length}) Opening & filling ${p.name}…`);
+    $('#cbResult').hidden = true;
+    try {
+      const r = await cloudOpenAndFill(p.applyUrl, p.id);
+      const box = $('#cbResult');
+      box.textContent = `(${qIndex + 1}/${queue.length}) ${p.name} — ${r ? fillMsg(r) : 'no fields found'} `
+        + 'Tick any captcha, review, and SUBMIT it, then click "Next form →".';
+      box.hidden = false;
+      status('');
+      $('#nextFormBtn').hidden = false;
+      $('#nextFormBtn').textContent = (qIndex + 1 < queue.length) ? 'Next form →' : 'Finish';
+    } catch (e) {
+      status(`(${qIndex + 1}/${queue.length}) ${p.name} failed: ${e.message}. Click "Next form →" to skip.`, true);
+      $('#nextFormBtn').hidden = false;
+      $('#nextFormBtn').textContent = (qIndex + 1 < queue.length) ? 'Next form →' : 'Finish';
     }
   }
 
-  async function pollFillResult() {
-    const deadline = Date.now() + 120000;
-    for (;;) {
-      await new Promise((r) => setTimeout(r, 2000));
-      let d;
-      try {
-        d = await (await fetch('/api/cobrowse/fill-result')).json();
-      } catch (_e) { continue; } // transient — keep polling
-      if (d.status === 'running') {
-        if (Date.now() > deadline) { status('Fill is taking unusually long — check the browser below.', true); break; }
-        continue;
-      }
-      if (d.status === 'error') { status('Fill error: ' + (d.error || 'unknown'), true); break; }
-      if (d.status === 'done' && d.result) {
-        const r = d.result;
-        let msg = `Filled ${r.filled} field${r.filled === 1 ? '' : 's'}.`;
-        if (r.missing && r.missing.length) msg += ` ${r.missing.length} need your input: ` + r.missing.map((m) => m.label).join(', ') + '.';
-        if (r.failed) msg += ` ${r.failed} could not be filled.`;
-        msg += ' Review everything, then submit yourself.';
-        const box = $('#cbResult'); box.textContent = msg; box.hidden = false;
-        status('');
-      }
-      break;
-    }
-    updateMode();
+  function nextForm() {
+    $('#nextFormBtn').hidden = true;
+    qIndex += 1;
+    runQueueStep();
   }
 
   function toggleMax() {
@@ -193,6 +251,8 @@
   $('#maxFillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
   $('#programSelect').addEventListener('change', updateMode);
+  $('#fillAllBtn').addEventListener('click', fillAllNoLogin);
+  $('#nextFormBtn').addEventListener('click', nextForm);
   $('#maxBtn').addEventListener('click', toggleMax);
   $('#maxBackdrop').addEventListener('click', toggleMax);
   document.addEventListener('keydown', (e) => {

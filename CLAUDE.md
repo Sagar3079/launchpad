@@ -37,6 +37,23 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-25 — co-browse polish: proxy, modes, autopilot
+- BYO residential proxy support (STEEL_PROXY_URL) so cheap Decodo/IPRoyal
+  proxies fix reCAPTCHA loops without Steel's $10 (verified: proxySource
+  external, residential exit IP, works on free tier).
+- Per-program routing: no-login/captcha forms -> cloud browser + proxy;
+  login forms -> open in the user's OWN browser/IP (clean SSO login).
+- Fill runs in the BACKGROUND with client polling (fixes Scalingo ~30s
+  timeout "server not reachable"). Live view is 72vh + Expand-to-fullscreen
+  (backdrop/Esc to close), with a "Fill now" button in the top bar.
+- Autopilot "Fill all no-login forms": sequential queue — open+fill each
+  no-login form, user ticks captcha + submits + clicks "Next form".
+- DECLINED (with reasons): auto session-cookie import from user's browser to
+  the cloud browser for Google/GitHub — device-bound cookies (DBSC, GA Apr
+  2026) + IP mismatch invalidate transferred sessions, and it's a token-
+  exfiltration security risk. Working alternative: SSO login in own browser +
+  extension side-panel fill (no session transfer).
+
 ### 2026-07-25 — program catalog expansion + tabs + filled tracking
 - 3 subagents: verified all 17 URLs (only Cloudflare broken: /lp/startups 404
   -> /startups/); found 8 login + 8 no-login new programs. After dedup/merge,
