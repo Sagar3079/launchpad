@@ -541,3 +541,26 @@ body:not(.agent-on) .btn-fill { opacity: .85; }
    attribute (UA `[hidden]{display:none}` loses to `.agent-modal-overlay`),
    so the login/modal box never disappeared. Make [hidden] win. */
 .agent-modal-overlay[hidden] { display: none !important; }
+
+/* =============== Login / no-login program tabs =============== */
+.prog-tabs { display: flex; gap: 8px; margin: 4px 0 20px; flex-wrap: wrap; }
+.prog-tab {
+  background: transparent; color: #55524a;
+  border: 1px solid #E5E1D8; border-radius: 999px;
+  padding: 9px 18px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.prog-tab:hover { border-color: #141413; color: #141413; }
+.prog-tab.is-active { background: #141413; color: #F0EEE6; border-color: #141413; }
+.prog-tab .tab-count { opacity: .7; font-weight: 500; }
+
+/* Already-filled badge + card treatment */
+.badge-filled { background: #E4F0E4; color: #2E7D32; border: 1px solid #C6E3C6; }
+.program.is-filled { border-color: #C6E3C6; }
+.program.is-filled::after {
+  content: "✓ Filled"; position: absolute; top: 12px; right: 12px;
+  background: #2E7D32; color: #fff; font-size: 11px; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px; letter-spacing: .02em;
+}
+.program { position: relative; }
+.mark-filled-btn { padding: 8px 14px; font-size: 13.5px; }

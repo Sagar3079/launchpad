@@ -261,7 +261,7 @@
       "Access to the Workers Launchpad funding program and VC partner network",
       "Credits valid for one year or until fully used"
     ],
-    "applyUrl": "https://www.cloudflare.com/lp/startups",
+    "applyUrl": "https://www.cloudflare.com/startups/",
     "requiresLogin": false,
     "loginNote": "Public application form; a free Cloudflare account is needed later to receive credits.",
     "eligibility": [

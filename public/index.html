@@ -160,6 +160,15 @@
 
     <div id="programsState" class="state-note" hidden></div>
 
+    <div class="prog-tabs" id="progTabs" role="tablist">
+      <button type="button" class="prog-tab is-active" id="tabNoLogin" role="tab" data-tab="nologin">
+        ⚡ No login needed <span class="tab-count" id="countNoLogin"></span>
+      </button>
+      <button type="button" class="prog-tab" id="tabLogin" role="tab" data-tab="login">
+        🔑 Login required <span class="tab-count" id="countLogin"></span>
+      </button>
+    </div>
+
     <div id="unlockedGrid" class="programs-grid" aria-live="polite"></div>
 
     <div id="lockedWrap" hidden>

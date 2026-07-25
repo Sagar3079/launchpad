@@ -168,6 +168,28 @@ app.post('/api/logout', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get('/api/filled', async (req, res) => {
+  try {
+    if (!req.userId) return res.json({ ok: true, filled: [] });
+    res.json({ ok: true, filled: await db.getFilled(req.userId) });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/filled', async (req, res) => {
+  if (!req.userId) return res.status(401).json({ ok: false, error: 'Log in to track filled applications' });
+  try {
+    const programId = String((req.body && req.body.programId) || '').trim();
+    const filled = !(req.body && req.body.filled === false);
+    if (!programId) return res.status(400).json({ ok: false, error: 'programId required' });
+    await db.setFilled(req.userId, programId, filled);
+    res.json({ ok: true, filled: await db.getFilled(req.userId) });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 app.get('/api/me', async (req, res) => {
   try {
     if (!req.userId) return res.json({ ok: true, user: null });
@@ -432,7 +454,12 @@ app.post('/api/cobrowse/fill', async (req, res) => {
   try {
     const profile = await profileForRequest(req);
     const applyUrl = req.body && typeof req.body.applyUrl === 'string' ? req.body.applyUrl : '';
+    const programId = req.body && typeof req.body.programId === 'string' ? req.body.programId : '';
     const result = await cobrowse.fillCurrentPage(req.userId, { applyUrl, profile });
+    // Auto-mark the program filled once we've actually filled fields for it.
+    if (programId && result && result.filled > 0) {
+      try { await db.setFilled(req.userId, programId, true); } catch { /* non-fatal */ }
+    }
     res.json({ ok: true, data: result });
   } catch (err) {
     res.status(502).json({ ok: false, error: err.message });

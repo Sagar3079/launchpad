@@ -76,6 +76,9 @@
   const form = $('#profileForm');
   let unlockedBefore = new Set();   // program ids unlocked prior to last save
   let firstRender = true;
+  let filledSet = new Set();        // program ids the user marked/auto-marked filled
+  let activeTab = 'nologin';        // 'nologin' | 'login'
+  let lastProgramsData = [];        // cache last /api/programs response for re-render
 
   /* ======================= PROFILE ======================= */
 
@@ -142,6 +145,7 @@
         currentUser = null;
         renderAuthArea();
         await loadProfile();
+        await loadFilled();
         await loadPrograms();
       });
       area.appendChild(name);
@@ -197,6 +201,7 @@
       $('#authPassword').value = '';
       renderAuthArea();
       await loadProfile();
+      await loadFilled();
       await loadPrograms({ animate: true });
     } catch (_e) {
       errEl.textContent = 'Server not reachable.';
@@ -310,6 +315,15 @@
       card.appendChild(details);
     }
 
+    const isFilled = filledSet.has(p.id);
+    if (isFilled) card.classList.add('is-filled');
+
+    // "Already filled" badge in the tag row
+    if (isFilled) {
+      const badge = el('span', 'badge badge-filled', '✓ Already filled');
+      tags.appendChild(badge);
+    }
+
     const foot = el('div', 'program-foot');
     if (p.applyUrl) {
       const fill = el('button', 'btn btn-fill', '⚡ Fill this');
@@ -321,9 +335,42 @@
     const apply = el('a', 'btn btn-primary apply-btn', 'Apply Now →');
     apply.href = 'apply.html?program=' + encodeURIComponent(p.id);
     foot.appendChild(apply);
+
+    const mark = el('button', 'btn btn-ghost mark-filled-btn', isFilled ? 'Filled ✓' : 'Mark filled');
+    mark.type = 'button';
+    mark.title = isFilled ? 'Click to unmark' : 'Mark this application as already filled/submitted';
+    mark.addEventListener('click', () => toggleFilled(p.id, !isFilled));
+    foot.appendChild(mark);
+
     card.appendChild(foot);
 
     return card;
+  }
+
+  async function toggleFilled(programId, filled) {
+    if (!currentUser) { openAuth('login'); return; }
+    try {
+      const res = await fetch('/api/filled', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ programId, filled })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) { toast(data.error || 'Could not update', { error: true }); return; }
+      filledSet = new Set(data.filled);
+      renderPrograms(lastProgramsData, false);
+    } catch (_e) {
+      toast('Server not reachable.', { error: true });
+    }
+  }
+
+  async function loadFilled() {
+    try {
+      const res = await fetch('/api/filled');
+      const data = await res.json();
+      filledSet = new Set(data && Array.isArray(data.filled) ? data.filled : []);
+    } catch (_e) {
+      filledSet = new Set();
+    }
   }
 
   function renderLockedCard(p) {
@@ -377,17 +424,36 @@
     }
     stateNote.hidden = true;
 
+    lastProgramsData = programs;
+
     const unlocked = programs.filter((p) => p.unlocked);
     const locked = programs.filter((p) => !p.unlocked);
 
     // live tier first, then others; stable within groups
     unlocked.sort((a, b) => (a.tier === 'live' ? 0 : 1) - (b.tier === 'live' ? 0 : 1));
 
-    unlocked.forEach((p) => unlockedGrid.appendChild(renderUnlockedCard(p, animate)));
+    // Split unlocked into the two tabs by login requirement.
+    const noLogin = unlocked.filter((p) => !p.requiresLogin);
+    const login = unlocked.filter((p) => p.requiresLogin);
+    const countNoLogin = $('#countNoLogin');
+    const countLogin = $('#countLogin');
+    if (countNoLogin) countNoLogin.textContent = `(${noLogin.length})`;
+    if (countLogin) countLogin.textContent = `(${login.length})`;
+
+    const tabsEl = $('#progTabs');
+    if (tabsEl) tabsEl.hidden = unlocked.length === 0;
+    $('#tabNoLogin') && $('#tabNoLogin').classList.toggle('is-active', activeTab === 'nologin');
+    $('#tabLogin') && $('#tabLogin').classList.toggle('is-active', activeTab === 'login');
+
+    const shown = activeTab === 'login' ? login : noLogin;
+    shown.forEach((p) => unlockedGrid.appendChild(renderUnlockedCard(p, animate)));
 
     if (unlocked.length === 0) {
       stateNote.hidden = false;
       stateNote.innerHTML = '<strong>No programs unlocked yet.</strong><br>Fill in your profile above and hit Save — programs unlock as you go.';
+    } else if (shown.length === 0) {
+      const otherTab = activeTab === 'login' ? 'No login needed' : 'Login required';
+      unlockedGrid.appendChild(el('p', 'state-note', `No programs in this tab. Check the "${otherTab}" tab.`));
     }
 
     // locked section
@@ -611,8 +677,14 @@
   form.addEventListener('input', updateCompleteness);
   form.addEventListener('change', updateCompleteness);
 
-  initAuth().then(() => {
+  const tabNoLogin = $('#tabNoLogin');
+  const tabLogin = $('#tabLogin');
+  if (tabNoLogin) tabNoLogin.addEventListener('click', () => { activeTab = 'nologin'; renderPrograms(lastProgramsData, false); });
+  if (tabLogin) tabLogin.addEventListener('click', () => { activeTab = 'login'; renderPrograms(lastProgramsData, false); });
+
+  initAuth().then(async () => {
     loadProfile();
+    await loadFilled();
     loadPrograms();
   });
 })();

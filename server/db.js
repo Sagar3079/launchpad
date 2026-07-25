@@ -57,6 +57,14 @@ async function initPg() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `);
+  await p.query(`
+    CREATE TABLE IF NOT EXISTS filled_programs (
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      program_id TEXT NOT NULL,
+      filled_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      PRIMARY KEY (user_id, program_id)
+    );
+  `);
 }
 
 // ---------------------------------------------------------------------------
@@ -173,4 +181,37 @@ async function saveProfile(userId, profile) {
   writeStore(store);
 }
 
-module.exports = { init, createUser, getUserByUsername, getUserById, getProfile, saveProfile, mode };
+/** @returns {Promise<string[]>} program ids the user has marked/auto-marked filled */
+async function getFilled(userId) {
+  if (mode === 'postgres') {
+    const r = await getPool().query('SELECT program_id FROM filled_programs WHERE user_id = $1', [userId]);
+    return r.rows.map((x) => x.program_id);
+  }
+  const u = readStore().users.find((x) => x.id === userId);
+  return u && Array.isArray(u.filled) ? u.filled : [];
+}
+
+/** Add or remove a program from the user's filled set. */
+async function setFilled(userId, programId, filled) {
+  if (mode === 'postgres') {
+    if (filled) {
+      await getPool().query(
+        `INSERT INTO filled_programs (user_id, program_id) VALUES ($1, $2)
+         ON CONFLICT (user_id, program_id) DO NOTHING`,
+        [userId, programId],
+      );
+    } else {
+      await getPool().query('DELETE FROM filled_programs WHERE user_id = $1 AND program_id = $2', [userId, programId]);
+    }
+    return;
+  }
+  const store = readStore();
+  const u = store.users.find((x) => x.id === userId);
+  if (!u) throw new Error('user not found');
+  const set = new Set(Array.isArray(u.filled) ? u.filled : []);
+  if (filled) set.add(programId); else set.delete(programId);
+  u.filled = Array.from(set);
+  writeStore(store);
+}
+
+module.exports = { init, createUser, getUserByUsername, getUserById, getProfile, saveProfile, getFilled, setFilled, mode };

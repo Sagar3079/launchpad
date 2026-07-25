@@ -87,10 +87,11 @@
     $('#fillBtn').disabled = true;
     status('Reading the form and filling it — watch the browser below…');
     $('#cbResult').hidden = true;
+    const programId = $('#programSelect').value || '';
     try {
       const res = await fetch('/api/cobrowse/fill', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
+        body: JSON.stringify({ programId })
       });
       const d = await res.json();
       if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); $('#fillBtn').disabled = false; return; }
