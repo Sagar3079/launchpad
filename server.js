@@ -415,6 +415,18 @@ app.post('/api/cobrowse/start', async (req, res) => {
   }
 });
 
+app.post('/api/cobrowse/open', async (req, res) => {
+  if (!requireLogin(req, res)) return;
+  try {
+    const url = req.body && typeof req.body.url === 'string' ? req.body.url : '';
+    if (!/^https?:\/\//i.test(url)) return res.status(400).json({ ok: false, error: 'valid url required' });
+    const data = await cobrowse.openUrl(req.userId, url);
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
 app.post('/api/cobrowse/fill', async (req, res) => {
   if (!requireLogin(req, res)) return;
   try {

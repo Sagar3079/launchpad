@@ -50,27 +50,47 @@
       session = d.data;
       $('#cbFrame').src = session.liveViewUrl;
       $('#frameCard').hidden = false;
+      $('#openBtn').disabled = false;
       $('#fillBtn').disabled = false;
       $('#stopBtn').disabled = false;
-      status('Session live. Log into your account in the browser below, open the application page, then Fill.');
+      status('Session live. Pick a program and click "Open application", log in if it asks, then Fill.');
     } catch (_e) {
       status('Server not reachable.', true);
       $('#startBtn').disabled = false;
     }
   }
 
+  async function open() {
+    if (!session) return;
+    const program = programs.find((p) => p.id === $('#programSelect').value);
+    if (!program || !program.applyUrl) { status('Pick a program first (the blank option has no URL).', true); return; }
+    $('#openBtn').disabled = true;
+    status('Opening the application form in the browser below…');
+    try {
+      const res = await fetch('/api/cobrowse/open', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: program.applyUrl })
+      });
+      const d = await res.json();
+      if (!res.ok || !d.ok) { status(d.error || 'Could not open the form', true); }
+      else status(`Opened ${program.name}. If it needs a login, sign in above, then click "Fill this form".`);
+    } catch (_e) {
+      status('Server not reachable.', true);
+    } finally {
+      $('#openBtn').disabled = false;
+    }
+  }
+
   async function fill() {
     if (!session) return;
-    const programId = $('#programSelect').value;
-    const program = programs.find((p) => p.id === programId);
-    const applyUrl = program ? program.applyUrl : '';
+    // Fill whatever page is currently open in the live browser.
     $('#fillBtn').disabled = true;
     status('Reading the form and filling it — watch the browser below…');
     $('#cbResult').hidden = true;
     try {
       const res = await fetch('/api/cobrowse/fill', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ applyUrl })
+        body: JSON.stringify({})
       });
       const d = await res.json();
       if (!res.ok || !d.ok) { status(d.error || 'Fill failed', true); $('#fillBtn').disabled = false; return; }
@@ -95,6 +115,7 @@
     session = null;
     $('#cbFrame').src = 'about:blank';
     $('#frameCard').hidden = true;
+    $('#openBtn').disabled = true;
     $('#fillBtn').disabled = true;
     $('#stopBtn').disabled = true;
     $('#startBtn').disabled = false;
@@ -102,6 +123,7 @@
   }
 
   $('#startBtn').addEventListener('click', start);
+  $('#openBtn').addEventListener('click', open);
   $('#fillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
   window.addEventListener('beforeunload', () => { if (session) navigator.sendBeacon('/api/cobrowse/stop'); });

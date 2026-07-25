@@ -143,6 +143,29 @@ function parseAnswers(raw) {
   } catch { return []; }
 }
 
+/**
+ * Navigate the user's live session to a URL (so the form opens directly in the
+ * embedded browser). The page persists after we disconnect.
+ * @param {number} userId
+ * @param {string} url
+ * @returns {Promise<{url:string, title:string}>}
+ */
+async function openUrl(userId, url) {
+  const s = sessions.get(userId);
+  if (!s) throw new Error('No live co-browse session — start one first');
+  const { chromium } = require('playwright-core');
+  const browser = await chromium.connectOverCDP(s.connectUrl);
+  try {
+    const context = browser.contexts()[0];
+    const page = (context.pages() && context.pages()[0]) || (await context.newPage());
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await page.waitForTimeout(800);
+    return { url: page.url(), title: await page.title().catch(() => '') };
+  } finally {
+    await browser.close().catch(() => {});
+  }
+}
+
 // ---- Playwright fill ----
 
 const CONSENT_RE = /terms|agree|consent|privacy|subscribe|newsletter/i;
@@ -245,4 +268,4 @@ async function fillCurrentPage(userId, opts) {
   }
 }
 
-module.exports = { configured, startSession, stopSession, fillCurrentPage };
+module.exports = { configured, startSession, stopSession, openUrl, fillCurrentPage };
