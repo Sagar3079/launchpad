@@ -66,6 +66,12 @@ async function startSession(userId) {
   const body = {
     stealthConfig: { humanizeInteractions: true },
     region: 'iad',
+    // Default session timeout is only 5 min (300000) — that's why sessions
+    // kept ending mid-flow. Give 30 minutes.
+    timeout: 1800000,
+    // Full-HD viewport so the live view is sharp when expanded to fullscreen.
+    dimensions: { width: 1920, height: 1080 },
+    blockAds: true,
   };
   const byoProxy = (process.env.STEEL_PROXY_URL || '').trim();
   if (byoProxy) {
@@ -106,6 +112,28 @@ async function stopSession(userId) {
   if (!s) return;
   sessions.delete(userId);
   try { await steelFetch(`/sessions/${s.id}/release`, { method: 'POST' }); } catch { /* best effort */ }
+}
+
+/**
+ * Navigate with retries — a residential proxy occasionally resets a connection
+ * (net::ERR_FAILED). Retry with progressively looser wait conditions.
+ * @param {import('playwright-core').Page} page
+ * @param {string} url
+ */
+async function robustGoto(page, url) {
+  const waits = ['domcontentloaded', 'commit', 'load'];
+  let lastErr;
+  for (let i = 0; i < 3; i += 1) {
+    try {
+      await page.goto(url, { waitUntil: waits[i], timeout: 50000 });
+      await page.waitForTimeout(1000);
+      return;
+    } catch (err) {
+      lastErr = err;
+      await page.waitForTimeout(1500);
+    }
+  }
+  throw lastErr;
 }
 
 // ---- Answer generation (truthful, never fabricate) ----
@@ -164,8 +192,7 @@ async function openUrl(userId, url) {
   try {
     const context = browser.contexts()[0];
     const page = (context.pages() && context.pages()[0]) || (await context.newPage());
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await page.waitForTimeout(800);
+    await robustGoto(page, url);
     return { url: page.url(), title: await page.title().catch(() => '') };
   } finally {
     await browser.close().catch(() => {});
@@ -194,8 +221,7 @@ async function fillCurrentPage(userId, opts) {
     const context = browser.contexts()[0];
     const page = (context.pages() && context.pages()[0]) || (await context.newPage());
     if (opts.applyUrl) {
-      await page.goto(opts.applyUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
-      await page.waitForTimeout(1500);
+      await robustGoto(page, opts.applyUrl);
     }
 
     // Scan visible fields, tagging each with a stable fid.

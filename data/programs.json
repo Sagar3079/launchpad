@@ -501,8 +501,8 @@
       "Credits valid for one year or until fully used"
     ],
     "applyUrl": "https://www.cloudflare.com/startups/",
-    "requiresLogin": false,
-    "loginNote": "Public application form; a free Cloudflare account is needed later to receive credits.",
+    "requiresLogin": true,
+    "loginNote": "Requires connecting/creating a Cloudflare account during the application.",
     "eligibility": [
       "Building a software product/service with an active website",
       "Funded up to Series B",
