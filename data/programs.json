@@ -501,8 +501,8 @@
       "Credits valid for one year or until fully used"
     ],
     "applyUrl": "https://www.cloudflare.com/startups/",
-    "requiresLogin": true,
-    "loginNote": "Requires connecting/creating a Cloudflare account during the application.",
+    "requiresLogin": false,
+    "loginNote": "Public application form (no login to apply). A Cloudflare account is only needed AFTER approval to redeem credits.",
     "eligibility": [
       "Building a software product/service with an active website",
       "Funded up to Series B",
@@ -944,8 +944,8 @@
       "Account is auto-provisioned after the form is approved"
     ],
     "applyUrl": "https://mixpanel.com/startups-apply/",
-    "requiresLogin": false,
-    "loginNote": "Public application form — no product account needed to apply; it is created after approval.",
+    "requiresLogin": true,
+    "loginNote": "Submitting provisions the Startup Plan onto your Mixpanel account, so expect a Mixpanel sign-in/account step.",
     "eligibility": [
       "Raised $8 million or less",
       "BLOCKER for Scalemax: must be incorporated less than 5 years ago (Scalemax is not yet incorporated)",
