@@ -25,11 +25,11 @@
 <main class="wrap">
   <section class="section">
     <div class="card">
+      <p class="section-sub" style="margin:0 0 10px;">The right mode is picked automatically per program:</p>
       <ol class="agent-modal-steps">
-        <li>Click <strong>Start session</strong> — a real cloud browser appears below.</li>
-        <li>In it, <strong>log into your account</strong> (Google, Microsoft, etc.) and open the program's application page.</li>
-        <li>Pick the program and click <strong>Fill this form</strong> — the agent fills every field it can from your profile, in this same browser.</li>
-        <li>Review everything (amber fields need your input), tick any terms, and <strong>submit yourself</strong>.</li>
+        <li><strong>⚡ No-login forms</strong> (Qdrant, Algolia, AssemblyAI…): <strong>Start session</strong>, pick the program, <strong>Open application</strong> — it loads in the cloud browser through a residential proxy so captchas don't loop. Tick any "I'm not a robot" box yourself, then <strong>Fill this form</strong>.</li>
+        <li><strong>🔑 Login forms</strong> (Google, Microsoft…): pick the program and click <strong>Open in my browser</strong> — it opens in your own tab on <strong>your own IP</strong> so login is clean (no cloud-IP challenges). Log in and fill there (use the ⚡ Fill this extension if installed).</li>
+        <li>Always <strong>review and submit yourself</strong> — the agent never submits.</li>
       </ol>
 
       <div class="form-actions" style="flex-wrap:wrap; gap:10px;">

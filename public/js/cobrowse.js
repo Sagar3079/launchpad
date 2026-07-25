@@ -26,9 +26,10 @@
     programs.filter((p) => p.applyUrl).forEach((p) => {
       const o = document.createElement('option');
       o.value = p.id;
-      o.textContent = p.name + (p.requiresLogin ? ' (login)' : '');
+      o.textContent = p.name + (p.requiresLogin ? ' 🔑 login' : ' ⚡ no-login');
       sel.appendChild(o);
     });
+    updateMode();
   }
 
   async function checkStatus() {
@@ -50,22 +51,57 @@
       session = d.data;
       $('#cbFrame').src = session.liveViewUrl;
       $('#frameCard').hidden = false;
-      $('#openBtn').disabled = false;
-      $('#fillBtn').disabled = false;
       $('#stopBtn').disabled = false;
-      status('Session live. Pick a program and click "Open application", log in if it asks, then Fill.');
+      updateMode();
+      status('Session live. Pick a no-login program, "Open application", tick any captcha yourself, then "Fill this form".');
     } catch (_e) {
       status('Server not reachable.', true);
       $('#startBtn').disabled = false;
     }
   }
 
+  function selectedProgram() {
+    return programs.find((p) => p.id === $('#programSelect').value);
+  }
+
+  // Route each program the right way:
+  //  - login-required  -> open on the USER's own IP (they sign in cleanly)
+  //  - no-login/captcha -> load into the cloud browser (residential proxy)
+  function updateMode() {
+    const p = selectedProgram();
+    const openBtn = $('#openBtn');
+    const fillBtn = $('#fillBtn');
+    if (p && p.requiresLogin) {
+      openBtn.textContent = 'Open in my browser (I log in) ↗';
+      openBtn.title = 'Opens on YOUR IP so login is clean — a cloud IP triggers Google/MS challenges';
+      openBtn.disabled = false;
+      fillBtn.disabled = true;
+      fillBtn.title = 'For login forms, fill in your own browser with the ⚡ Fill this extension';
+    } else {
+      openBtn.textContent = 'Open application ↗';
+      openBtn.title = 'Loads the form in the cloud browser below (residential proxy handles captchas)';
+      openBtn.disabled = !(p && p.applyUrl);
+      fillBtn.disabled = !session;
+      fillBtn.title = 'Fill the page open in the cloud browser';
+    }
+  }
+
   async function open() {
-    if (!session) return;
-    const program = programs.find((p) => p.id === $('#programSelect').value);
+    const program = selectedProgram();
     if (!program || !program.applyUrl) { status('Pick a program first (the blank option has no URL).', true); return; }
+
+    // Login-required -> open on the user's own IP in a new tab.
+    if (program.requiresLogin) {
+      window.open(program.applyUrl, '_blank', 'noopener');
+      status(`Opened ${program.name} in your own browser tab — you're on your own IP, so log in there. `
+        + `If the LaunchPad extension is installed, use "⚡ Fill this" on the dashboard to fill it.`);
+      return;
+    }
+
+    // No-login/captcha -> cloud browser (proxy). Needs a live session.
+    if (!session) { status('Click "Start session" first for no-login forms.', true); return; }
     $('#openBtn').disabled = true;
-    status('Opening the application form in the browser below…');
+    status('Opening the application form in the cloud browser below…');
     try {
       const res = await fetch('/api/cobrowse/open', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -73,11 +109,11 @@
       });
       const d = await res.json();
       if (!res.ok || !d.ok) { status(d.error || 'Could not open the form', true); }
-      else status(`Opened ${program.name}. If it needs a login, sign in above, then click "Fill this form".`);
+      else status(`Opened ${program.name}. Tick any "I'm not a robot" box yourself, then click "Fill this form".`);
     } catch (_e) {
       status('Server not reachable.', true);
     } finally {
-      $('#openBtn').disabled = false;
+      updateMode();
     }
   }
 
@@ -116,10 +152,9 @@
     session = null;
     $('#cbFrame').src = 'about:blank';
     $('#frameCard').hidden = true;
-    $('#openBtn').disabled = true;
-    $('#fillBtn').disabled = true;
     $('#stopBtn').disabled = true;
     $('#startBtn').disabled = false;
+    updateMode();
     status('Session ended.');
   }
 
@@ -127,6 +162,7 @@
   $('#openBtn').addEventListener('click', open);
   $('#fillBtn').addEventListener('click', fill);
   $('#stopBtn').addEventListener('click', stop);
+  $('#programSelect').addEventListener('change', updateMode);
   window.addEventListener('beforeunload', () => { if (session) navigator.sendBeacon('/api/cobrowse/stop'); });
 
   loadPrograms();
