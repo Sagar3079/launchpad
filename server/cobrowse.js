@@ -21,6 +21,15 @@ const kiro = (() => { try { return require('./kiro.js'); } catch { return null; 
 const STEEL_API_KEY = () => (process.env.STEEL_API_KEY || '').trim();
 const STEEL_API = 'https://api.steel.dev/v1';
 
+// --- Answer backend: Scalemax (OpenAI-compatible, DeepSeek V4 Flash) ---
+// Primary model backend for the fill; Kiro is the fallback. Both optional, but
+// at least one must be configured. Base defaults to Scalemax's token gateway.
+const SCALEMAX_KEY = () => (process.env.SCALEMAX_API_KEY || '').trim();
+const SCALEMAX_BASE = () =>
+  (process.env.SCALEMAX_BASE_URL || 'https://api.scalemax.pro/token/v1').trim().replace(/\/+$/, '');
+const SCALEMAX_MODEL = () => (process.env.SCALEMAX_MODEL || 'deepseek-v4-flash').trim();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 // In-memory session registry, keyed by app user id. One live session per user.
 const sessions = new Map();
 
@@ -29,22 +38,40 @@ function configured() {
 }
 
 async function steelFetch(pathname, options) {
-  const res = await fetch(STEEL_API + pathname, {
-    ...options,
-    headers: {
-      'steel-api-key': STEEL_API_KEY(),
-      'content-type': 'application/json',
-      ...(options && options.headers),
-    },
-  });
-  const text = await res.text();
-  let json = null;
-  try { json = text ? JSON.parse(text) : null; } catch { json = null; }
-  if (!res.ok) {
+  // Retry transient network failures ("fetch failed" from a dropped connection)
+  // and 5xx — a single blip at session-create time is what made sessions seem to
+  // "break a lot". Client errors (4xx) surface immediately. Sessions auto-time
+  // out in 15 min, so a rare duplicate from a lost-response retry is harmless.
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let res;
+    try {
+      res = await fetch(STEEL_API + pathname, {
+        ...options,
+        headers: {
+          'steel-api-key': STEEL_API_KEY(),
+          'content-type': 'application/json',
+          ...(options && options.headers),
+        },
+      });
+    } catch (err) {
+      lastErr = err;
+      await sleep(1200);
+      continue;
+    }
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { json = null; }
+    if (res.ok) return json;
     const msg = (json && (json.message || json.error)) || `Steel API ${res.status}`;
+    if (res.status >= 500) {
+      lastErr = new Error(msg);
+      await sleep(1200);
+      continue;
+    }
     throw new Error(msg);
   }
-  return json;
+  throw lastErr || new Error('Steel API request failed');
 }
 
 /**
@@ -184,6 +211,87 @@ function parseAnswers(raw) {
 }
 
 /**
+ * Generate text via Scalemax's OpenAI-compatible API (DeepSeek V4 Flash).
+ * DeepSeek's upstream occasionally returns a transient `provider_unavailable`,
+ * so retry a few times before giving up. Returns { text }.
+ */
+async function scalemaxGenerate({ system, user }) {
+  const key = SCALEMAX_KEY();
+  if (!key) throw new Error('SCALEMAX_API_KEY not set');
+  const messages = [];
+  if (system) messages.push({ role: 'system', content: system });
+  messages.push({ role: 'user', content: user });
+  // DeepSeek V4 Flash is a reasoning model — leave the budget room for hidden
+  // reasoning plus the JSON answer so the output isn't truncated.
+  const body = JSON.stringify({ model: SCALEMAX_MODEL(), messages, max_tokens: 8000 });
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let res;
+    try {
+      res = await fetch(SCALEMAX_BASE() + '/chat/completions', {
+        method: 'POST',
+        headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' },
+        body,
+      });
+    } catch (err) {
+      lastErr = err;
+      await sleep(1500);
+      continue;
+    }
+    const text = await res.text();
+    let json = null;
+    try { json = text ? JSON.parse(text) : null; } catch { json = null; }
+    if (res.ok && json) {
+      const content =
+        json.choices && json.choices[0] && json.choices[0].message && json.choices[0].message.content;
+      return { text: content || '' };
+    }
+    const code = json && json.error && json.error.code;
+    lastErr = new Error((json && json.error && json.error.message) || `Scalemax API ${res.status}`);
+    // Transient upstream (provider_unavailable) or 5xx -> retry; else bail.
+    if (code === 'provider_unavailable' || res.status >= 500) {
+      await sleep(1500);
+      continue;
+    }
+    throw lastErr;
+  }
+  throw lastErr || new Error('Scalemax generate failed');
+}
+
+/**
+ * Produce the raw answer JSON text, preferring Scalemax and falling back to
+ * Kiro. Throws only if every configured backend fails / none is configured.
+ */
+async function generateAnswersText(profile, scan) {
+  const system = buildSystem(profile);
+  const user = buildUser(scan);
+  const errs = [];
+  if (SCALEMAX_KEY()) {
+    try {
+      return (await scalemaxGenerate({ system, user })).text;
+    } catch (err) {
+      errs.push('Scalemax: ' + err.message);
+    }
+  }
+  if (kiro && (process.env.KIRO_API_KEY || '').trim()) {
+    try {
+      const g = await kiro.generateText({
+        system,
+        user,
+        model: 'kiro/claude-haiku-4.5',
+        apiKey: (process.env.KIRO_API_KEY || '').trim(),
+      });
+      return g.text;
+    } catch (err) {
+      errs.push('Kiro: ' + err.message);
+    }
+  }
+  throw new Error(
+    errs.length ? errs.join(' | ') : 'No answer engine configured (set SCALEMAX_API_KEY or KIRO_API_KEY)'
+  );
+}
+
+/**
  * Navigate the user's live session to a URL (so the form opens directly in the
  * embedded browser). The page persists after we disconnect.
  * @param {number} userId
@@ -226,7 +334,9 @@ const CONSENT_RE = /terms|agree|consent|privacy|subscribe|newsletter/i;
 async function fillCurrentPage(userId, opts) {
   const s = sessions.get(userId);
   if (!s) throw new Error('No live co-browse session — start one first');
-  if (!kiro) throw new Error('Kiro answer engine unavailable');
+  if (!SCALEMAX_KEY() && !kiro) {
+    throw new Error('No answer engine configured (set SCALEMAX_API_KEY or KIRO_API_KEY)');
+  }
 
   const { chromium } = require('playwright-core');
   const browser = await chromium.connectOverCDP(s.connectUrl);
@@ -268,14 +378,9 @@ async function fillCurrentPage(userId, opts) {
 
     if (!scan.fields.length) return { filled: 0, missing: [], failed: 0, url: scan.url };
 
-    // Generate truthful answers via Kiro.
-    const gen = await kiro.generateText({
-      system: buildSystem(opts.profile),
-      user: buildUser(scan),
-      model: 'kiro/claude-haiku-4.5',
-      apiKey: (process.env.KIRO_API_KEY || '').trim(),
-    });
-    const answers = parseAnswers(gen.text);
+    // Generate truthful answers (Scalemax / DeepSeek V4 Flash, Kiro fallback).
+    const genText = await generateAnswersText(opts.profile, scan);
+    const answers = parseAnswers(genText);
 
     let filled = 0;
     let failed = 0;

@@ -37,6 +37,29 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-30 — new proxy + Scalemax model backend (fill verified locally)
+- Old Decodo proxy sub expired. Replaced with DataImpulse (BYO residential,
+  pay-as-you-go non-expiring, ~$1/GB). Chose Sticky + India targeting; verified
+  exit IP = Reliance Jio residential (proxy:false, hosting:false), stable across
+  requests. Only STEEL_PROXY_URL changes (local .env + Scalingo env).
+- Model backend fix: Kiro hit its MONTHLY_REQUEST_COUNT limit, and the co-browse
+  fill was hardcoded to Kiro with NO fallback (single point of failure). Wired
+  Scalemax (the user's own product) as the PRIMARY backend: OpenAI-compatible,
+  base https://api.scalemax.pro/token/v1, model deepseek-v4-flash, key sm_live_.
+  Kiro is now the fallback. New env: SCALEMAX_API_KEY (+ optional
+  SCALEMAX_BASE_URL / SCALEMAX_MODEL, defaults baked in). Endpoint quirks found:
+  base is /token/v1 (not /v1); DeepSeek upstream throws transient
+  provider_unavailable -> scalemaxGenerate retries 3x. max_tokens 8000 (reasoning
+  model needs room for hidden reasoning + JSON).
+- Reliability: steelFetch now retries transient network failures ("fetch failed"
+  on session create) + 5xx (3x). This was the real cause of "sessions breaking a
+  lot" at start — a single blip had no retry.
+- VERIFIED end to end locally (filldemo user, Scalemax profile): proxy -> Steel
+  session -> open Sentry form through the Indian IP -> fill via DeepSeek V4 Flash:
+  filled 6, missing 1 (Sentry Org Slug, honestly flagged — no fabrication),
+  failed 0, never submitted. Next: user sets STEEL_PROXY_URL + SCALEMAX_API_KEY
+  on Scalingo and redeploys this commit, then verify globally.
+
 ### 2026-07-25 — co-browse reliability + unified login flow (3 subagents)
 - Session stability: Steel default timeout is 5 min (why sessions kept
   ending); free tier caps at 15 min, so set timeout 900000 + no
