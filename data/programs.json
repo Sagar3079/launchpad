@@ -2000,5 +2000,900 @@
       "Benefit is a 20% discount (not credits)."
     ],
     "tier": "locked-extra"
+  },
+  {
+    "id": "posthog-startups",
+    "name": "PostHog for Startups",
+    "provider": "PostHog",
+    "logoEmoji": "🦔",
+    "benefitSummary": "$50,000 in PostHog credits for 1 year + partner perks",
+    "benefits": [
+      "$50,000 in PostHog platform credits, valid 12 months",
+      "$25,000 DigitalOcean credit via the Hatch program",
+      "50% off Mintlify and 50% off Speakeasy for 6 months",
+      "Free PostHog merch, startup spotlights, and office hours"
+    ],
+    "applyUrl": "https://posthog.com/startups/apply",
+    "requiresLogin": true,
+    "loginNote": "Sign up for a PostHog Cloud account, add a card / upgrade on the billing page, then open the startup application from that billing page.",
+    "eligibility": [
+      "Less than 2 years old",
+      "Raised less than $5 million in funding (bootstrapped / $0 qualifies)",
+      "Signed up for PostHog after Jan 1, 2023",
+      "Not previously enrolled in the startup program"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "basic.foundedYear",
+      "extended.fundingRaised"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Use your company-domain email (scalemax.pro), not Gmail"
+      },
+      {
+        "label": "How much funding have you raised?",
+        "profileKey": "extended.fundingRaised",
+        "type": "select",
+        "hint": "Bootstrapped / $0 qualifies — cap is under $5M"
+      },
+      {
+        "label": "When was the company founded?",
+        "profileKey": "basic.foundedYear",
+        "type": "text",
+        "hint": "Must be within the last 2 years"
+      },
+      {
+        "label": "What does your startup do?",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Apply from a company-domain email and a live website that matches the application",
+      "Bootstrapped / $0 raised is fine — the limit is a $5M ceiling, not a funding minimum",
+      "Credit is auto-applied then manually reviewed, so send a few real events into your PostHog project so it reads as a genuine product"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "render-startups",
+    "name": "Render Startup Program",
+    "provider": "Render",
+    "logoEmoji": "🚀",
+    "benefitSummary": "Up to $10k credits (up to $100k AI tier), no VC referral",
+    "benefits": [
+      "Base tier open to any startup; up to $10k for <$1M funding",
+      "Up to $25k ($1M+) and up to $100k for AI/compute-intensive startups",
+      "12 months to use credits",
+      "Hands-on migration help and technical support"
+    ],
+    "applyUrl": "https://render.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Create/sign in to a Render account first — you spin up a Render instance and reference it in the application so approved credits attach to your account.",
+    "eligibility": [
+      "Bootstrapped, pre-seed, or seed startups (no VC referral required for base tiers)",
+      "Higher tiers ($10k/$25k/$100k) scale with funding stage",
+      "Company-domain email strongly preferred over personal Gmail/Outlook"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Use the scalemax.pro company-domain email"
+      },
+      {
+        "label": "Founder / your name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Total funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      },
+      {
+        "label": "What are you building / workload on Render?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Short summary of product, the workload, and the near-term milestone the credits unlock"
+      },
+      {
+        "label": "Render account / service to apply credits to",
+        "profileKey": null,
+        "type": "text",
+        "hint": "The Render instance/service ID you created"
+      }
+    ],
+    "approvalTips": [
+      "Use the scalemax.pro company email, not a personal address — the #1 rejection reason",
+      "Make sure the website is real and matches the application (no placeholder page)",
+      "State the concrete near-term milestone the credits will help you hit"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "supabase-startups",
+    "name": "Supabase Startup Program",
+    "provider": "Supabase",
+    "logoEmoji": "🟢",
+    "benefitSummary": "Up to 6 months Team plan free (~$3.6k value) + credits",
+    "benefits": [
+      "Up to 6 months of the Supabase Team plan free (~$3,600 value)",
+      "Up to ~$3,000 in credits for early-stage startups",
+      "Higher compute, point-in-time recovery, daily backups, email support",
+      "Covers Postgres, Auth, Edge Functions, and Storage"
+    ],
+    "applyUrl": "https://supabase.com/solutions/startups",
+    "requiresLogin": true,
+    "loginNote": "Sign in with your Supabase account (GitHub or email) so approved credits attach to your organization/project.",
+    "eligibility": [
+      "Startup less than 5 years old",
+      "Under $5M total funding (pre-seed through Series A)",
+      "Bootstrapped and early-stage welcome — no VC referral required",
+      "Company-domain email required (personal Gmail/Outlook is a top rejection reason)"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Company email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Must be a company-domain (scalemax.pro) address"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Total funding raised",
+        "profileKey": "extended.fundingRaised",
+        "type": "text"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      },
+      {
+        "label": "How will you use Supabase?",
+        "profileKey": "generated",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Apply with the scalemax.pro email — the single biggest rejection driver is a personal address",
+      "Ensure the site and application details line up (name, description)",
+      "Be specific about which Supabase features (Postgres/Auth/Storage) you'll use"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "workos-startups",
+    "name": "WorkOS for Startups",
+    "provider": "WorkOS",
+    "logoEmoji": "🔐",
+    "benefitSummary": "User Management free up to 1M MAU + up to $25k in perks — no VC referral",
+    "benefits": [
+      "WorkOS User Management (AuthKit) free up to 1,000,000 monthly active users",
+      "Up to $25,000 in partner perks and resources",
+      "Enterprise features: SSO, Directory Sync (SCIM), audit logs",
+      "No equity and no VC referral required"
+    ],
+    "applyUrl": "https://workos.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Create a free WorkOS account first, then apply from the dashboard with your company details.",
+    "eligibility": [
+      "Early-stage startup (pre-seed to Series A)",
+      "Company-domain email address",
+      "Live product website matching the application",
+      "Open to startups worldwide; bootstrapped welcome"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "Must be a live site matching your application"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Company-domain email (not Gmail/Outlook)"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select",
+        "hint": "Bootstrapped / pre-seed is accepted"
+      },
+      {
+        "label": "What are you building?",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Use your scalemax.pro email, not a personal Gmail — that is the #1 rejection reason",
+      "Make sure the live website content matches what you write in the application",
+      "No VC referral is needed for the bootstrapped/pre-seed tier"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "new-relic-startups",
+    "name": "New Relic for Startups",
+    "provider": "New Relic",
+    "logoEmoji": "📈",
+    "benefitSummary": "Free full observability platform (5 users + generous data) for early-stage AI startups",
+    "benefits": [
+      "Five users and generous data ingest per month, free",
+      "Every New Relic capability and AI feature from day one, no gating",
+      "Onboarding plus monthly office hours and paired sessions with New Relic engineers",
+      "Quarterly architecture reviews and a founder community"
+    ],
+    "applyUrl": "https://newrelic.com/solutions/industry/startups",
+    "requiresLogin": false,
+    "eligibility": [
+      "Vetted, early-stage startup",
+      "Building on or with AI",
+      "Open to applicants worldwide"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.founderName"
+    ],
+    "formFields": [
+      {
+        "label": "Full name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Company-domain email"
+      },
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Tell us about your startup",
+        "profileKey": "basic.description",
+        "type": "textarea",
+        "hint": "Emphasize that you build software on frontier AI models"
+      }
+    ],
+    "approvalTips": [
+      "Lead with the AI angle — the program specifically targets startups building on AI, which Scalemax is",
+      "It is a register-interest form and the team reaches out, so make the AI use case unmistakable",
+      "Apply with a company-domain email"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "replicate-startups",
+    "name": "Replicate Startup Program",
+    "provider": "Replicate",
+    "logoEmoji": "🔁",
+    "benefitSummary": "$1K–$10K in inference credits for AI startups on open models",
+    "benefits": [
+      "$1K–$10K in inference credits (non-dilutive, no equity)",
+      "Run open-weight models (Llama, Mistral, FLUX, SDXL, Whisper) via API without owning GPUs",
+      "Credits applied directly to your Replicate account, ~6 month validity",
+      "Support for scaling production inference"
+    ],
+    "applyUrl": "https://replicate.com/startups",
+    "requiresLogin": true,
+    "loginNote": "Sign up at replicate.com with a company-domain email and generate an API token first; the startup application is completed from your logged-in account.",
+    "eligibility": [
+      "AI/ML startup building a production product (not research-only)",
+      "Pre-Series B stage",
+      "Company-domain email strongly preferred (personal Gmail/Outlook is a top rejection reason)",
+      "Worldwide applicants; no VC referral required"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Use company-domain email (scalemax.pro), not personal Gmail"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "What you're building / use case on Replicate",
+        "profileKey": "extended.pitch",
+        "type": "textarea"
+      },
+      {
+        "label": "Models you plan to run",
+        "profileKey": "generated",
+        "type": "text"
+      }
+    ],
+    "approvalTips": [
+      "Apply with the scalemax.pro email, not a personal address — the #1 rejection reason",
+      "Have a real, non-placeholder website live and describe a concrete inference use case",
+      "Frame Scalemax as building a production product, not research"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "cohere-startups",
+    "name": "Cohere Startup Program",
+    "provider": "Cohere",
+    "logoEmoji": "🔷",
+    "benefitSummary": "25% discount on all Cohere models for 12 months + technical support",
+    "benefits": [
+      "25% discount on all Cohere models for up to 12 months",
+      "Technical support from Cohere's experts to develop and ship ideas",
+      "Co-marketing / startup spotlight",
+      "Access to all Cohere models (Command, Embed, Rerank) on the platform"
+    ],
+    "applyUrl": "https://cohere.com/startup-program-application",
+    "requiresLogin": false,
+    "eligibility": [
+      "Startups at Series B funding or earlier (pre-seed, seed, Series A welcome)",
+      "Building enterprise/AI applications with language models",
+      "Open globally"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Business email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Founder name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "What you're building with LLMs",
+        "profileKey": "extended.pitch",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Position Scalemax as building an enterprise LLM application — Cohere is enterprise-focused",
+      "Being pre-Series B is an advantage here; state the stage plainly",
+      "Note this is a 25% model discount, not free credits"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "huggingface-startups",
+    "name": "Hugging Face Startup Program",
+    "provider": "Hugging Face",
+    "logoEmoji": "🤗",
+    "benefitSummary": "Up to 50% off Enterprise Hub in Year 1 for early-stage AI startups",
+    "benefits": [
+      "Up to 50% off Enterprise Hub for the first year",
+      "Private model & dataset repos, autoscaling inference endpoints, Spaces with persistent storage",
+      "ZeroGPU quota extension, SSO (SAML/OIDC), SOC 2 Type II + GDPR posture",
+      "Hub credits usable across inference providers, endpoints, Jobs and Space upgrades"
+    ],
+    "applyUrl": "https://huggingface.co/enterprise",
+    "requiresLogin": true,
+    "loginNote": "Create a Hugging Face organization, then complete the Enterprise contact form mentioning the startup program and your funding stage; a scoping call follows.",
+    "eligibility": [
+      "Pre-Series B / bootstrapped / pre-seed / seed stage",
+      "AI-native product actively using open models or datasets",
+      "Fewer than 50 employees",
+      "Company-domain email; no VC referral required"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "extended.stage",
+      "extended.teamSize"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "How you use open models / datasets",
+        "profileKey": "extended.techStack",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "Emphasize concrete use of open models/datasets — the program is aimed at open-source-native builders",
+      "This is a discount on a PAID annual Enterprise contract, not free credits — only apply if you actually need Enterprise Hub",
+      "Apply from the company HF org with the scalemax.pro email"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "freshworks-startups",
+    "name": "Freshworks for Startups (India)",
+    "provider": "Freshworks",
+    "logoEmoji": "🌱",
+    "benefitSummary": "Up to $10,000 in credits across the Freshworks suite for recognized Indian startups",
+    "benefits": [
+      "$10,000 in credits for Startup India tax-exempted startups (or $4,000 for DPIIT-recognized)",
+      "Access across Freshdesk, Freshsales, Freshchat, Freshservice, Freshmarketer and more",
+      "Mentorship, community and go-to-market resources",
+      "Credits valid for one year"
+    ],
+    "applyUrl": "https://www.freshworks.com/partners/startup-program/startup-india/",
+    "requiresLogin": true,
+    "loginNote": "Sign up on the Freshworks startup landing page with your startup details; you must supply Startup India / DPIIT recognition to unlock the credits.",
+    "eligibility": [
+      "Startup India tax-exempted status (for $10k) or DPIIT recognition (for $4k)",
+      "Must not have previously applied to or enrolled in the program",
+      "India-registered startup"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "basic.country",
+      "extended.founderName",
+      "extended.incorporated"
+    ],
+    "formFields": [
+      {
+        "label": "Startup name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Work email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "DPIIT / Startup India recognition number",
+        "profileKey": null,
+        "type": "text",
+        "hint": "Required — needs a registered entity with DPIIT recognition"
+      },
+      {
+        "label": "Founder name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "About your startup",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      }
+    ],
+    "approvalTips": [
+      "This route is India-only and gated on Startup India / DPIIT recognition — get DPIIT-recognized first",
+      "The $10k tier needs Startup India tax-exemption (80-IAC); the $4k tier only needs basic DPIIT recognition",
+      "Apply once — re-applications from already-enrolled startups are rejected"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "zoho-startups",
+    "name": "Zoho for Startups",
+    "provider": "Zoho",
+    "logoEmoji": "🧰",
+    "benefitSummary": "Up to $1,200 (DPIIT: up to $3,600) in Zoho Wallet credits across 55+ apps",
+    "benefits": [
+      "Stage 1: up to $1,200 in Zoho Wallet credits usable on any Zoho app",
+      "Stage 2: additional credits for hosting your domain with Zoho within 15 days",
+      "DPIIT-recognized startups: up to $3,600 total",
+      "Access to 55+ apps — CRM, Books, Projects, Mail and more"
+    ],
+    "applyUrl": "https://www.zoho.com/startups/founders-registration.html",
+    "requiresLogin": true,
+    "loginNote": "Create a free Zoho account first (the email you register permanently becomes the credit wallet and cannot be changed later), then fill out the founders registration form.",
+    "eligibility": [
+      "Either match the Startup India definition OR be registered with a Zoho ecosystem-enabler collaborator",
+      "Must be a free/new Zoho user with no active or past paid subscription",
+      "No prior Zoho startup credit history"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "basic.country",
+      "extended.industry"
+    ],
+    "formFields": [
+      {
+        "label": "Startup name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Work email (becomes the credit wallet)",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Cannot be changed later — use an email you control long-term"
+      },
+      {
+        "label": "Recognition type",
+        "profileKey": null,
+        "type": "select",
+        "hint": "Startup India recognition OR an ecosystem-enabler collaborator"
+      },
+      {
+        "label": "Startup vertical / industry",
+        "profileKey": "extended.industry",
+        "type": "select"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "City / State",
+        "profileKey": null,
+        "type": "text"
+      },
+      {
+        "label": "Domain name",
+        "profileKey": "basic.website",
+        "type": "text",
+        "hint": "For Stage 2 domain-hosting credits"
+      }
+    ],
+    "approvalTips": [
+      "Eligibility is either/or — if you are not DPIIT-recognized yet, registering through one of Zoho's ecosystem-enabler collaborators can qualify you without incorporation",
+      "Use a brand-new Zoho email you will keep — it permanently owns the credit wallet",
+      "Complete Stage 2 (host your domain with Zoho within 15 days) to unlock the extra credits"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "ovhcloud-startups",
+    "name": "OVHcloud Startup Program",
+    "provider": "OVHcloud",
+    "logoEmoji": "☁️",
+    "benefitSummary": "€10k credits (START), up to €100k (SCALE)",
+    "benefits": [
+      "START level: €10,000 free cloud credits over 12 months + 6 hours 1:1 engineer time",
+      "SCALE level: up to €100,000 credits over 12 months + up to 20 hours 1:1 engineer time",
+      "No equity taken; low egress fees and EU data sovereignty",
+      "Rolling review — decision typically within 7 days"
+    ],
+    "applyUrl": "https://startup.ovhcloud.com/en/",
+    "requiresLogin": true,
+    "loginNote": "Apply through the startup portal (startup.ovhcloud.com/en/login/) — you create/sign in to an OVHcloud startup-program account to submit.",
+    "eligibility": [
+      "Tech-focused startup less than 5 years old",
+      "Fewer than 50 employees and revenue below €10M",
+      "START for early-stage (low monthly cloud spend); SCALE for post-Series-A / higher spend",
+      "Open globally including India via OVHcloud regional entities"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description",
+      "basic.country"
+    ],
+    "formFields": [
+      {
+        "label": "Startup name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Business email",
+        "profileKey": "basic.email",
+        "type": "text"
+      },
+      {
+        "label": "Founder name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "Year founded",
+        "profileKey": "basic.foundedYear",
+        "type": "text"
+      },
+      {
+        "label": "Team size",
+        "profileKey": "extended.teamSize",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "Monthly cloud spend",
+        "profileKey": "extended.monthlyCloudSpend",
+        "type": "text"
+      },
+      {
+        "label": "Describe your project / product",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      },
+      {
+        "label": "Why is your project innovative?",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "Selection prioritizes the most innovative projects"
+      }
+    ],
+    "approvalTips": [
+      "Emphasize technical innovation — the selection committee prioritizes the most innovative projects",
+      "Apply for START (€10k) given early-stage/low cloud spend",
+      "Be honest about company age/size; the <5yr, <50 employees, <€10M revenue gates are checked"
+    ],
+    "tier": "live"
+  },
+  {
+    "id": "akamai-rise-startups",
+    "name": "Akamai Cloud Rise (Linode) Startup Program",
+    "provider": "Akamai (Linode)",
+    "logoEmoji": "🌐",
+    "benefitSummary": "$500 up front, up to $120k in year-one credits",
+    "benefits": [
+      "$500 in cloud infrastructure immediately on qualifying",
+      "Up to $120,000 in credits during year one",
+      "Discounted services in years two and three (3-year program)",
+      "Solutions-engineer guidance and dedicated account management"
+    ],
+    "applyUrl": "https://www.akamai.com/cloud/start-ups/rise",
+    "requiresLogin": true,
+    "loginNote": "Create an Akamai Cloud (Linode) account with your company-domain email and a valid credit card before submitting the embedded Rise application form.",
+    "eligibility": [
+      "For-profit company fewer than 7 years old",
+      "At least one of: paid non-founder employees, active users, initial revenue, or VC funding",
+      "A defined infrastructure scaling plan; Akamai Cloud as primary provider",
+      "Prior credit recipients must have received under $3,000 previously"
+    ],
+    "requiredProfileFields": [
+      "basic.startupName",
+      "basic.website",
+      "basic.email",
+      "basic.description"
+    ],
+    "formFields": [
+      {
+        "label": "Company name",
+        "profileKey": "basic.startupName",
+        "type": "text"
+      },
+      {
+        "label": "Company website",
+        "profileKey": "basic.website",
+        "type": "text"
+      },
+      {
+        "label": "Corporate email",
+        "profileKey": "basic.email",
+        "type": "text",
+        "hint": "Must match your company domain (scalemax.pro)"
+      },
+      {
+        "label": "Founder / contact name",
+        "profileKey": "extended.founderName",
+        "type": "text"
+      },
+      {
+        "label": "Country",
+        "profileKey": "basic.country",
+        "type": "text"
+      },
+      {
+        "label": "Funding stage",
+        "profileKey": "extended.stage",
+        "type": "select"
+      },
+      {
+        "label": "What does your company do?",
+        "profileKey": "basic.description",
+        "type": "textarea"
+      },
+      {
+        "label": "Infrastructure scaling plan",
+        "profileKey": "generated",
+        "type": "textarea",
+        "hint": "How you'll grow on Akamai Cloud"
+      },
+      {
+        "label": "Linode/Akamai Cloud account",
+        "profileKey": null,
+        "type": "text",
+        "hint": "Account you created for the application"
+      }
+    ],
+    "approvalTips": [
+      "Show at least one traction signal (users, revenue, or a hire) — required to qualify",
+      "Use the scalemax.pro corporate email and a matching real website",
+      "Have a clear infrastructure scaling plan naming Akamai Cloud as primary"
+    ],
+    "tier": "live"
   }
 ]

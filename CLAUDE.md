@@ -37,6 +37,23 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — catalog expansion to 41 programs (3 research subagents)
+- Added 12 verified programs (29 -> 41; now 29 login / 12 no-login). 3 parallel
+  research agents (cloud/DB, AI/ML, devtools+SaaS+India), each returning strict
+  JSON scored with a Scalemax-eligibility verdict; merged via a validating script
+  (unique ids, profileKey allowlist, login/loginNote consistency).
+- Eligible-now for bootstrapped pre-revenue Scalemax: PostHog ($50k credits,
+  <2yr & <$5M — best fit), Render, Supabase, WorkOS (free to 1M MAU), New Relic
+  (no-login), Replicate, Cohere (no-login, 25% model discount).
+- AI perk: Hugging Face (50% Enterprise, a paid discount not credits). India:
+  Freshworks + Zoho (both gated on DPIIT/Startup India — honest note; Zoho has a
+  non-incorporation route via ecosystem enabler). Global borderline: OVHcloud
+  (EUR10k), Akamai Rise ($120k, needs one traction signal).
+- SKIPPED per the no-VC-gated policy: Modal, RunPod, LangSmith, Auth0 (need
+  venture backing); Scaleway (EU-only, India excluded); Statsig (~25k MAU
+  target). Agents also flagged closed/unverifiable: Railway, DataStax, Redis,
+  Twilio (no credits now), Postman, Linear (partner-code), Groq (invite-only).
+
 ### 2026-07-30 — new proxy + Scalemax model backend (fill verified locally)
 - Old Decodo proxy sub expired. Replaced with DataImpulse (BYO residential,
   pay-as-you-go non-expiring, ~$1/GB). Chose Sticky + India targeting; verified
