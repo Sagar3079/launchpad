@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LaunchPad — Live Co-browse</title>
+  <script>try{var t=localStorage.getItem('lp-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}</script>
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -17,6 +18,7 @@
       </div>
     </div>
     <nav class="header-nav">
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
       <a class="btn btn-ghost" href="/">← Dashboard</a>
     </nav>
   </div>
@@ -68,6 +70,7 @@
 </main>
 
 <div id="agentToasts"></div>
+<script src="/js/theme-toggle.js" defer></script>
 <script src="/js/cobrowse.js" defer></script>
 </body>
 </html>

@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LaunchPad — Startup Credit Programs</title>
+  <script>try{var t=localStorage.getItem('lp-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}</script>
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
@@ -19,6 +20,7 @@
     <nav class="header-nav">
       <span class="pill" id="programCountPill">Loading programs…</span>
       <a class="btn btn-fill" href="/cobrowse.html" title="Log in yourself, then the agent fills login-gated applications">🖥️ Live co-browse</a>
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
       <span id="authArea" class="auth-area"></span>
     </nav>
   </div>
@@ -195,6 +197,17 @@
       </button>
     </div>
 
+    <div class="prog-controls">
+      <input type="search" id="progSearch" class="prog-search" placeholder="🔎 Search programs (AWS, credits, database…)" aria-label="Search programs" />
+      <select id="progSort" class="prog-sort" aria-label="Sort programs">
+        <option value="default">Sort: Default</option>
+        <option value="benefit">Biggest benefit</option>
+        <option value="az">Name A–Z</option>
+      </select>
+      <label class="prog-chip"><input type="checkbox" id="filterIndia" /> 🇮🇳 India-friendly</label>
+      <label class="prog-chip"><input type="checkbox" id="hideFilled" /> Hide filled</label>
+    </div>
+
     <div id="unlockedGrid" class="programs-grid" aria-live="polite"></div>
 
     <div id="lockedWrap" hidden>
@@ -235,6 +248,7 @@
   </div>
 </div>
 
+<script src="/js/theme-toggle.js" defer></script>
 <script src="/js/app.js" defer></script>
 </body>
 </html>

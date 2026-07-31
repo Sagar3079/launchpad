@@ -79,6 +79,40 @@
   let firstRender = true;
   let filledSet = new Set();        // program ids the user marked/auto-marked filled
   let activeTab = 'nologin';        // 'nologin' | 'login'
+  // Program toolbar state (search / sort / filter chips).
+  let uiSearch = '';
+  let uiSort = 'default';           // 'default' | 'benefit' | 'az'
+  let uiIndia = false;
+  let uiHideFilled = false;
+
+  // Approx $/€ value of the biggest benefit, for the "Biggest benefit" sort.
+  function benefitValue(p) {
+    const txt = (p.benefitSummary || '') + ' ' + ((p.benefits || []).join(' '));
+    let max = 0;
+    const re = /[\$€£]\s?([\d,]+(?:\.\d+)?)\s*([kKmM])?/g;
+    let m;
+    while ((m = re.exec(txt))) {
+      let n = parseFloat(m[1].replace(/,/g, ''));
+      if (/k/i.test(m[2] || '')) n *= 1e3;
+      if (/m/i.test(m[2] || '')) n *= 1e6;
+      if (n > max) max = n;
+    }
+    return max;
+  }
+
+  // Apply the toolbar's search / India / hide-filled filters + sort to a list.
+  function refine(list) {
+    let out = list.slice();
+    const q = uiSearch.trim().toLowerCase();
+    if (q) out = out.filter((p) =>
+      ((p.name || '') + ' ' + (p.provider || '') + ' ' + (p.benefitSummary || '') + ' ' + ((p.benefits || []).join(' '))).toLowerCase().includes(q));
+    if (uiIndia) out = out.filter((p) =>
+      /india|dpiit|startup india/i.test(((p.eligibility || []).join(' ')) + ' ' + (p.benefitSummary || '') + ' ' + (p.name || '')));
+    if (uiHideFilled) out = out.filter((p) => !filledSet.has(p.id));
+    if (uiSort === 'az') out.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    else if (uiSort === 'benefit') out.sort((a, b) => benefitValue(b) - benefitValue(a));
+    return out;
+  }
   let lastProgramsData = [];        // cache last /api/programs response for re-render
 
   /* ======================= PROFILE ======================= */
@@ -451,15 +485,18 @@
     $('#tabNoLogin') && $('#tabNoLogin').classList.toggle('is-active', activeTab === 'nologin');
     $('#tabLogin') && $('#tabLogin').classList.toggle('is-active', activeTab === 'login');
 
-    const shown = activeTab === 'login' ? login : noLogin;
+    const shown = refine(activeTab === 'login' ? login : noLogin);
     shown.forEach((p) => unlockedGrid.appendChild(renderUnlockedCard(p, animate)));
 
     if (unlocked.length === 0) {
       stateNote.hidden = false;
       stateNote.innerHTML = '<strong>No programs unlocked yet.</strong><br>Fill in your profile above and hit Save — programs unlock as you go.';
     } else if (shown.length === 0) {
+      const filtering = uiSearch || uiIndia || uiHideFilled;
       const otherTab = activeTab === 'login' ? 'No login needed' : 'Login required';
-      unlockedGrid.appendChild(el('p', 'state-note', `No programs in this tab. Check the "${otherTab}" tab.`));
+      unlockedGrid.appendChild(el('p', 'state-note', filtering
+        ? 'No programs match your filters. Clear the search or filters to see more.'
+        : `No programs in this tab. Check the "${otherTab}" tab.`));
     }
 
     // locked section
@@ -707,6 +744,17 @@
   const tabLogin = $('#tabLogin');
   if (tabNoLogin) tabNoLogin.addEventListener('click', () => { activeTab = 'nologin'; renderPrograms(lastProgramsData, false); });
   if (tabLogin) tabLogin.addEventListener('click', () => { activeTab = 'login'; renderPrograms(lastProgramsData, false); });
+
+  // Program toolbar: search / sort / filter chips → re-render the cached list.
+  const rerender = () => { if (lastProgramsData) renderPrograms(lastProgramsData, false); };
+  const search = $('#progSearch');
+  if (search) search.addEventListener('input', () => { uiSearch = search.value || ''; rerender(); });
+  const sort = $('#progSort');
+  if (sort) sort.addEventListener('change', () => { uiSort = sort.value; rerender(); });
+  const fIndia = $('#filterIndia');
+  if (fIndia) fIndia.addEventListener('change', () => { uiIndia = fIndia.checked; rerender(); });
+  const fFilled = $('#hideFilled');
+  if (fFilled) fFilled.addEventListener('change', () => { uiHideFilled = fFilled.checked; rerender(); });
 
   initAuth().then(async () => {
     loadProfile();

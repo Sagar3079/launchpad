@@ -418,3 +418,69 @@ a:hover { text-decoration: underline; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   body::before { animation: none; }
 }
+
+/* ---------- 13. PROGRAM TOOLBAR (search / sort / chips) ---------- */
+.prog-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 20px; }
+.prog-search {
+  flex: 1 1 260px; min-width: 200px; font-family: var(--sans); font-size: 14.5px; color: var(--ink);
+  background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid var(--line-2); border-radius: 999px; padding: 11px 18px;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.prog-search::placeholder { color: var(--ink-mute); }
+.prog-search:focus { outline: none; border-color: var(--violet); box-shadow: var(--ring); }
+.prog-sort {
+  font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink);
+  background: var(--glass); border: 1px solid var(--line-2); border-radius: 999px; padding: 11px 16px; cursor: pointer;
+}
+.prog-sort:focus { outline: none; box-shadow: var(--ring); }
+.prog-chip {
+  display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 600; color: var(--ink-soft);
+  background: var(--glass); border: 1px solid var(--line-2); border-radius: 999px; padding: 9px 15px; cursor: pointer; user-select: none;
+  transition: border-color .2s ease;
+}
+.prog-chip input { accent-color: var(--violet); width: 15px; height: 15px; cursor: pointer; }
+.prog-chip:hover { border-color: var(--violet); }
+.theme-toggle { padding: 10px 13px; font-size: 16px; }
+
+/* ---------- 14. DARK THEME ---------- */
+:root[data-theme="dark"] {
+  --bg: #0e0d1a; --bg-2: #16152a;
+  --ink: #f3f2ff; --ink-soft: #c6c4e6; --ink-mute: #918fb4;
+  --line: rgba(255,255,255,.10); --line-2: rgba(255,255,255,.17);
+  --glass: rgba(32,30,58,.6); --glass-2: rgba(32,30,58,.48); --glass-in: rgba(18,17,38,.72);
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.5);
+  --shadow-lift: 0 8px 18px rgba(0,0,0,.45), 0 30px 60px rgba(0,0,0,.6);
+  --ring: 0 0 0 4px rgba(124,92,255,.4);
+}
+:root[data-theme="dark"] body::after { background: linear-gradient(180deg, rgba(14,13,26,.5), rgba(14,13,26,.82)); }
+:root[data-theme="dark"] body::before { filter: blur(30px) saturate(140%) brightness(.92); opacity: .85; }
+:root[data-theme="dark"] a { color: #b9a8ff; }
+:root[data-theme="dark"] .site-header { background: rgba(14,13,26,.66); border-bottom-color: rgba(255,255,255,.08); }
+:root[data-theme="dark"] .card, :root[data-theme="dark"] .program,
+:root[data-theme="dark"] .agent-modal, :root[data-theme="dark"] .stepper > *,
+:root[data-theme="dark"] .program-logo, :root[data-theme="dark"] .orb-chip { border-color: rgba(255,255,255,.1); }
+:root[data-theme="dark"] .btn-fill { background: rgba(255,255,255,.09); color: #ffb39a; border-color: rgba(255,179,154,.4); }
+:root[data-theme="dark"] .btn-fill:hover { background: rgba(255,255,255,.15); }
+:root[data-theme="dark"] .btn-ghost { background: rgba(255,255,255,.06); }
+:root[data-theme="dark"] .btn-ghost:hover { background: rgba(255,255,255,.13); }
+:root[data-theme="dark"] .field input:focus, :root[data-theme="dark"] .field textarea:focus,
+:root[data-theme="dark"] .field select:focus { background: #1a1834; }
+:root[data-theme="dark"] .meter { background: rgba(255,255,255,.1); }
+:root[data-theme="dark"] .badge { color: #c3b4ff; border-color: rgba(124,92,255,.35); }
+:root[data-theme="dark"] .badge-live { color: #5ee39b; }
+:root[data-theme="dark"] .badge-muted { background: rgba(255,255,255,.08); color: var(--ink-mute); }
+:root[data-theme="dark"] .tips summary, :root[data-theme="dark"] .step-tag,
+:root[data-theme="dark"] .group-legend, :root[data-theme="dark"] .code-toggle { color: #b9a8ff; }
+:root[data-theme="dark"] select option { background: #16152a; color: var(--ink); }
+/* apply.html inline-styled bits */
+:root[data-theme="dark"] .step-pill { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); color: var(--ink-soft); }
+:root[data-theme="dark"] .step-pill .n { background: rgba(255,255,255,.12); color: var(--ink-soft); }
+:root[data-theme="dark"] .step-pill.active { color: #fff; }
+:root[data-theme="dark"] .field textarea { background: var(--glass-in); color: var(--ink); border-color: var(--line-2); }
+:root[data-theme="dark"] .field label { color: var(--ink-soft); }
+:root[data-theme="dark"] .prog-title, :root[data-theme="dark"] .step-card > h2 { color: var(--ink); }
+:root[data-theme="dark"] .prog-sub, :root[data-theme="dark"] .step-desc, :root[data-theme="dark"] .back-link { color: var(--ink-soft); }
+:root[data-theme="dark"] .login-note { background: rgba(124,92,255,.1); border-color: rgba(124,92,255,.25); color: var(--ink-soft); }
+:root[data-theme="dark"] .fallback-item { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1); }
+:root[data-theme="dark"] .fallback-item .fi-value { color: var(--ink-soft); }

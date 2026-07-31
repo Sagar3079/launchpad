@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Apply — LaunchPad</title>
+  <script>try{var t=localStorage.getItem('lp-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}</script>
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
     /* ---- apply-page-specific styles (base classes come from styles.css) ---- */
@@ -130,7 +131,10 @@
 </head>
 <body>
   <div class="apply-wrap">
-    <a class="back-link" href="/">← Back to programs</a>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <a class="back-link" href="/">← Back to programs</a>
+      <button type="button" class="btn btn-ghost theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+    </div>
 
     <div id="prog-head-mount"></div>
 
@@ -181,6 +185,7 @@
     <div id="error-mount"></div>
   </div>
 
+  <script src="/js/theme-toggle.js" defer></script>
   <script src="/js/snippet-builder.js"></script>
   <script src="/js/apply.js"></script>
 </body>

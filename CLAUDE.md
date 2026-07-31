@@ -37,6 +37,20 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — add-ons: program search/sort/filters + dark mode
+- User picked two add-ons: "filters/search/sort" + "dark mode".
+- Toolbar (index.html .prog-controls + app.js): live search (name/provider/
+  benefits text), sort (Default / Biggest benefit [parses $/€ + k/m] / A-Z), and
+  chips India-friendly (regex on eligibility/benefit/name) + Hide-filled. refine()
+  applies to the active tab's list; re-renders the cached lastProgramsData on any
+  control change. Verified: search "credit" -> 12 no-login cards to 7.
+- Dark mode: :root[data-theme="dark"] token overrides in styles.css (bg/ink/glass/
+  shadows) + targeted fixes incl. apply.html's inline-styled bits (step-pill,
+  textarea, etc.). Shared public/js/theme-toggle.js wires a #themeToggle button;
+  a tiny inline <head> script on all 3 pages applies the saved theme with NO flash
+  (defaults to prefers-color-scheme). Toggle added to index/apply/cobrowse headers.
+- Verified with headless-Chrome screenshots: toolbar + light + dark all clean.
+
 ### 2026-07-31 — co-browse: kill stray "about:blank" tabs (target=_blank fix)
 - Symptom: in the cloud browser a 2nd tab opened and hung on about:blank ("keeps
   loading"). Cause: the same-tab override only patched window.open; a
