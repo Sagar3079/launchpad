@@ -224,7 +224,7 @@
     ]);
     buildBtn.addEventListener('click', onBuildSnippet);
     body.appendChild(buildBtn);
-    body.appendChild(el('p', { class: 'disabled-hint', text: 'Uses your edited answers from Step 2.' }));
+    body.appendChild(el('p', { class: 'disabled-hint', text: 'Fills instantly from your profile — no waiting, no Step 2 needed.' }));
     var out = el('div', { id: 'snippet-out' });
     body.appendChild(out);
   }
@@ -232,16 +232,18 @@
   function onBuildSnippet() {
     var btn = $('build-btn');
     btn.disabled = true;
-    getJSON('/api/fill-payload/' + encodeURIComponent(state.programId))
-      .then(function (payload) {
+    // The snippet fills from the PROFILE only, so fetch that directly — instant,
+    // no slow answer-generation call.
+    getJSON('/api/profile')
+      .then(function (profile) {
         btn.disabled = false;
         btn.textContent = 'Rebuild snippet';
-        var built = window.LaunchPadSnippet.buildFromPayload(payload, state.answers);
+        var built = window.LaunchPadSnippet.buildFromPayload({ profile: profile });
         renderSnippet(built);
       })
       .catch(function (err) {
         btn.disabled = false;
-        showError('Could not load fill payload. ' + err.message);
+        showError('Could not load your profile. ' + err.message);
       });
   }
 
@@ -387,6 +389,10 @@
         renderStep1();
         renderModeBadge();
         renderAnswers();
+        // Step 3 fills instantly from your PROFILE — it does not need Step 2, so
+        // make the snippet button available right away (Step 2 is only for the
+        // manual copy-paste fallback in Step 4).
+        renderStep3Trigger();
         renderStep4();
         $('gen-btn').addEventListener('click', onGenerate);
 
