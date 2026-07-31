@@ -325,6 +325,53 @@ async function generateAnswersText(profile, scan) {
  * @param {string} url
  * @returns {Promise<{url:string, title:string}>}
  */
+// Keep EVERYTHING in one tab. Steel's viewer shows a single tab, so both
+// window.open popups AND target="_blank" links would strand the user in a new
+// tab (often stuck on about:blank). Force same-tab for all of them.
+async function installSameTab(context) {
+  await context.addInitScript(() => {
+    try {
+      window.open = function (u) {
+        if (u) { try { window.top.location.href = u; } catch (e) { window.location.href = u; } }
+        return window;
+      };
+      var strip = function () {
+        var els = document.querySelectorAll('a[target], form[target]');
+        for (var i = 0; i < els.length; i++) { if (els[i].target && els[i].target !== '_self') els[i].target = '_self'; }
+      };
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest && e.target.closest('a[target]');
+        if (a && a.target && a.target !== '_self') a.target = '_self';
+      }, true);
+      if (document.readyState !== 'loading') strip();
+      document.addEventListener('DOMContentLoaded', strip);
+    } catch (_e) { /* ignore */ }
+  }).catch(() => {});
+}
+
+// Close blank stray tabs (OAuth / target=_blank leftovers stuck on about:blank)
+// and return the real page to act on. Also strips target=_blank on the live page.
+async function pickPage(context) {
+  const pages = context.pages();
+  if (!pages.length) return await context.newPage();
+  const isBlank = (p) => { const u = p.url() || ''; return u === '' || u === 'about:blank' || u.indexOf('chrome://') === 0; };
+  const real = pages.filter((p) => !isBlank(p));
+  let page;
+  if (real.length) {
+    for (const p of pages) { if (isBlank(p)) { try { await p.close(); } catch (_e) { /* ignore */ } } }
+    page = real[0];
+  } else {
+    page = pages[0];
+  }
+  await page.evaluate(() => {
+    try {
+      var els = document.querySelectorAll('a[target], form[target]');
+      for (var i = 0; i < els.length; i++) { if (els[i].target && els[i].target !== '_self') els[i].target = '_self'; }
+    } catch (_e) {}
+  }).catch(() => {});
+  return page;
+}
+
 async function openUrl(userId, url) {
   const s = sessions.get(userId);
   if (!s) throw new Error('No live co-browse session — start one first');
@@ -332,14 +379,8 @@ async function openUrl(userId, url) {
   const browser = await chromium.connectOverCDP(s.connectUrl);
   try {
     const context = browser.contexts()[0];
-    const page = (context.pages() && context.pages()[0]) || (await context.newPage());
-    // Keep OAuth "Continue with Google/GitHub" popups in the SAME tab — Steel's
-    // live viewer shows only one tab, so a popup would strand the human.
-    await context.addInitScript(() => {
-      try {
-        window.open = function (u) { if (u) { window.location.href = u; } return window; };
-      } catch (_e) { /* ignore */ }
-    }).catch(() => {});
+    await installSameTab(context);
+    const page = await pickPage(context);
     await robustGoto(page, url);
     return { url: page.url(), title: await page.title().catch(() => '') };
   } finally {
@@ -369,7 +410,8 @@ async function fillCurrentPage(userId, opts) {
   const browser = await chromium.connectOverCDP(s.connectUrl);
   try {
     const context = browser.contexts()[0];
-    const page = (context.pages() && context.pages()[0]) || (await context.newPage());
+    await installSameTab(context);
+    const page = await pickPage(context); // closes stray about:blank tabs
     if (opts.applyUrl) {
       await robustGoto(page, opts.applyUrl);
     }

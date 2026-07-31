@@ -37,6 +37,18 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — co-browse: kill stray "about:blank" tabs (target=_blank fix)
+- Symptom: in the cloud browser a 2nd tab opened and hung on about:blank ("keeps
+  loading"). Cause: the same-tab override only patched window.open; a
+  target="_blank" link (or form) opened a real new tab that Steel's single-tab
+  viewer can't reach.
+- Fix (server/cobrowse.js): installSameTab(context) now also strips target on all
+  a[target]/form[target] to _self (init-script + a capturing click handler +
+  on-load sweep), plus window.open -> top-frame same-tab. New pickPage(context)
+  closes blank stray tabs (about:blank / chrome://) and returns the real page,
+  also stripping target on the live DOM. Wired into BOTH openUrl and
+  fillCurrentPage. Verified openUrl still opens forms (Sentry) cleanly.
+
 ### 2026-07-31 — UI/UX overhaul (aurora + glass + CSS 3D) + local auth bypass
 - User: "ui/ux sucks, improve it, use 3d animations, not too complicated; disable
   login on local svr (only I use it)."
