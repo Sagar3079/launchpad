@@ -55,11 +55,22 @@ with AI — truthfully. Two hard rules baked in everywhere:
   forced to deepseek-v4-flash); built snippet baseURL = http://localhost:3000/
   api/llm/v1, no sm_live_ leak, no api.scalemax.pro reference. Needs
   SCALEMAX_API_KEY on Scalingo for the deployed dashboard.
-- OPEN CAVEAT (told user): the console also showed cross-origin iframe
-  SecurityErrors + page-agent auto-navigating. Those are page-agent behaviors on
-  a heavy marketing page. If the New Relic form is itself a cross-origin embedded
-  iframe, NO in-page snippet can fill it (browser boundary) — co-browse (Steel +
-  Playwright, frame-level access) is the robust path for those.
+- Then hit "InvokeError: Response truncated: max tokens reached" — DeepSeek V4
+  Flash is a reasoning model, page-agent's small max_tokens got eaten by hidden
+  reasoning. Fix: the /api/llm proxy now forces max_tokens = max(client, 16000)
+  (finish_reason went length -> stop).
+- RESOLVED the iframe caveat by TESTING it myself with Playwright (a standalone
+  script: Steel session + playwright-core + the Scalemax profile). The New Relic
+  "form" is a SAME-ORIGIN Marketo form (<form id="mktoForm_4369">), NOT a
+  cross-origin iframe — the iframe SecurityErrors were just the chat widget. The
+  script found 8 fields and filled First/Last name, Company, Email + textarea
+  from the profile (screenshot proof, never submitted). So the snippet CAN fill
+  it now that CORS+DNS+max_tokens are fixed.
+- Real remaining gotcha: the DataImpulse tunnel intermittently throws
+  net::ERR_TUNNEL_CONNECTION_FAILED on the first goto (heavy page). robustGoto's
+  retries handle it (attempt 2 on 'commit' succeeded) — that's why the co-browse
+  fill was SLOW (retrying) not broken. Possible follow-up: skip the redundant
+  re-navigation in fillCurrentPage when already on applyUrl.
 
 ### 2026-07-31 — fix page-agent snippet (CORS) — migrate apply flow to Scalemax
 - Bug: the apply.html "paste snippet" flow ran page-agent inside the application

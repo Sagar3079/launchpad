@@ -446,7 +446,11 @@ app.post('/api/llm/v1/chat/completions', async (req, res) => {
   const base = (process.env.SCALEMAX_BASE_URL || 'https://api.scalemax.pro/token/v1').replace(/\/+$/, '');
   const model = (process.env.SCALEMAX_MODEL || 'deepseek-v4-flash').trim();
   const incoming = req.body && typeof req.body === 'object' ? req.body : {};
-  const payload = Object.assign({}, incoming, { model }); // force our model; keep messages/params
+  // Force our model + a generous max_tokens. DeepSeek V4 Flash is a reasoning
+  // model: a small client max_tokens gets consumed by hidden reasoning and the
+  // real answer is truncated (page-agent: "Response truncated: max tokens reached").
+  const maxTokens = Math.max(Number(incoming.max_tokens) || 0, 16000);
+  const payload = Object.assign({}, incoming, { model, max_tokens: maxTokens });
   try {
     const r = await fetch(base + '/chat/completions', {
       method: 'POST',
