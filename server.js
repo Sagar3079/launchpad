@@ -29,7 +29,7 @@ function defaultProfile() {
   return {
     basic: {
       startupName: '', website: '', email: '', description: '',
-      country: '', foundedYear: ''
+      country: '', foundedYear: '', phone: ''
     },
     extended: {
       stage: '', fundingRaised: '', teamSize: '', industry: '',
@@ -450,7 +450,9 @@ app.post('/api/llm/v1/chat/completions', async (req, res) => {
   // model: a small client max_tokens gets consumed by hidden reasoning and the
   // real answer is truncated (page-agent: "Response truncated: max tokens reached").
   const maxTokens = Math.max(Number(incoming.max_tokens) || 0, 16000);
-  const payload = Object.assign({}, incoming, { model, max_tokens: maxTokens });
+  // Disable hidden reasoning unless the caller already asked for it — ~2.7x faster.
+  const ctk = Object.assign({ enable_thinking: false }, incoming.chat_template_kwargs);
+  const payload = Object.assign({}, incoming, { model, max_tokens: maxTokens, chat_template_kwargs: ctk });
   try {
     const r = await fetch(base + '/chat/completions', {
       method: 'POST',

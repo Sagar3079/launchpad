@@ -292,7 +292,7 @@
       el('li', {}, ['Switch to the application tab where you signed in (Step 1).']),
       el('li', {}, ['Open DevTools: press ', el('span', { class: 'kbd', text: 'F12' }), ' (or ', el('span', { class: 'kbd', text: 'Ctrl+Shift+J' }), '), then click the ', el('strong', { text: 'Console' }), ' tab.']),
       el('li', {}, ['First time in Chrome, it blocks pasting into the console — type ', el('code', { text: 'allow pasting' }), ' and press ', el('span', { class: 'kbd', text: 'Enter' }), ' when prompted.']),
-      el('li', {}, ['Paste the snippet and press ', el('span', { class: 'kbd', text: 'Enter' }), '. page-agent loads and fills the visible fields.']),
+      el('li', {}, ['Paste the snippet and press ', el('span', { class: 'kbd', text: 'Enter' }), ' — it fills the visible fields instantly from your profile (about 1 second, no waiting).']),
       el('li', {}, ['It will ', el('strong', { text: 'never' }), ' click Submit. Review every field, then submit the form yourself.']),
     ].forEach(function (li) { ol.appendChild(li); });
     out.appendChild(ol);

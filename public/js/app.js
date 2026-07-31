@@ -9,7 +9,7 @@
   /* ---- All profile fields (dotted keys) used for the completeness meter.
          Order/shape mirrors the schema in ARCHITECTURE.md. ---- */
   const ALL_FIELDS = [
-    'basic.startupName', 'basic.website', 'basic.email',
+    'basic.startupName', 'basic.website', 'basic.email', 'basic.phone',
     'basic.description', 'basic.country', 'basic.foundedYear',
     'extended.stage', 'extended.fundingRaised', 'extended.teamSize',
     'extended.industry', 'extended.linkedin', 'extended.pitch',
@@ -23,6 +23,7 @@
     'basic.startupName': 'Startup name',
     'basic.website': 'Website',
     'basic.email': 'Contact email',
+    'basic.phone': 'Phone',
     'basic.description': 'Description',
     'basic.country': 'Country',
     'basic.foundedYear': 'Founded year',

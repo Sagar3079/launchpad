@@ -37,6 +37,31 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — instant deterministic fill + phone field + 2.7x faster model
+- User: "so slow, not filling fast; and phone +91 9711995422 / country India not
+  filling." Root causes: (a) DeepSeek V4 Flash is a reasoning model — measured
+  47s default vs 26s (reasoning_effort:low) vs 17s (chat_template_kwargs
+  enable_thinking:false); page-agent made MANY such calls -> minutes. (b) phone
+  wasn't a profile field at all; country select wasn't matched by page-agent.
+- Speed: added chat_template_kwargs:{enable_thinking:false} to every Scalemax
+  call (cobrowse scalemaxGenerate, answers.js, the /api/llm proxy). ~2.7x faster,
+  same output, still DeepSeek V4 Flash.
+- Phone: added basic.phone to the schema (defaultProfile), the profile form
+  (index.html tel input), and app.js ALL_FIELDS/LABELS. Set filldemo's phone.
+- Instant snippet: REPLACED the page-agent snippet with a self-contained
+  DETERMINISTIC filler (snippet-builder.js). It embeds the flattened profile and
+  matches visible fields by label/name/placeholder — no page-agent, no LLM, no
+  network, no API key at fill time. Handles inputs/textarea/selects, splits
+  founderName into first/last, skips consent + already-filled fields, never
+  submits. Verified on the REAL New Relic Marketo form via Playwright: filled 7/8
+  in ~1.1s (first/last name, company, description textarea CORRECT, email, phone
+  +91..., country select -> India); skipped only Funding Stage (no matching
+  option — honest, no fabrication). Fake-DOM run of the generated snippet: same 7
+  fields, Country select resolved to the India option. apply.js Step-3 copy
+  updated (no more page-agent).
+- The model-based paths (co-browse, answers.js) still exist and are now faster;
+  the snippet path is instant because it needs no model at all.
+
 ### 2026-07-31 — page-agent snippet: route through a server-side LLM proxy
 - Follow-up to the CORS fix. Pointing the snippet straight at Scalemax then hit
   net::ERR_NAME_NOT_RESOLVED — the user's home router DNS (192.168.1.1) can't

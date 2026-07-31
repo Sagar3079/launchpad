@@ -238,6 +238,8 @@ async function aiAnswers(profile, program, fields, apiKey) {
     body: JSON.stringify({
       model: MODEL,
       max_tokens: MAX_TOKENS,
+      // Disable hidden reasoning — big latency win for form-filling, no quality loss.
+      chat_template_kwargs: { enable_thinking: false },
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: buildUserPrompt(profile, program, fields) },
