@@ -2,7 +2,7 @@
  *
  * Builds the self-contained JavaScript console snippet that a user pastes into
  * the DevTools console of the *application* tab. The snippet injects the
- * page-agent CDN bundle, constructs a PageAgent against Anthropic's
+ * page-agent CDN bundle, constructs a PageAgent against Scalemax's
  * OpenAI-compatible endpoint, and asks it to fill (but NEVER submit) the form.
  *
  * page-agent facts confirmed from https://github.com/alibaba/page-agent (v1.12.2):
@@ -19,10 +19,15 @@
 
   var CDN_URL =
     'https://cdn.jsdelivr.net/npm/page-agent@1.12.2/dist/iife/page-agent.demo.js?autoInit=false';
-  var MODEL = 'deepseek-v4-flash-free';
-  var BASE_URL = 'https://opencode.ai/zen/v1/';
+  var MODEL = 'deepseek-v4-flash';
+  // Scalemax's OpenAI-compatible gateway. It sends CORS headers
+  // (access-control-allow-origin: *), so page-agent can call it directly from
+  // the application page — OpenCode Zen does NOT, which is why the browser
+  // blocked every call with a CORS error. No trailing slash: page-agent appends
+  // "/chat/completions", and a trailing slash produced a "//" double-slash.
+  var BASE_URL = 'https://api.scalemax.pro/token/v1';
   var LANGUAGE = 'en-US';
-  var API_KEY_PLACEHOLDER = 'YOUR_ANTHROPIC_API_KEY';
+  var API_KEY_PLACEHOLDER = 'YOUR_SCALEMAX_API_KEY';
 
   /**
    * Build the natural-language instruction handed to page-agent.execute().
@@ -72,7 +77,7 @@
    * Build the pasteable console snippet.
    * @param {Object} opts
    * @param {string}      opts.instruction  instruction string (from buildInstruction)
-   * @param {string|null} opts.apiKey       Anthropic key, or null → placeholder
+   * @param {string|null} opts.apiKey       Scalemax key, or null → placeholder
    * @returns {{snippet: string, hasKey: boolean}}
    */
   function buildSnippet(opts) {

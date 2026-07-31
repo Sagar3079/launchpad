@@ -96,8 +96,11 @@ function loadAnswerEngine() {
 }
 
 function getApiKey() {
-  const key = process.env.ANTHROPIC_API_KEY;
-  return key && key.trim() !== '' ? key.trim() : null;
+  // Prefer Scalemax (OpenAI-compatible, browser-CORS-enabled) — it powers both
+  // the server-side answer engine and the page-agent snippet. Fall back to an
+  // Anthropic key if Scalemax isn't configured.
+  const key = process.env.SCALEMAX_API_KEY || process.env.ANTHROPIC_API_KEY || '';
+  return key.trim() !== '' ? key.trim() : null;
 }
 
 // Merge an arbitrary stored object over the full default schema shape.

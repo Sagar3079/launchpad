@@ -37,6 +37,30 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — fix page-agent snippet (CORS) — migrate apply flow to Scalemax
+- Bug: the apply.html "paste snippet" flow ran page-agent inside the application
+  page (e.g. newrelic.com) pointed at OpenCode Zen (opencode.ai/zen), which sends
+  NO CORS headers -> every model call died with "blocked by CORS policy" +
+  net::ERR_FAILED. A new OpenCode key can't fix this: CORS blocks before auth.
+  Also a double-slash bug (BASE_URL trailing slash + page-agent appends
+  /chat/completions -> /zen/v1//chat/completions).
+- Fix: point everything at Scalemax, which DOES send access-control-allow-origin:*
+  (verified: OPTIONS preflight 204 + POST 200 from an Origin: newrelic.com).
+  - snippet-builder.js: BASE_URL -> https://api.scalemax.pro/token/v1 (no trailing
+    slash, kills the //), MODEL -> deepseek-v4-flash, placeholder/docs updated.
+  - answers.js (server-side answer engine): repointed from opencode to Scalemax
+    via the same SCALEMAX_BASE_URL / SCALEMAX_MODEL env vars as cobrowse.js.
+  - server.js getApiKey(): prefer SCALEMAX_API_KEY (falls back to ANTHROPIC).
+- Verified locally: /api/fill-payload/new-relic-startups now returns the sm_live_
+  key + real AI answers (founder, scalemax.pro, AI-written description); built
+  snippet has the right base/model/key and no double-slash; page-agent's exact
+  POST from a newrelic.com origin returns 200. Deployed site needs SCALEMAX_API_KEY
+  set on Scalingo for this to work globally.
+- NOTE: the snippet embeds the sm_live_ key into whatever page it's pasted on
+  (page-agent needs a client-side key) — user should rotate periodically. A
+  server-side CORS proxy would avoid this but wasn't needed since Scalemax allows
+  browser CORS directly.
+
 ### 2026-07-31 — catalog expansion to 41 programs (3 research subagents)
 - Added 12 verified programs (29 -> 41; now 29 login / 12 no-login). 3 parallel
   research agents (cloud/DB, AI/ML, devtools+SaaS+India), each returning strict

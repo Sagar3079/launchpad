@@ -16,10 +16,11 @@
  * present in the profile becomes "[MISSING: ask user]".
  */
 
-// OpenCode Zen — OpenAI-compatible gateway serving Claude models.
-const API_URL = "https://opencode.ai/zen/v1/chat/completions";
-// Overridable via env so we can switch models without code edits.
-const MODEL = process.env.OPENCODE_MODEL || "deepseek-v4-flash-free";
+// Scalemax — OpenAI-compatible gateway (DeepSeek V4 Flash). Same env vars as the
+// co-browse fill (server/cobrowse.js), so both engines share one backend.
+const API_BASE = (process.env.SCALEMAX_BASE_URL || "https://api.scalemax.pro/token/v1").replace(/\/+$/, "");
+const API_URL = API_BASE + "/chat/completions";
+const MODEL = process.env.SCALEMAX_MODEL || process.env.OPENCODE_MODEL || "deepseek-v4-flash";
 // Free Zen models are reasoning models: they spend tokens on hidden reasoning
 // before emitting content, so the budget must cover reasoning + the JSON output.
 const MAX_TOKENS = 8000;
@@ -251,7 +252,7 @@ async function aiAnswers(profile, program, fields, apiKey) {
     } catch (_) {
       /* ignore */
     }
-    throw new Error(`OpenCode Zen API ${res.status}${detail ? `: ${detail}` : ""}`);
+    throw new Error(`LLM API ${res.status}${detail ? `: ${detail}` : ""}`);
   }
 
   const data = await res.json();
