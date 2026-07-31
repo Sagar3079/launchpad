@@ -19,7 +19,7 @@ const DATA_DIR = path.join(__dirname, 'data');
 const PROFILE_PATH = path.join(DATA_DIR, 'profile.json');
 const PROGRAMS_PATH = path.join(DATA_DIR, 'programs.json');
 
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '4mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(auth.attach);
 
@@ -290,9 +290,9 @@ app.post('/api/generate-answers', async (req, res) => {
 });
 
 app.get('/api/fill-payload/:programId', async (req, res) => {
-  // This payload includes the Anthropic API key (consumed by the local
-  // injection snippet). Same production guard as /api/agent-generate:
-  // when AGENT_TOKEN is set, require the matching header.
+  // The snippet calls our /api/llm proxy (not Scalemax directly), so the payload
+  // returns a PROXY TOKEN, never the real model key. Same production guard as
+  // /api/agent-generate: when AGENT_TOKEN is set, require the matching header.
   const fillToken = process.env.AGENT_TOKEN && process.env.AGENT_TOKEN.trim();
   if (fillToken && req.get('x-agent-token') !== fillToken) {
     return res.status(401).json({ ok: false, error: 'unauthorized' });
@@ -312,6 +312,10 @@ app.get('/api/fill-payload/:programId', async (req, res) => {
     const apiKey = getApiKey();
     const result = await engine.generateAnswers(profile, program, apiKey);
     const answers = result.answers || [];
+    // The snippet authenticates to our /api/llm proxy with this token (equals
+    // AGENT_TOKEN in production, a harmless placeholder locally) — NOT the real
+    // model key, which stays server-side in the proxy.
+    const snippetKey = (process.env.AGENT_TOKEN && process.env.AGENT_TOKEN.trim()) || 'launchpad';
 
     const fieldLines = answers
       .map((a) => `${a.label}: ${a.value}`)
@@ -329,7 +333,7 @@ app.get('/api/fill-payload/:programId', async (req, res) => {
       `- Do NOT click the final submit/apply button — leave the form for the ` +
       `user to review and submit themselves.`;
 
-    res.json({ program, profile, answers, apiKey, instruction });
+    res.json({ program, profile, answers, apiKey: snippetKey, instruction });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -408,6 +412,51 @@ app.post('/api/agent-generate', async (req, res) => {
     res.json({ ok: true, data: { text: result.text, model: result.model } });
   } catch (err) {
     res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
+// OpenAI-compatible LLM proxy for the page-agent snippet (snippet-builder.js).
+// The snippet runs INSIDE the application page (e.g. newrelic.com). Calling
+// Scalemax directly from there depends on the browser resolving api.scalemax.pro
+// (flaky home DNS -> ERR_NAME_NOT_RESOLVED) and would embed the key in that page.
+// Instead the snippet calls THIS endpoint on the LaunchPad origin it was served
+// from (already resolved), and we proxy to Scalemax with the key kept server-side.
+// Open CORS so it works from any application page.
+function setLlmCors(res) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.set('Access-Control-Max-Age', '86400');
+}
+app.options('/api/llm/v1/chat/completions', (req, res) => {
+  setLlmCors(res);
+  res.status(204).end();
+});
+app.post('/api/llm/v1/chat/completions', async (req, res) => {
+  setLlmCors(res);
+  // Reuse AGENT_TOKEN as the shared secret when set: page-agent sends the snippet
+  // key as `Authorization: Bearer <token>`. Locally (no AGENT_TOKEN) it's open.
+  const agentToken = process.env.AGENT_TOKEN && process.env.AGENT_TOKEN.trim();
+  if (agentToken) {
+    const bearer = (req.get('authorization') || '').replace(/^Bearer\s+/i, '').trim();
+    if (bearer !== agentToken) return res.status(401).json({ error: { message: 'unauthorized' } });
+  }
+  const key = (process.env.SCALEMAX_API_KEY || '').trim();
+  if (!key) return res.status(503).json({ error: { message: 'SCALEMAX_API_KEY not set' } });
+  const base = (process.env.SCALEMAX_BASE_URL || 'https://api.scalemax.pro/token/v1').replace(/\/+$/, '');
+  const model = (process.env.SCALEMAX_MODEL || 'deepseek-v4-flash').trim();
+  const incoming = req.body && typeof req.body === 'object' ? req.body : {};
+  const payload = Object.assign({}, incoming, { model }); // force our model; keep messages/params
+  try {
+    const r = await fetch(base + '/chat/completions', {
+      method: 'POST',
+      headers: { authorization: 'Bearer ' + key, 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const text = await r.text();
+    res.status(r.status).type('application/json').send(text);
+  } catch (err) {
+    res.status(502).json({ error: { message: 'LLM proxy failed: ' + err.message } });
   }
 });
 

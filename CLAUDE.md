@@ -37,6 +37,30 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — page-agent snippet: route through a server-side LLM proxy
+- Follow-up to the CORS fix. Pointing the snippet straight at Scalemax then hit
+  net::ERR_NAME_NOT_RESOLVED — the user's home router DNS (192.168.1.1) can't
+  resolve api.scalemax.pro from the browser (nslookup no-response; curl resolves
+  via Cloudflare 104.21.46.69 after a slow 4s first lookup). Also, calling the
+  provider directly embedded the sm_live_ key in the application page.
+- Fix: added an OpenAI-compatible proxy on the LaunchPad server —
+  POST/OPTIONS /api/llm/v1/chat/completions (open CORS, forces model
+  deepseek-v4-flash, forwards to Scalemax with the key kept server-side; reuses
+  AGENT_TOKEN as the bearer secret when set). snippet-builder.js now bakes in the
+  LaunchPad origin (window.location.origin + /api/llm/v1) at build time, so the
+  browser only talks to the origin it already resolved. fill-payload returns a
+  proxy token ("launchpad" locally / AGENT_TOKEN in prod), never the real key.
+  Bumped express.json limit 1mb -> 4mb (page-agent posts the DOM tree).
+- Verified locally: preflight 204 + proxy POST returns a real completion (model
+  forced to deepseek-v4-flash); built snippet baseURL = http://localhost:3000/
+  api/llm/v1, no sm_live_ leak, no api.scalemax.pro reference. Needs
+  SCALEMAX_API_KEY on Scalingo for the deployed dashboard.
+- OPEN CAVEAT (told user): the console also showed cross-origin iframe
+  SecurityErrors + page-agent auto-navigating. Those are page-agent behaviors on
+  a heavy marketing page. If the New Relic form is itself a cross-origin embedded
+  iframe, NO in-page snippet can fill it (browser boundary) — co-browse (Steel +
+  Playwright, frame-level access) is the robust path for those.
+
 ### 2026-07-31 — fix page-agent snippet (CORS) — migrate apply flow to Scalemax
 - Bug: the apply.html "paste snippet" flow ran page-agent inside the application
   page (e.g. newrelic.com) pointed at OpenCode Zen (opencode.ai/zen), which sends

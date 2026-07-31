@@ -2,8 +2,9 @@
  *
  * Builds the self-contained JavaScript console snippet that a user pastes into
  * the DevTools console of the *application* tab. The snippet injects the
- * page-agent CDN bundle, constructs a PageAgent against Scalemax's
- * OpenAI-compatible endpoint, and asks it to fill (but NEVER submit) the form.
+ * page-agent CDN bundle, constructs a PageAgent against the LaunchPad server's
+ * /api/llm proxy (which forwards to Scalemax server-side), and asks it to fill
+ * (but NEVER submit) the form.
  *
  * page-agent facts confirmed from https://github.com/alibaba/page-agent (v1.12.2):
  *   - CDN IIFE build: dist/iife/page-agent.demo.js  → global `window.PageAgent`
@@ -20,14 +21,22 @@
   var CDN_URL =
     'https://cdn.jsdelivr.net/npm/page-agent@1.12.2/dist/iife/page-agent.demo.js?autoInit=false';
   var MODEL = 'deepseek-v4-flash';
-  // Scalemax's OpenAI-compatible gateway. It sends CORS headers
-  // (access-control-allow-origin: *), so page-agent can call it directly from
-  // the application page — OpenCode Zen does NOT, which is why the browser
-  // blocked every call with a CORS error. No trailing slash: page-agent appends
-  // "/chat/completions", and a trailing slash produced a "//" double-slash.
-  var BASE_URL = 'https://api.scalemax.pro/token/v1';
   var LANGUAGE = 'en-US';
-  var API_KEY_PLACEHOLDER = 'YOUR_SCALEMAX_API_KEY';
+  var API_KEY_PLACEHOLDER = 'YOUR_LAUNCHPAD_TOKEN';
+
+  // page-agent runs INSIDE the application page (e.g. newrelic.com), so it must
+  // call the LaunchPad server's OpenAI-compatible proxy (/api/llm/v1) — NOT the
+  // model provider directly. Reasons: (1) the browser already resolved the
+  // LaunchPad origin to load this page, so no dependency on it resolving the
+  // provider's domain (that was the ERR_NAME_NOT_RESOLVED failure); (2) the real
+  // model key stays server-side in the proxy instead of being embedded in the
+  // page. We bake in the LaunchPad origin (where this builder runs) at build time.
+  // No trailing slash: page-agent appends "/chat/completions".
+  function launchpadBaseUrl() {
+    var origin = '';
+    try { origin = (window.location && window.location.origin) || ''; } catch (e) { origin = ''; }
+    return origin + '/api/llm/v1';
+  }
 
   /**
    * Build the natural-language instruction handed to page-agent.execute().
@@ -91,6 +100,7 @@
     var keyLit = JSON.stringify(apiKey);
     var instrLit = JSON.stringify(instruction);
     var srcLit = JSON.stringify(CDN_URL);
+    var baseURL = launchpadBaseUrl();
 
     var snippet =
       '/* LaunchPad auto-fill — paste into the DevTools console of the APPLICATION tab. */\n' +
@@ -119,7 +129,7 @@
       '\n' +
       '  const agent = new window.PageAgent({\n' +
       '    model: "' + MODEL + '",\n' +
-      '    baseURL: "' + BASE_URL + '",\n' +
+      '    baseURL: "' + baseURL + '",\n' +
       '    apiKey: API_KEY,\n' +
       '    language: "' + LANGUAGE + '",\n' +
       '  });\n' +
