@@ -37,6 +37,22 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — co-browse: proactive session-liveness detection ("stuck" fix)
+- Symptom: co-browse fill worked (Freshworks: 13 filled, 3 left incl consent),
+  then the Steel viewer showed "Session ended" but the toolbar buttons still
+  looked active — stuck. Cause: the frontend only noticed a dead session when the
+  NEXT open/fill call failed; at the 15-min free-tier cap (idle) nothing fired.
+- Fix: server cobrowse.sessionAlive(userId) GETs the Steel session and checks
+  status (released/failed/timed_out/... => dead, deletes from the Map); transient
+  error => assume alive. New route GET /api/cobrowse/alive. Frontend polls it
+  every 20s while a session is live and calls markSessionEnded() (now also stops
+  the poll) with a clear "Session ended (15-min cap) — Start session to continue"
+  message. Verified: alive=false (no session) -> true (live) -> false (released).
+- HONEST LIMIT: 15 min is the Steel FREE-TIER session cap — this makes the end
+  graceful/recoverable but doesn't extend it. Real long-session fix = Steel
+  Profiles (persist login so a restart keeps you signed in) or a paid Steel plan;
+  still not built.
+
 ### 2026-07-31 — instant deterministic fill + phone field + 2.7x faster model
 - User: "so slow, not filling fast; and phone +91 9711995422 / country India not
   filling." Root causes: (a) DeepSeek V4 Flash is a reasoning model — measured

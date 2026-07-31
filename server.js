@@ -535,6 +535,12 @@ app.post('/api/cobrowse/fill', async (req, res) => {
     });
 });
 
+app.get('/api/cobrowse/alive', async (req, res) => {
+  if (!req.userId) return res.json({ ok: true, alive: false });
+  try { res.json({ ok: true, alive: await cobrowse.sessionAlive(req.userId) }); }
+  catch { res.json({ ok: true, alive: true }); }
+});
+
 app.get('/api/cobrowse/fill-result', (req, res) => {
   if (!req.userId) return res.status(401).json({ ok: false, error: 'Log in' });
   const j = cobrowseFills.get(req.userId);

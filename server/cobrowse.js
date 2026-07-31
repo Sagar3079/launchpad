@@ -148,6 +148,28 @@ async function stopSession(userId) {
 }
 
 /**
+ * Is the user's Steel session still live? Steel free-tier sessions die at the
+ * 15-min cap; the client polls this so the UI can reset promptly instead of
+ * looking active over a dead browser. On a transient error we assume alive (do
+ * not kill the UI on a blip).
+ * @param {number} userId
+ * @returns {Promise<boolean>}
+ */
+async function sessionAlive(userId) {
+  const s = sessions.get(userId);
+  if (!s) return false;
+  try {
+    const data = await steelFetch(`/sessions/${s.id}`, { method: 'GET' });
+    const st = String((data && (data.status || data.state)) || 'live').toLowerCase();
+    const dead = ['released', 'failed', 'timed_out', 'timedout', 'ended', 'closed', 'expired'];
+    if (dead.indexOf(st) !== -1) { sessions.delete(userId); return false; }
+    return true;
+  } catch (_e) {
+    return true;
+  }
+}
+
+/**
  * Navigate with retries — a residential proxy occasionally resets a connection
  * (net::ERR_FAILED). Retry with progressively looser wait conditions.
  * @param {import('playwright-core').Page} page
@@ -423,4 +445,4 @@ async function fillCurrentPage(userId, opts) {
   }
 }
 
-module.exports = { configured, startSession, stopSession, openUrl, fillCurrentPage };
+module.exports = { configured, startSession, stopSession, sessionAlive, openUrl, fillCurrentPage };

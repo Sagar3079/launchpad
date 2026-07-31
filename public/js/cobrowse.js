@@ -6,6 +6,24 @@
   const $ = (s) => document.querySelector(s);
   let session = null;
   let programs = [];
+  let aliveTimer = null;
+
+  // While a session is live, poll Steel so we notice the 15-min cap (or any
+  // break) and reset the UI immediately instead of leaving dead-looking buttons.
+  function startAlivePoll() {
+    stopAlivePoll();
+    aliveTimer = setInterval(async () => {
+      if (!session) return;
+      try {
+        const d = await (await fetch('/api/cobrowse/alive')).json();
+        if (d.ok && d.alive === false) {
+          status('Session ended (15-min free-tier limit). Click "Start session" to continue — you\'ll log in again.', true);
+          markSessionEnded();
+        }
+      } catch (_e) { /* ignore transient */ }
+    }, 20000);
+  }
+  function stopAlivePoll() { if (aliveTimer) { clearInterval(aliveTimer); aliveTimer = null; } }
 
   function status(text, isErr) {
     const el = $('#cbStatus');
@@ -53,6 +71,7 @@
       $('#frameCard').hidden = false;
       $('#stopBtn').disabled = false;
       updateMode();
+      startAlivePoll();
       status('Session live. Pick a no-login program, "Open application", tick any captcha yourself, then "Fill this form".');
     } catch (_e) {
       status('Server not reachable.', true);
@@ -135,6 +154,7 @@
     return /no live|session|connect|closed|target|websocket|ECONN|ended|timed out/i.test(String(msg || ''));
   }
   function markSessionEnded() {
+    stopAlivePoll();
     session = null;
     $('#cbFrame').src = 'about:blank';
     $('#frameCard').hidden = true;
@@ -267,6 +287,7 @@
   }
 
   async function stop() {
+    stopAlivePoll();
     try { await fetch('/api/cobrowse/stop', { method: 'POST' }); } catch (_e) { /* ignore */ }
     session = null;
     $('#cbFrame').src = 'about:blank';
