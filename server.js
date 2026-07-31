@@ -23,6 +23,26 @@ app.use(express.json({ limit: '4mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(auth.attach);
 
+// Local single-user convenience: DISABLE_AUTH=1 makes every request act as the
+// local user (LOCAL_USERNAME, default 'filldemo'), so you never log in on your
+// own machine. NEVER set this in production.
+const AUTH_DISABLED = /^(1|true|yes)$/i.test((process.env.DISABLE_AUTH || '').trim());
+let _localUserId = null;
+async function localUserId() {
+  if (_localUserId != null) return _localUserId;
+  try {
+    const u = await db.getUserByUsername((process.env.LOCAL_USERNAME || 'filldemo').trim());
+    if (u) _localUserId = u.id;
+  } catch (_e) { /* ignore */ }
+  return _localUserId;
+}
+if (AUTH_DISABLED) {
+  app.use(async (req, _res, next) => {
+    if (!req.userId) { const id = await localUserId(); if (id != null) req.userId = id; }
+    next();
+  });
+}
+
 // ---- Profile helpers ----
 
 function defaultProfile() {
@@ -195,11 +215,11 @@ app.post('/api/filled', async (req, res) => {
 
 app.get('/api/me', async (req, res) => {
   try {
-    if (!req.userId) return res.json({ ok: true, user: null });
+    if (!req.userId) return res.json({ ok: true, user: null, authDisabled: AUTH_DISABLED });
     const user = await db.getUserById(req.userId);
-    if (!user) return res.json({ ok: true, user: null });
+    if (!user) return res.json({ ok: true, user: null, authDisabled: AUTH_DISABLED });
     const profile = normalizeProfile(await db.getProfile(req.userId));
-    res.json({ ok: true, user, profile });
+    res.json({ ok: true, user, profile, authDisabled: AUTH_DISABLED });
   } catch (err) {
     res.status(500).json({ ok: false, error: 'Could not load account' });
   }

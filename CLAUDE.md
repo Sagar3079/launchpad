@@ -37,6 +37,31 @@ with AI — truthfully. Two hard rules baked in everywhere:
 
 ## Work log
 
+### 2026-07-31 — UI/UX overhaul (aurora + glass + CSS 3D) + local auth bypass
+- User: "ui/ux sucks, improve it, use 3d animations, not too complicated; disable
+  login on local svr (only I use it)."
+- Local auth bypass: DISABLE_AUTH=1 (+ LOCAL_USERNAME, default filldemo) in .env.
+  server.js middleware sets req.userId to the local user on every request when
+  set (NEVER in prod); /api/me returns authDisabled so app.js hides all login UI
+  and never prompts. Verified: /api/me -> authDisabled:true as filldemo with no
+  cookie; co-browse loggedIn:true. filldemo profile (Scalemax + phone) auto-loads.
+- Visual: rewrote public/css/styles.css as a modern system (kept EVERY class name
+  used by index/apply/cobrowse + app.js). Animated aurora background on all pages
+  (body::before), glass surfaces (backdrop-blur) for header/hero/cards/modal,
+  coral->pink->violet gradient accents, gradient primary buttons, shimmering
+  completeness meter, pill tabs. CSS 3D (no libs): hero has a floating rocket ORB
+  with an orbiting ring + floating chips (perspective + bob/spin keyframes);
+  program cards get cursor-follow tilt (app.js enhanceCards: pointermove ->
+  rotateX/Y, logo pops via translateZ) + staggered rise-in reveal.
+  prefers-reduced-motion disables it all.
+- index.html: added the hero section (eyebrow, gradient headline, CTAs, 3D scene).
+  apply.html: retheme its inline <style> (serif->sans headings, old coral
+  #D97757 -> #ff6a3d) so it matches the shared theme.
+- Verified with headless Chrome screenshots (dashboard, programs grid, apply):
+  cohesive, modern, no layout breakage. NOTE: "import skills from fellow project"
+  (caveman/ui-ux-pro-max/etc.) — those still aren't in the installed marketplaces;
+  applied design fundamentals directly instead of pulling unknown code.
+
 ### 2026-07-31 — co-browse: proactive session-liveness detection ("stuck" fix)
 - Symptom: co-browse fill worked (Freshworks: 13 filled, 3 left incl consent),
   then the Steel viewer showed "Session ended" but the toolbar buttons still

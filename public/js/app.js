@@ -132,11 +132,14 @@
 
   let currentUser = null;
   let authMode = 'login'; // 'login' | 'register'
+  let authDisabled = false; // local single-user mode (server DISABLE_AUTH)
 
   function renderAuthArea() {
     const area = $('#authArea');
     if (!area) return;
     area.textContent = '';
+    // Local single-user mode: no login UI at all.
+    if (authDisabled) return;
     if (currentUser) {
       const name = el('span', 'auth-user', '@' + currentUser.username);
       const out = el('button', 'btn btn-ghost auth-btn', 'Log out');
@@ -217,10 +220,12 @@
       const res = await fetch('/api/me');
       const data = await res.json();
       currentUser = data && data.user ? data.user : null;
+      authDisabled = !!(data && data.authDisabled);
     } catch (_e) {
       currentUser = null;
     }
     renderAuthArea();
+    if (authDisabled) return; // local single-user mode — never prompt
     // On a deployed (non-localhost) instance, an account is the only way to
     // keep a profile — prompt right away when anonymous.
     const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
@@ -478,6 +483,26 @@
 
     // record for next diff
     unlockedBefore = new Set(unlocked.map((p) => p.id));
+
+    enhanceCards();
+  }
+
+  // Staggered reveal + cursor-follow 3D tilt on program cards (tasteful, GPU-only).
+  function enhanceCards() {
+    const cards = document.querySelectorAll('.program');
+    cards.forEach((card, i) => {
+      card.style.animationDelay = Math.min(i * 45, 420) + 'ms';
+      if (card._tilt) return;
+      card._tilt = true;
+      card.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `rotateY(${px * 7}deg) rotateX(${-py * 7}deg) translateY(-4px)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    });
   }
 
   async function loadPrograms(opts = {}) {
